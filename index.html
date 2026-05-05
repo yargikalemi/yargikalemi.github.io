@@ -1,1362 +1,1474 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="tr" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>KARAR — Hukuk Blog & Danışmanlık Platformu</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        /* =============================================
+           THEME VARIABLES — tüm renkler buradan
+        ============================================= */
         :root {
-            --primary: #0D1B2A;
-            --light: #F4F1EB;
-            --accent: #C9A84C;
-            --text-dark: #1a1a1a;
-            --text-light: #666;
-            --border-light: #e0dcd5;
+            --bg-base:          #F4F1EB;
+            --bg-card:          #FFFFFF;
+            --bg-card-alt:      #EEE9DF;
+            --bg-dark:          #0D1B2A;
+            --bg-dark-2:        #132a47;
+            --nav-bg:           #0D1B2A;
+            --nav-text:         #F4F1EB;
+            --nav-text-sub:     rgba(244,241,235,0.75);
+            --accent:           #C9A84C;
+            --accent-hover:     #e0b85a;
+            --text-primary:     #0D1B2A;
+            --text-secondary:   #555550;
+            --text-muted:       #888882;
+            --border:           #DDD9D0;
+            --shadow-sm:        0 2px 8px rgba(0,0,0,0.06);
+            --shadow-md:        0 8px 24px rgba(0,0,0,0.09);
+            --shadow-lg:        0 16px 48px rgba(0,0,0,0.12);
+            --radius:           6px;
+            --transition:       0.25s ease;
         }
 
-        body.dark-mode {
-            --primary: #F4F1EB;
-            --light: #0D1B2A;
-            --accent: #E6C968;
-            --text-dark: #F4F1EB;
-            --text-light: #b0b0b0;
-            --border-light: #2a3a4a;
+        [data-theme="dark"] {
+            --bg-base:          #0D1B2A;
+            --bg-card:          #12253a;
+            --bg-card-alt:      #0f2035;
+            --bg-dark:          #060f18;
+            --bg-dark-2:        #091524;
+            --nav-bg:           #060f18;
+            --nav-text:         #E8E4DC;
+            --nav-text-sub:     rgba(232,228,220,0.65);
+            --accent:           #D4AE52;
+            --accent-hover:     #E6C968;
+            --text-primary:     #E8E4DC;
+            --text-secondary:   #A8A09A;
+            --text-muted:       #70696A;
+            --border:           #1e3248;
+            --shadow-sm:        0 2px 8px rgba(0,0,0,0.3);
+            --shadow-md:        0 8px 24px rgba(0,0,0,0.4);
+            --shadow-lg:        0 16px 48px rgba(0,0,0,0.5);
         }
 
-        body.dark-mode header {
-            background-color: #0a1420;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-        }
-
-        body.dark-mode #hero {
-            background: linear-gradient(135deg, #0a1420 0%, #091529 100%);
-        }
-
-        body.dark-mode .featured-card,
-        body.dark-mode .consultation-form,
-        body.dark-mode #about p {
-            background-color: #1a2a3a;
-            border-color: #2a3a4a;
-        }
-
-        body.dark-mode .post-card {
-            background-color: #1a2a3a;
-        }
-
-        body.dark-mode footer {
-            background-color: #0a1420;
-        }
-
-        body.dark-mode .filter-btn {
-            border-color: var(--border-light);
-            background-color: #1a2a3a;
-            color: var(--text-dark);
-        }
-
-        body.dark-mode .filter-btn.active {
-            background-color: var(--accent);
-            color: var(--primary);
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
+        /* =============================================
+           RESET & BASE
+        ============================================= */
+        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior: smooth; font-size: 16px; }
         body {
             font-family: 'Inter', sans-serif;
-            color: var(--text-dark);
-            background-color: var(--light);
-            line-height: 1.6;
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            line-height: 1.65;
+            transition: background-color var(--transition), color var(--transition);
         }
+        img { max-width:100%; display:block; }
+        a { text-decoration: none; color: inherit; }
+        button { font-family: inherit; cursor: pointer; }
 
-        /* PROGRESS BAR */
-        .progress-bar {
+        /* =============================================
+           SCROLL PROGRESS
+        ============================================= */
+        #progress-bar {
             position: fixed;
-            top: 0;
-            left: 0;
+            top: 0; left: 0;
             height: 3px;
-            background: linear-gradient(90deg, var(--accent), #8b7a3f);
             width: 0%;
-            z-index: 2000;
-            transition: width 0.1s ease;
+            background: linear-gradient(90deg, var(--accent), var(--accent-hover));
+            z-index: 3000;
+            transition: width 0.08s linear;
         }
 
-        /* HEADER & NAV */
-        header {
-            background-color: var(--primary);
-            color: var(--light);
-            padding: 1rem 5%;
+        /* =============================================
+           HEADER
+        ============================================= */
+        #header {
             position: sticky;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            background-color: var(--nav-bg);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+            transition: background-color var(--transition);
         }
 
-        .header-container {
-            max-width: 1200px;
+        .header-inner {
+            max-width: 1280px;
             margin: 0 auto;
+            padding: 0 5%;
+            height: 68px;
             display: flex;
+            align-items: center;
             justify-content: space-between;
-            align-items: center;
+            gap: 1.5rem;
         }
 
-        .logo {
+        .brand { flex-shrink: 0; }
+        .brand-logo {
             font-family: 'Playfair Display', serif;
-            font-size: 2rem;
+            font-size: 1.85rem;
             font-weight: 700;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             color: var(--accent);
+            line-height: 1;
         }
-
-        .tagline {
-            font-size: 0.85rem;
-            color: rgba(244, 241, 235, 0.8);
+        .brand-tagline {
+            font-size: 0.72rem;
+            color: var(--nav-text-sub);
             font-style: italic;
-            margin-top: 0.2rem;
+            margin-top: 3px;
+            letter-spacing: 0.3px;
         }
 
-        .header-controls {
+        .header-nav {
             display: flex;
-            gap: 1rem;
+            gap: 0.25rem;
             align-items: center;
         }
+        .header-nav a {
+            color: var(--nav-text);
+            font-size: 0.9rem;
+            font-weight: 500;
+            padding: 0.5rem 0.85rem;
+            border-radius: var(--radius);
+            transition: background var(--transition), color var(--transition);
+        }
+        .header-nav a:hover { background: rgba(201,168,76,0.12); color: var(--accent); }
 
-        .theme-toggle, .menu-toggle {
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        .btn-icon {
             background: none;
             border: none;
-            color: var(--light);
-            font-size: 1.3rem;
-            cursor: pointer;
-            transition: color 0.3s ease;
+            color: var(--nav-text);
+            font-size: 1.15rem;
             padding: 0.5rem;
+            border-radius: var(--radius);
+            transition: color var(--transition), background var(--transition);
+            line-height: 1;
         }
+        .btn-icon:hover { color: var(--accent); background: rgba(201,168,76,0.12); }
 
-        .theme-toggle:hover, .menu-toggle:hover {
-            color: var(--accent);
-        }
-
-        .menu-toggle {
-            display: none;
-        }
-
-        nav {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
-        }
-
-        nav a {
-            color: var(--light);
-            text-decoration: none;
-            font-size: 0.95rem;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-
-        nav a:hover {
-            color: var(--accent);
-        }
-
-        /* MOBILE MENU */
-        .mobile-menu {
-            display: none;
-            position: fixed;
-            left: 0;
-            top: 70px;
-            width: 100%;
-            background-color: var(--primary);
-            flex-direction: column;
-            padding: 1rem;
-            z-index: 999;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
-
-        .mobile-menu.active {
-            display: flex;
-        }
-
-        .mobile-menu a {
-            color: var(--light);
-            text-decoration: none;
-            padding: 0.8rem;
-            border-bottom: 1px solid rgba(244, 241, 235, 0.1);
-            font-weight: 500;
-            transition: background-color 0.3s ease;
-        }
-
-        .mobile-menu a:hover {
-            background-color: rgba(201, 168, 76, 0.1);
-            color: var(--accent);
-        }
-
-        .cta-button {
-            background-color: var(--accent);
-            color: var(--primary);
-            padding: 0.6rem 1.5rem;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
+        .btn-cta {
+            background: var(--accent);
+            color: var(--bg-dark);
             border: none;
-            cursor: pointer;
+            padding: 0.55rem 1.25rem;
+            border-radius: var(--radius);
+            font-size: 0.88rem;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
         }
-
-        .cta-button:hover {
-            background-color: #e0b85a;
+        .btn-cta:hover {
+            background: var(--accent-hover);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(201, 168, 76, 0.3);
+            box-shadow: 0 4px 14px rgba(201,168,76,0.35);
         }
 
-        .cta-button.outline {
-            background-color: transparent;
-            color: var(--accent);
-            border: 2px solid var(--accent);
+        /* Hamburger */
+        #hamburger { display: none; }
+
+        /* =============================================
+           MOBILE MENU DRAWER
+        ============================================= */
+        #mobile-menu {
+            display: none;
+            flex-direction: column;
+            background-color: var(--nav-bg);
+            border-top: 1px solid rgba(255,255,255,0.06);
+            padding: 0.5rem 5% 1.5rem;
+            gap: 0.25rem;
+            transition: background-color var(--transition);
+        }
+        #mobile-menu.open { display: flex; }
+        #mobile-menu a {
+            color: var(--nav-text);
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 0.85rem 1rem;
+            border-radius: var(--radius);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            transition: background var(--transition), color var(--transition);
+        }
+        #mobile-menu a:last-of-type { border-bottom: none; }
+        #mobile-menu a:hover { background: rgba(201,168,76,0.1); color: var(--accent); }
+        #mobile-menu .btn-cta {
+            margin-top: 0.5rem;
+            text-align: center;
+            padding: 0.85rem;
         }
 
-        .cta-button.outline:hover {
-            background-color: var(--accent);
-            color: var(--primary);
-        }
-
-        /* HERO SECTION */
+        /* =============================================
+           HERO
+        ============================================= */
         #hero {
-            background: linear-gradient(135deg, var(--primary) 0%, #132a47 100%);
-            background-attachment: fixed;
-            color: var(--light);
-            padding: 8rem 5% 6rem;
+            background: linear-gradient(160deg, var(--bg-dark) 0%, var(--bg-dark-2) 100%);
+            color: var(--nav-text);
+            padding: 7rem 5% 5.5rem;
             text-align: center;
             position: relative;
             overflow: hidden;
         }
-
         #hero::before {
             content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image:
-                repeating-linear-gradient(
-                    90deg,
-                    transparent,
-                    transparent 2px,
-                    rgba(255, 255, 255, 0.03) 2px,
-                    rgba(255, 255, 255, 0.03) 4px
-                );
+            position: absolute; inset: 0;
+            background-image: repeating-linear-gradient(
+                90deg,
+                transparent, transparent 3px,
+                rgba(255,255,255,0.018) 3px, rgba(255,255,255,0.018) 4px
+            );
             pointer-events: none;
         }
+        #hero::after {
+            content: '';
+            position: absolute;
+            bottom: -2px; left: 0; right: 0;
+            height: 60px;
+            background: var(--bg-base);
+            clip-path: ellipse(55% 100% at 50% 100%);
+            transition: background var(--transition);
+        }
 
-        .hero-content {
-            max-width: 900px;
+        .hero-inner {
+            max-width: 860px;
             margin: 0 auto;
             position: relative;
             z-index: 1;
         }
-
-        .hero-content h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 3.5rem;
+        .hero-eyebrow {
+            display: inline-block;
+            font-size: 0.78rem;
             font-weight: 700;
-            line-height: 1.2;
-            margin-bottom: 1.5rem;
-            letter-spacing: -1px;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--accent);
+            border: 1px solid rgba(201,168,76,0.35);
+            padding: 0.35rem 1rem;
+            border-radius: 20px;
+            margin-bottom: 1.6rem;
         }
-
-        .hero-content p {
-            font-size: 1.2rem;
-            color: rgba(244, 241, 235, 0.95);
-            margin-bottom: 2.5rem;
-            line-height: 1.6;
+        .hero-inner h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 5vw, 3.6rem);
+            font-weight: 700;
+            line-height: 1.18;
+            margin-bottom: 1.4rem;
         }
-
-        .hero-buttons {
+        .hero-inner p {
+            font-size: clamp(1rem, 2vw, 1.18rem);
+            color: var(--nav-text-sub);
+            max-width: 680px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.7;
+        }
+        .hero-btns {
             display: flex;
             gap: 1rem;
             justify-content: center;
             flex-wrap: wrap;
         }
-
-        /* FEATURED POST */
-        #featured {
-            padding: 5rem 5%;
-            background-color: var(--light);
-        }
-
-        .featured-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .featured-card {
-            background-color: white;
-            padding: 3rem;
-            border-left: 5px solid var(--accent);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-            margin-bottom: 2rem;
-            opacity: 0;
-            animation: fadeInUp 0.8s ease-out forwards;
-        }
-
-        .featured-label {
-            display: inline-block;
-            background-color: var(--accent);
-            color: var(--primary);
-            padding: 0.4rem 0.8rem;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .featured-card h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            color: var(--primary);
-            line-height: 1.3;
-        }
-
-        .meta {
-            color: var(--text-light);
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-            display: flex;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .featured-card p {
-            color: var(--text-light);
-            margin-bottom: 1.5rem;
-            font-size: 1.05rem;
-            line-height: 1.8;
-        }
-
-        .read-more {
+        .btn-outline {
+            background: transparent;
             color: var(--accent);
-            text-decoration: none;
+            border: 2px solid var(--accent);
+            padding: 0.7rem 1.6rem;
+            border-radius: var(--radius);
+            font-size: 0.95rem;
             font-weight: 600;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            display: inline-block;
+            transition: all var(--transition);
         }
-
-        .read-more:hover {
-            color: var(--primary);
-            transform: translateX(4px);
-        }
-
-        /* POSTS GRID */
-        #posts {
-            padding: 3rem 5%;
-            background-color: white;
-        }
-
-        .posts-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
+        .btn-outline:hover { background: var(--accent); color: var(--bg-dark); }
+        .btn-filled {
+            background: var(--accent);
+            color: var(--bg-dark);
+            border: 2px solid var(--accent);
+            padding: 0.7rem 1.6rem;
+            border-radius: var(--radius);
+            font-size: 0.95rem;
             font-weight: 700;
-            margin-bottom: 2rem;
-            color: var(--primary);
+            transition: all var(--transition);
+        }
+        .btn-filled:hover {
+            background: var(--accent-hover);
+            border-color: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(201,168,76,0.35);
+        }
+
+        /* =============================================
+           STATS BAND
+        ============================================= */
+        #stats {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            transition: background var(--transition), border-color var(--transition);
+        }
+        .stats-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2.5rem 5%;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
             text-align: center;
         }
-
-        .filter-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.8rem;
-            justify-content: center;
-            margin-bottom: 2.5rem;
-            padding: 0 0.5rem;
-        }
-
-        .filter-btn {
-            background-color: transparent;
-            border: 2px solid var(--accent);
+        .stat-item { padding: 1rem; }
+        .stat-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.6rem;
+            font-weight: 700;
             color: var(--accent);
-            padding: 0.6rem 1.2rem;
+            line-height: 1;
+        }
+        .stat-label {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            margin-top: 0.4rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .stat-sep {
+            width: 1px;
+            background: var(--border);
+            align-self: stretch;
+            transition: background var(--transition);
+        }
+
+        /* =============================================
+           SECTION COMMONS
+        ============================================= */
+        .section-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 0.6rem;
+        }
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.6rem, 3vw, 2.2rem);
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.25;
+            margin-bottom: 0.8rem;
+        }
+        .section-sub {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        .section-header { margin-bottom: 2.5rem; }
+
+        /* =============================================
+           FEATURED POST
+        ============================================= */
+        #featured {
+            padding: 4.5rem 5%;
+            background: var(--bg-base);
+            transition: background var(--transition);
+        }
+        .featured-inner { max-width: 1280px; margin: 0 auto; }
+        .featured-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-md);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            overflow: hidden;
+            transition: background var(--transition), box-shadow var(--transition);
+        }
+        .featured-img {
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #1a3a5c 100%);
+            min-height: 320px;
+            display: flex;
+            align-items: flex-end;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .featured-img::before {
+            content: '§';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%,-50%);
+            font-size: 14rem;
+            font-family: 'Playfair Display', serif;
+            color: rgba(201,168,76,0.07);
+            pointer-events: none;
+            line-height: 1;
+        }
+        .featured-badge {
+            background: var(--accent);
+            color: var(--bg-dark);
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 0.35rem 0.85rem;
+            border-radius: 3px;
+        }
+        .featured-body { padding: 2.8rem; display: flex; flex-direction: column; justify-content: center; }
+        .featured-category {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 0.8rem;
+        }
+        .featured-body h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+        .featured-body p {
+            color: var(--text-secondary);
+            font-size: 0.97rem;
+            line-height: 1.75;
+            margin-bottom: 1.6rem;
+        }
+        .featured-meta {
+            display: flex;
+            gap: 1.5rem;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            margin-bottom: 1.6rem;
+            flex-wrap: wrap;
+        }
+        .read-link {
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 0.93rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: gap var(--transition), color var(--transition);
+        }
+        .read-link:hover { gap: 0.7rem; color: var(--accent-hover); }
+
+        /* =============================================
+           YAZILAR GRID
+        ============================================= */
+        #posts {
+            padding: 4.5rem 5%;
+            background: var(--bg-card);
+            transition: background var(--transition);
+        }
+        .posts-inner { max-width: 1280px; margin: 0 auto; }
+
+        .posts-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .filter-pills {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .pill {
+            background: transparent;
+            border: 1.5px solid var(--border);
+            color: var(--text-secondary);
+            padding: 0.45rem 1.1rem;
             border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 0.83rem;
             font-weight: 600;
-            transition: all 0.3s ease;
-            white-space: nowrap;
+            transition: all var(--transition);
+            cursor: pointer;
         }
+        .pill:hover { border-color: var(--accent); color: var(--accent); }
+        .pill.active { background: var(--accent); border-color: var(--accent); color: var(--bg-dark); }
 
-        .filter-btn:hover {
-            background-color: var(--accent);
-            color: var(--primary);
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--bg-base);
+            border: 1.5px solid var(--border);
+            border-radius: 24px;
+            padding: 0.45rem 1rem;
+            transition: border-color var(--transition), background var(--transition);
         }
-
-        .filter-btn.active {
-            background-color: var(--accent);
-            color: var(--primary);
+        .search-box:focus-within { border-color: var(--accent); }
+        .search-box i { color: var(--text-muted); font-size: 0.85rem; }
+        .search-box input {
+            background: none;
+            border: none;
+            outline: none;
+            font-family: inherit;
+            font-size: 0.88rem;
+            color: var(--text-primary);
+            width: 160px;
         }
+        .search-box input::placeholder { color: var(--text-muted); }
 
         .posts-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
         }
-
         .post-card {
-            background-color: var(--light);
-            border-radius: 4px;
+            background: var(--bg-base);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
             overflow: hidden;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            opacity: 0;
-            animation: fadeInUp 0.8s ease-out forwards;
-            display: flex;
-            flex-direction: column;
+            transition: transform var(--transition), box-shadow var(--transition), background var(--transition), border-color var(--transition);
         }
+        .post-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
 
-        .post-card:nth-child(1) { animation-delay: 0.1s; }
-        .post-card:nth-child(2) { animation-delay: 0.2s; }
-        .post-card:nth-child(3) { animation-delay: 0.3s; }
-
-        .post-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+        .card-accent-bar {
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--bg-dark-2));
         }
-
-        .post-header {
-            padding: 1.5rem;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .post-category {
-            display: inline-block;
-            background-color: var(--accent);
-            color: var(--primary);
-            padding: 0.3rem 0.7rem;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            margin-bottom: 1rem;
-            width: fit-content;
-            letter-spacing: 0.5px;
-        }
-
-        .post-card h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.4rem;
+        .card-body { padding: 1.4rem 1.4rem 0; flex-grow: 1; display: flex; flex-direction: column; }
+        .card-cat {
+            font-size: 0.7rem;
             font-weight: 700;
-            margin-bottom: 0.8rem;
-            color: var(--primary);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 0.7rem;
+        }
+        .card-body h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.17rem;
+            font-weight: 700;
+            color: var(--text-primary);
             line-height: 1.4;
+            margin-bottom: 0.75rem;
         }
-
-        .post-excerpt {
-            color: var(--text-light);
-            font-size: 0.95rem;
-            margin-bottom: 1rem;
+        .card-excerpt {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            line-height: 1.65;
             flex-grow: 1;
-            line-height: 1.6;
+            margin-bottom: 1rem;
         }
-
-        .post-meta {
-            font-size: 0.85rem;
-            color: var(--text-light);
-            border-top: 1px solid var(--border-light);
-            padding-top: 1rem;
-        }
-
-        .post-share {
+        .card-footer {
+            padding: 0.9rem 1.4rem;
+            border-top: 1px solid var(--border);
             display: flex;
-            gap: 0.8rem;
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--border-light);
+            justify-content: space-between;
+            align-items: center;
+            transition: border-color var(--transition);
         }
-
-        .share-btn {
+        .card-meta { font-size: 0.78rem; color: var(--text-muted); }
+        .card-shares { display: flex; gap: 0.4rem; }
+        .share-ico {
             background: none;
             border: none;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            padding: 0.3rem 0.4rem;
+            border-radius: 4px;
             cursor: pointer;
-            font-size: 1.2rem;
-            transition: transform 0.2s ease, color 0.2s ease;
-            padding: 0.4rem;
-            color: var(--accent);
+            transition: color var(--transition), background var(--transition);
+        }
+        .share-ico:hover { color: var(--accent); background: rgba(201,168,76,0.1); }
+
+        .posts-no-result {
+            grid-column: 1/-1;
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            display: none;
         }
 
-        .share-btn:hover {
-            transform: scale(1.2);
-            color: var(--text-dark);
+        /* =============================================
+           NEWSLETTER
+        ============================================= */
+        #newsletter {
+            background: var(--bg-dark);
+            padding: 3.5rem 5%;
+            transition: background var(--transition);
         }
-
-        /* FEATURES BAND */
-        #features {
-            background-color: var(--primary);
-            color: var(--light);
-            padding: 4rem 5%;
-        }
-
-        .features-container {
-            max-width: 1200px;
+        .newsletter-inner {
+            max-width: 640px;
             margin: 0 auto;
+            text-align: center;
         }
+        .newsletter-inner h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.7rem;
+            color: var(--nav-text);
+            margin-bottom: 0.6rem;
+        }
+        .newsletter-inner p { font-size: 0.95rem; color: var(--nav-text-sub); margin-bottom: 1.8rem; }
+        .newsletter-form {
+            display: flex;
+            gap: 0.6rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .newsletter-form input {
+            flex: 1;
+            min-width: 220px;
+            padding: 0.8rem 1.1rem;
+            border: 1.5px solid rgba(255,255,255,0.15);
+            border-radius: var(--radius);
+            background: rgba(255,255,255,0.07);
+            color: var(--nav-text);
+            font-family: inherit;
+            font-size: 0.93rem;
+            outline: none;
+            transition: border-color var(--transition);
+        }
+        .newsletter-form input::placeholder { color: var(--nav-text-sub); }
+        .newsletter-form input:focus { border-color: var(--accent); }
+        .newsletter-form button {
+            background: var(--accent);
+            color: var(--bg-dark);
+            border: none;
+            padding: 0.8rem 1.6rem;
+            border-radius: var(--radius);
+            font-weight: 700;
+            font-size: 0.93rem;
+            cursor: pointer;
+            transition: background var(--transition), transform var(--transition);
+        }
+        .newsletter-form button:hover { background: var(--accent-hover); transform: translateY(-2px); }
 
+        /* =============================================
+           FEATURES BAND
+        ============================================= */
+        #features {
+            background: var(--bg-base);
+            padding: 4.5rem 5%;
+            transition: background var(--transition);
+        }
+        .features-inner { max-width: 1280px; margin: 0 auto; }
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 3rem;
-            text-align: center;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
         }
-
-        .feature-item h3 {
-            font-family: 'Playfair Display', serif;
+        .feature-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2.2rem 1.8rem;
+            text-align: center;
+            transition: background var(--transition), border-color var(--transition), box-shadow var(--transition);
+        }
+        .feature-box:hover { box-shadow: var(--shadow-md); }
+        .feature-icon-wrap {
+            width: 56px; height: 56px;
+            background: rgba(201,168,76,0.12);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 1.2rem;
             font-size: 1.5rem;
-            margin-bottom: 1rem;
             color: var(--accent);
         }
-
-        .feature-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .feature-item p {
-            font-size: 0.95rem;
-            line-height: 1.6;
-            color: rgba(244, 241, 235, 0.9);
-        }
-
-        /* CONSULTATION CTA */
-        #consultation {
-            padding: 5rem 5%;
-            background-color: var(--light);
-        }
-
-        .consultation-container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .consultation-header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .consultation-header h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.2rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            color: var(--primary);
-            line-height: 1.3;
-        }
-
-        .consultation-header p {
-            font-size: 1.05rem;
-            color: var(--text-light);
-            line-height: 1.7;
-        }
-
-        .consultation-form {
-            background-color: white;
-            padding: 2.5rem;
-            border-radius: 4px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group:last-of-type {
-            margin-bottom: 0;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: var(--primary);
-            font-size: 0.95rem;
-        }
-
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 0.8rem;
-            border: 1px solid var(--border-light);
-            border-radius: 4px;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.95rem;
-            transition: border-color 0.3s ease;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.1);
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 120px;
-        }
-
-        .form-note {
-            font-size: 0.85rem;
-            color: var(--text-light);
-            margin-top: 1.5rem;
-            font-style: italic;
-        }
-
-        .form-submit {
-            width: 100%;
-            padding: 0.9rem;
-            margin-top: 1.5rem;
-            font-size: 1rem;
-        }
-
-        /* ABOUT SECTION */
-        #about {
-            padding: 5rem 5%;
-            background-color: white;
-        }
-
-        .about-container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        #about h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.2rem;
-            font-weight: 700;
-            margin-bottom: 2rem;
-            color: var(--primary);
-            text-align: center;
-        }
-
-        #about p {
-            font-size: 1.05rem;
-            color: var(--text-light);
-            line-height: 1.8;
-            text-align: center;
-            border-left: 4px solid var(--accent);
-            padding-left: 2rem;
-            margin-left: 2rem;
-        }
-
-        /* FOOTER */
-        footer {
-            background-color: var(--primary);
-            color: var(--light);
-            padding: 3rem 5%;
-        }
-
-        .footer-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .footer-section h4 {
+        .feature-box h3 {
             font-family: 'Playfair Display', serif;
             font-size: 1.2rem;
-            margin-bottom: 1rem;
+            color: var(--text-primary);
+            margin-bottom: 0.7rem;
+        }
+        .feature-box p { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.65; }
+
+        /* =============================================
+           TESTIMONIALS
+        ============================================= */
+        #testimonials {
+            padding: 4.5rem 5%;
+            background: var(--bg-card);
+            transition: background var(--transition);
+        }
+        .testimonials-inner { max-width: 1280px; margin: 0 auto; }
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+        .testi-card {
+            background: var(--bg-base);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.8rem;
+            position: relative;
+            transition: background var(--transition), border-color var(--transition);
+        }
+        .testi-card::before {
+            content: '"';
+            font-family: 'Playfair Display', serif;
+            font-size: 5rem;
             color: var(--accent);
+            opacity: 0.18;
+            position: absolute;
+            top: -0.5rem; left: 1rem;
+            line-height: 1;
+        }
+        .testi-text {
+            font-size: 0.93rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 1.3rem;
+            position: relative;
+            z-index: 1;
+        }
+        .testi-author { display: flex; align-items: center; gap: 0.9rem; }
+        .testi-avatar {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            background: var(--bg-dark);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 0.95rem;
+            flex-shrink: 0;
+        }
+        .testi-name { font-weight: 700; font-size: 0.88rem; color: var(--text-primary); }
+        .testi-role { font-size: 0.78rem; color: var(--text-muted); }
+
+        /* =============================================
+           CONSULTATION
+        ============================================= */
+        #consultation {
+            padding: 4.5rem 5%;
+            background: var(--bg-base);
+            transition: background var(--transition);
+        }
+        .consultation-inner {
+            max-width: 760px;
+            margin: 0 auto;
+        }
+        .consultation-inner .section-header { text-align: center; }
+        .form-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2.4rem;
+            box-shadow: var(--shadow-sm);
+            transition: background var(--transition), border-color var(--transition);
+        }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .form-group { margin-bottom: 1.2rem; }
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 0.4rem;
+            letter-spacing: 0.3px;
+        }
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem 0.95rem;
+            background: var(--bg-base);
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius);
+            font-family: inherit;
+            font-size: 0.93rem;
+            color: var(--text-primary);
+            outline: none;
+            transition: border-color var(--transition), background var(--transition);
+        }
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus { border-color: var(--accent); }
+        .form-group textarea { resize: vertical; min-height: 115px; }
+        .form-group select option { background: var(--bg-card); }
+        .form-note {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin: 0.5rem 0 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .form-submit {
+            width: 100%;
+            background: var(--accent);
+            color: var(--bg-dark);
+            border: none;
+            padding: 0.95rem;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+        }
+        .form-submit:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(201,168,76,0.3);
         }
 
-        .footer-section ul {
-            list-style: none;
+        /* =============================================
+           ABOUT
+        ============================================= */
+        #about {
+            padding: 4.5rem 5%;
+            background: var(--bg-dark);
+            transition: background var(--transition);
+        }
+        .about-inner {
+            max-width: 860px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        #about .section-title { color: var(--nav-text); }
+        #about .section-label { margin-bottom: 0.6rem; }
+        .about-quote {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.05rem, 2vw, 1.25rem);
+            font-style: italic;
+            color: var(--nav-text-sub);
+            line-height: 1.8;
+            border-left: 3px solid var(--accent);
+            text-align: left;
+            padding: 1.5rem 2rem;
+            margin-top: 2rem;
+            background: rgba(255,255,255,0.03);
+            border-radius: 0 var(--radius) var(--radius) 0;
         }
 
-        .footer-section ul li {
+        /* =============================================
+           FOOTER
+        ============================================= */
+        footer {
+            background: var(--bg-dark-2);
+            color: var(--nav-text);
+            padding: 3rem 5% 1.5rem;
+            transition: background var(--transition);
+        }
+        .footer-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .footer-brand .brand-logo { font-size: 1.5rem; margin-bottom: 0.5rem; }
+        .footer-brand p { font-size: 0.85rem; color: var(--nav-text-sub); line-height: 1.6; margin-bottom: 1rem; }
+        .footer-col h4 {
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+        .footer-col ul { list-style: none; }
+        .footer-col ul li { margin-bottom: 0.6rem; }
+        .footer-col a {
+            font-size: 0.88rem;
+            color: var(--nav-text-sub);
+            transition: color var(--transition);
+        }
+        .footer-col a:hover { color: var(--accent); }
+        .footer-bottom {
+            padding-top: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+        .footer-legal { font-size: 0.78rem; color: var(--nav-text-sub); line-height: 1.5; max-width: 600px; }
+        .footer-copy { font-size: 0.78rem; color: var(--text-muted); white-space: nowrap; }
+
+        /* =============================================
+           BLOG POST MODAL
+        ============================================= */
+        #modal-overlay {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            display: none;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 2rem 5%;
+            overflow-y: auto;
+            backdrop-filter: blur(4px);
+        }
+        #modal-overlay.open { display: flex; }
+        .modal-box {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            max-width: 780px;
+            width: 100%;
+            padding: 2.5rem;
+            margin: auto;
+            position: relative;
+            box-shadow: var(--shadow-lg);
+            transition: background var(--transition);
+        }
+        .modal-close {
+            position: absolute;
+            top: 1rem; right: 1rem;
+            background: var(--bg-base);
+            border: none;
+            color: var(--text-secondary);
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: background var(--transition), color var(--transition);
+        }
+        .modal-close:hover { background: var(--accent); color: var(--bg-dark); }
+        .modal-cat {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--accent);
             margin-bottom: 0.8rem;
         }
-
-        .footer-section a {
-            color: rgba(244, 241, 235, 0.8);
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: color 0.3s ease;
+        .modal-box h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.4rem, 3vw, 1.9rem);
+            color: var(--text-primary);
+            margin-bottom: 0.8rem;
+            line-height: 1.3;
         }
-
-        .footer-section a:hover {
-            color: var(--accent);
+        .modal-meta {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            display: flex; gap: 1.5rem; flex-wrap: wrap;
         }
-
-        .footer-bottom {
-            border-top: 1px solid rgba(244, 241, 235, 0.2);
-            padding-top: 2rem;
-            text-align: center;
-            color: rgba(244, 241, 235, 0.6);
-            font-size: 0.85rem;
+        .modal-content {
+            font-size: 0.97rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
         }
-
-        .legal-note {
-            line-height: 1.6;
+        .modal-content p { margin-bottom: 1rem; }
+        .modal-content h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            color: var(--text-primary);
+            margin: 1.5rem 0 0.6rem;
         }
+        .modal-content ul { padding-left: 1.5rem; margin-bottom: 1rem; }
+        .modal-content ul li { margin-bottom: 0.5rem; }
+        .modal-divider { height: 2px; background: var(--accent); width: 50px; margin-bottom: 1.5rem; }
 
-        /* SCROLL TO TOP */
-        .scroll-to-top {
+        /* =============================================
+           SCROLL TO TOP
+        ============================================= */
+        #scroll-top {
             position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            background-color: var(--accent);
-            color: var(--primary);
-            width: 50px;
-            height: 50px;
+            bottom: 1.8rem; right: 1.8rem;
+            width: 46px; height: 46px;
             border-radius: 50%;
+            background: var(--accent);
+            color: var(--bg-dark);
             border: none;
-            cursor: pointer;
-            font-size: 1.5rem;
+            font-size: 1rem;
             display: none;
             align-items: center;
             justify-content: center;
-            z-index: 999;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(201, 168, 76, 0.3);
-        }
-
-        .scroll-to-top.show {
-            display: flex;
-        }
-
-        .scroll-to-top:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 6px 16px rgba(201, 168, 76, 0.4);
-        }
-
-        /* NEWSLETTER */
-        .newsletter-section {
-            background-color: var(--primary);
-            color: var(--light);
-            padding: 2.5rem 5%;
-            margin: 3rem 0;
-            border-radius: 4px;
-        }
-
-        .newsletter-content {
-            max-width: 600px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .newsletter-content h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
-            margin-bottom: 0.8rem;
-            color: var(--accent);
-        }
-
-        .newsletter-form {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 1.5rem;
-            flex-wrap: wrap;
-        }
-
-        .newsletter-form input {
-            flex: 1;
-            min-width: 200px;
-            padding: 0.8rem;
-            border: none;
-            border-radius: 4px;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.9rem;
-        }
-
-        .newsletter-form button {
-            padding: 0.8rem 1.5rem;
-            background-color: var(--accent);
-            color: var(--primary);
-            border: none;
-            border-radius: 4px;
-            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            white-space: nowrap;
+            z-index: 800;
+            box-shadow: 0 4px 16px rgba(201,168,76,0.35);
+            transition: background var(--transition), transform var(--transition);
+        }
+        #scroll-top.visible { display: flex; }
+        #scroll-top:hover { background: var(--accent-hover); transform: translateY(-3px); }
+
+        /* =============================================
+           FADE-IN ANIMATION
+        ============================================= */
+        .fade-in { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+        /* =============================================
+           RESPONSIVE
+        ============================================= */
+        @media (max-width: 1024px) {
+            .posts-grid { grid-template-columns: repeat(2, 1fr); }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
         }
 
-        .newsletter-form button:hover {
-            background-color: #e0b85a;
-            transform: translateY(-2px);
-        }
-
-        /* ANIMATIONS */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* RESPONSIVE */
         @media (max-width: 768px) {
-            .header-container {
-                flex-wrap: wrap;
-            }
+            .header-nav { display: none; }
+            #hamburger { display: flex; }
 
-            .menu-toggle {
-                display: block;
-            }
+            .stats-inner { grid-template-columns: repeat(2, 1fr); }
+            .stat-sep { display: none; }
 
-            nav {
-                display: none;
-            }
+            .featured-card { grid-template-columns: 1fr; }
+            .featured-img { min-height: 200px; }
 
-            .mobile-menu.active {
-                display: flex;
-            }
+            .posts-grid { grid-template-columns: 1fr; }
+            .posts-toolbar { flex-direction: column; align-items: flex-start; gap: 0.8rem; }
+            .search-box { width: 100%; }
+            .search-box input { width: 100%; }
 
-            .header-controls {
-                order: 2;
-                width: 100%;
-                justify-content: flex-end;
-                margin-top: 0.5rem;
-            }
+            .features-grid { grid-template-columns: 1fr; }
 
-            .hero-content h1 {
-                font-size: 2rem;
-            }
+            .testimonials-grid { grid-template-columns: 1fr; }
 
-            .hero-content p {
-                font-size: 1rem;
-            }
+            .form-row { grid-template-columns: 1fr; }
 
-            .hero-buttons {
-                flex-direction: column;
-            }
+            .footer-grid { grid-template-columns: 1fr; }
+            .footer-bottom { flex-direction: column; align-items: flex-start; }
 
-            .hero-buttons button,
-            .hero-buttons a {
-                width: 100%;
-            }
+            .hero-btns button, .hero-btns a { width: 100%; justify-content: center; }
 
-            .section-title {
-                font-size: 1.8rem;
-            }
-
-            .featured-card {
-                padding: 1.5rem;
-            }
-
-            .featured-card h2 {
-                font-size: 1.5rem;
-            }
-
-            .posts-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .consultation-form {
-                padding: 1.5rem;
-            }
-
-            #about p {
-                margin-left: 0;
-                padding-left: 1.5rem;
-                text-align: left;
-            }
-
-            .footer-container {
-                grid-template-columns: 1fr;
-            }
-
-            .filter-container {
-                margin-bottom: 1.5rem;
-            }
-
-            .scroll-to-top {
-                width: 45px;
-                height: 45px;
-                bottom: 1.5rem;
-                right: 1.5rem;
-                font-size: 1.3rem;
-            }
-
-            .newsletter-section {
-                padding: 1.5rem 5%;
-                margin: 2rem 0;
-            }
-
-            .newsletter-form {
-                flex-direction: column;
-            }
-
-            .newsletter-form input,
-            .newsletter-form button {
-                width: 100%;
-            }
+            #hero { padding: 4.5rem 5% 4rem; }
         }
 
         @media (max-width: 480px) {
-            header {
-                padding: 0.8rem 5%;
-            }
+            .brand-logo { font-size: 1.5rem; }
+            .header-inner { height: 60px; }
 
-            .logo {
-                font-size: 1.3rem;
-            }
+            .stats-inner { padding: 1.8rem 5%; gap: 0.5rem; }
+            .stat-number { font-size: 2rem; }
 
-            .tagline {
-                font-size: 0.75rem;
-            }
+            .featured-body { padding: 1.6rem; }
 
-            #hero {
-                padding: 3rem 5% 2rem;
-            }
+            .modal-box { padding: 1.5rem; }
+            .modal-box h2 { font-size: 1.3rem; }
 
-            .hero-content h1 {
-                font-size: 1.5rem;
-                line-height: 1.2;
-            }
+            #scroll-top { bottom: 1rem; right: 1rem; width: 42px; height: 42px; }
 
-            .hero-content p {
-                font-size: 0.95rem;
-                margin-bottom: 1.5rem;
-            }
-
-            .hero-buttons {
-                gap: 0.5rem;
-            }
-
-            .hero-buttons button,
-            .hero-buttons a {
-                font-size: 0.85rem;
-                padding: 0.5rem 1rem;
-            }
-
-            .section-title {
-                font-size: 1.5rem;
-                margin-bottom: 1.5rem;
-            }
-
-            #featured,
-            #posts,
-            #consultation,
-            #about,
-            #features {
-                padding: 2rem 5%;
-            }
-
-            .featured-card {
-                padding: 1.2rem;
-                border-left-width: 4px;
-            }
-
-            .featured-card h2 {
-                font-size: 1.3rem;
-            }
-
-            .featured-label {
-                font-size: 0.7rem;
-                padding: 0.3rem 0.6rem;
-            }
-
-            .post-card {
-                border-radius: 3px;
-            }
-
-            .post-category {
-                font-size: 0.7rem;
-                padding: 0.25rem 0.6rem;
-            }
-
-            .post-card h3 {
-                font-size: 1.2rem;
-                margin-bottom: 0.6rem;
-            }
-
-            .post-excerpt {
-                font-size: 0.9rem;
-                margin-bottom: 0.8rem;
-            }
-
-            .post-meta {
-                font-size: 0.8rem;
-            }
-
-            .post-share {
-                margin-top: 0.8rem;
-                padding-top: 0.8rem;
-                gap: 0.6rem;
-            }
-
-            .share-btn {
-                font-size: 1rem;
-                padding: 0.3rem;
-            }
-
-            .features-grid {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-
-            .feature-icon {
-                font-size: 2rem;
-                margin-bottom: 0.8rem;
-            }
-
-            .feature-item h3 {
-                font-size: 1.2rem;
-                margin-bottom: 0.8rem;
-            }
-
-            .feature-item p {
-                font-size: 0.9rem;
-            }
-
-            .consultation-header h2 {
-                font-size: 1.4rem;
-            }
-
-            .consultation-header p {
-                font-size: 0.95rem;
-            }
-
-            .consultation-form {
-                padding: 1.2rem;
-            }
-
-            .form-group label {
-                font-size: 0.9rem;
-                margin-bottom: 0.4rem;
-            }
-
-            .form-group input,
-            .form-group textarea {
-                padding: 0.7rem;
-                font-size: 0.9rem;
-            }
-
-            .form-group textarea {
-                min-height: 100px;
-            }
-
-            .form-submit {
-                font-size: 0.95rem;
-                padding: 0.8rem;
-            }
-
-            #about p {
-                margin-left: 0;
-                padding-left: 1.2rem;
-                font-size: 0.95rem;
-                line-height: 1.7;
-            }
-
-            .scroll-to-top {
-                width: 42px;
-                height: 42px;
-                bottom: 1rem;
-                right: 1rem;
-                font-size: 1.2rem;
-            }
-
-            .newsletter-content h3 {
-                font-size: 1.4rem;
-            }
-
-            .newsletter-form input,
-            .newsletter-form button {
-                font-size: 0.85rem;
-                padding: 0.7rem;
-            }
+            .form-card { padding: 1.4rem; }
         }
 
-        /* TOUCH-FRIENDLY BUTTONS */
+        /* Touch targets */
         @media (hover: none) and (pointer: coarse) {
-            button, a.cta-button, .share-btn, .filter-btn {
-                min-height: 44px;
-                min-width: 44px;
-            }
+            .pill, .btn-icon, .btn-cta, .btn-filled, .btn-outline,
+            .share-ico, .form-submit, .newsletter-form button { min-height: 44px; }
         }
     </style>
 </head>
 <body>
-    <!-- PROGRESS BAR -->
-    <div class="progress-bar"></div>
 
-    <!-- HEADER -->
-    <header>
-        <div class="header-container">
-            <div>
-                <div class="logo">KARAR</div>
-                <p class="tagline">Hukuku anla. Hakkını bil.</p>
-            </div>
-            <div class="header-controls">
-                <button class="theme-toggle" id="themeToggle" title="Tema değiştir">
-                    <i class="fas fa-moon"></i>
-                </button>
-                <button class="menu-toggle" id="menuToggle" title="Menüyü aç">
-                    <i class="fas fa-bars"></i>
-                </button>
-            </div>
-            <nav id="mainNav">
-                <a href="#posts">Yazılar</a>
-                <a href="#about">Hakkında</a>
-                <a href="#consultation">Danışmanlık</a>
-                <a href="#contact">İletişim</a>
-                <button class="cta-button" onclick="document.getElementById('consultation').scrollIntoView({behavior: 'smooth'})">Danışmanlık Al</button>
-            </nav>
+<!-- SCROLL PROGRESS -->
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<div id="header">
+    <div class="header-inner">
+        <a href="#" class="brand">
+            <div class="brand-logo">KARAR</div>
+            <div class="brand-tagline">Hukuku anla. Hakkını bil.</div>
+        </a>
+
+        <nav class="header-nav">
+            <a href="#posts">Yazılar</a>
+            <a href="#features">Platform</a>
+            <a href="#about">Hakkında</a>
+            <a href="#consultation">Danışmanlık</a>
+        </nav>
+
+        <div class="header-actions">
+            <button class="btn-icon" id="theme-btn" title="Tema değiştir"><i class="fas fa-moon"></i></button>
+            <button class="btn-icon" id="hamburger" title="Menü"><i class="fas fa-bars"></i></button>
+            <button class="btn-cta" onclick="scrollTo('#consultation')">Danışmanlık Al</button>
         </div>
+    </div>
 
-        <!-- MOBILE MENU -->
-        <div class="mobile-menu" id="mobileMenu">
-            <a href="#posts" onclick="closeMobileMenu()">Yazılar</a>
-            <a href="#about" onclick="closeMobileMenu()">Hakkında</a>
-            <a href="#consultation" onclick="closeMobileMenu()">Danışmanlık</a>
-            <a href="#contact" onclick="closeMobileMenu()">İletişim</a>
-            <button class="cta-button" style="margin: 1rem 0;" onclick="document.getElementById('consultation').scrollIntoView({behavior: 'smooth'}); closeMobileMenu();">Danışmanlık Al</button>
+    <div id="mobile-menu">
+        <a href="#posts" onclick="closeMobileMenu()">Yazılar</a>
+        <a href="#features" onclick="closeMobileMenu()">Platform</a>
+        <a href="#about" onclick="closeMobileMenu()">Hakkında</a>
+        <a href="#consultation" onclick="closeMobileMenu()">Danışmanlık</a>
+        <button class="btn-cta" onclick="scrollTo('#consultation'); closeMobileMenu();">Danışmanlık Al</button>
+    </div>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+    <div class="hero-inner fade-in">
+        <span class="hero-eyebrow">Bağımsız Hukuk Platformu</span>
+        <h1>Yıllarca karar yazdım.<br>Şimdi haklarınız için yazıyorum.</h1>
+        <p>Kürsüde öğrendiklerimi herkes için kaleme alıyorum. Türkiye'nin hukuk sistemini, haklarınızı ve kendinizi nasıl koruyacağınızı anlatan bağımsız bir platform.</p>
+        <div class="hero-btns">
+            <button class="btn-outline" onclick="scrollTo('#posts')">Yazıları Oku</button>
+            <button class="btn-filled" onclick="scrollTo('#consultation')">Danışmanlık Al</button>
         </div>
-    </header>
+    </div>
+</section>
 
-    <!-- HERO SECTION -->
-    <section id="hero">
-        <div class="hero-content">
-            <h1>Yıllarca mahkemede oturdum. Şimdi sizin için yazıyorum.</h1>
-            <p>Türkiye'nin hukuk sistemini, haklarınızı ve kendinizi nasıl koruyacağınızı anlatan bağımsız bir platform. Hukuku herkes anlamalı—gereksiz jargonlar olmadan.</p>
-            <div class="hero-buttons">
-                <a href="#posts" class="cta-button outline">Yazıları Oku</a>
-                <button class="cta-button" onclick="document.getElementById('consultation').scrollIntoView({behavior: 'smooth'})">Danışmanlık Al</button>
+<!-- STATS -->
+<div id="stats">
+    <div class="stats-inner">
+        <div class="stat-item fade-in">
+            <div class="stat-number" data-target="30">0</div>
+            <div class="stat-label">Yıl Deneyim</div>
+        </div>
+        <div class="stat-sep"></div>
+        <div class="stat-item fade-in">
+            <div class="stat-number" data-target="2400">0</div>
+            <div class="stat-label">Dava Deneyimi</div>
+        </div>
+        <div class="stat-sep"></div>
+        <div class="stat-item fade-in">
+            <div class="stat-number" data-target="48">0</div>
+            <div class="stat-label">Yayımlanmış Yazı</div>
+        </div>
+        <div class="stat-sep"></div>
+        <div class="stat-item fade-in">
+            <div class="stat-number" data-target="12000">0</div>
+            <div class="stat-label">Aylık Okuyucu</div>
+        </div>
+    </div>
+</div>
+
+<!-- FEATURED POST -->
+<section id="featured">
+    <div class="featured-inner">
+        <div class="section-header fade-in">
+            <div class="section-label">Öne Çıkan Yazı</div>
+        </div>
+        <div class="featured-card fade-in">
+            <div class="featured-img">
+                <span class="featured-badge">Editörün Seçimi</span>
             </div>
-        </div>
-    </section>
-
-    <!-- FEATURED POST -->
-    <section id="featured">
-        <div class="featured-container">
-            <div class="featured-card">
-                <span class="featured-label">Öne Çıkan Yazı</span>
+            <div class="featured-body">
+                <div class="featured-category">Ceza Hukuku</div>
                 <h2>Gözaltına Alındığınızda İlk 24 Saatte Yapmanız Gereken 5 Şey</h2>
-                <div class="meta">
-                    <span>📅 5 Mayıs 2025</span>
-                    <span>⏱️ 8 dakika okuma</span>
-                    <span>📂 Ceza Hukuku</span>
+                <p>Gözaltına alınmak, sıradan bir vatandaşın karşılaşabileceği en stresli deneyimlerden biridir. Panikte alınan yanlış kararlar, ilerleyen süreçte telafisi güç sonuçlara yol açabilir. Mahkemede yüzlerce gözaltı vakasına bakan bir hakimin perspektifinden, kritik 24 saati adım adım anlatıyorum.</p>
+                <div class="featured-meta">
+                    <span><i class="far fa-calendar-alt"></i> 5 Mayıs 2025</span>
+                    <span><i class="far fa-clock"></i> 8 dakika okuma</span>
+                    <span><i class="fas fa-eye"></i> 4.2K görüntülenme</span>
                 </div>
-                <p>Gözaltına almalar, sıradan bir vatandaşın karşılaşabileceği en stresli anlardan biridir. Panikte karar vermek yerine, bilmemiz gerekenler nelerdir? Bu yazıda, mahkemede yüzlerce vakaya bakan birinin perspektifinden, gözaltında bulunduğunuz ilk 24 saatin kritik adımlarını anlatıyorum. Sessiz kalma hakkından avukat talep etme hususiyetlerine kadar her detay önemli.</p>
-                <a href="#" class="read-more">Devamını Oku →</a>
+                <a href="#" class="read-link" onclick="openModal('featured'); return false;">
+                    Devamını Oku <i class="fas fa-arrow-right"></i>
+                </a>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- POSTS GRID -->
-    <section id="posts">
-        <div class="posts-container">
+<!-- POSTS -->
+<section id="posts">
+    <div class="posts-inner">
+        <div class="section-header fade-in">
+            <div class="section-label">İçerik</div>
             <h2 class="section-title">Son Yazılar</h2>
+        </div>
 
-            <!-- FILTER BUTTONS -->
-            <div class="filter-container">
-                <button class="filter-btn active" data-filter="all">Tümü</button>
-                <button class="filter-btn" data-filter="Mali Hukuk">Mali Hukuk</button>
-                <button class="filter-btn" data-filter="Hukuk Temelleri">Temeller</button>
-                <button class="filter-btn" data-filter="Ceza Hukuku">Ceza Hukuku</button>
+        <div class="posts-toolbar fade-in">
+            <div class="filter-pills">
+                <button class="pill active" data-cat="all">Tümü</button>
+                <button class="pill" data-cat="Ceza Hukuku">Ceza Hukuku</button>
+                <button class="pill" data-cat="Mali Hukuk">Mali Hukuk</button>
+                <button class="pill" data-cat="Aile Hukuku">Aile Hukuku</button>
+                <button class="pill" data-cat="İdare Hukuku">İdare Hukuku</button>
             </div>
-
-            <div class="posts-grid" id="postsGrid">
-                <article class="post-card" data-category="Mali Hukuk">
-                    <div class="post-header">
-                        <span class="post-category">Mali Hukuk</span>
-                        <h3>Avukat Tutamayanlar İçin: Adli Yardım Nasıl Alınır?</h3>
-                        <p class="post-excerpt">Ekonomik zorluk yaşayan kişiler dava açmak istediğinde "avukat pahalı" diyerek vazgeçiyor. Oysa Türk hukuk sistemi adli yardım kurumunun aracılığıyla bunu olası kılıyor. Süreci, şartları ve başvuru yollarını detaylı anlatıyorum.</p>
-                        <div class="post-meta">📅 2 Mayıs 2025 • ⏱️ 6 dakika</div>
-                        <div class="post-share">
-                            <button class="share-btn" onclick="sharePost('Avukat Tutamayanlar İçin: Adli Yardım Nasıl Alınır?', 'twitter')" title="Twitter'da paylaş">
-                                <i class="fab fa-twitter"></i>
-                            </button>
-                            <button class="share-btn" onclick="sharePost('Avukat Tutamayanlar İçin: Adli Yardım Nasıl Alınır?', 'linkedin')" title="LinkedIn'de paylaş">
-                                <i class="fab fa-linkedin"></i>
-                            </button>
-                            <button class="share-btn" onclick="sharePost('Avukat Tutamayanlar İçin: Adli Yardım Nasıl Alınır?', 'whatsapp')" title="WhatsApp'ta paylaş">
-                                <i class="fab fa-whatsapp"></i>
-                            </button>
-                            <button class="share-btn" onclick="copyToClipboard()" title="Bağlantıyı kopyala">
-                                <i class="fas fa-link"></i>
-                            </button>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="post-card" data-category="Hukuk Temelleri">
-                    <div class="post-header">
-                        <span class="post-category">Hukuk Temelleri</span>
-                        <h3>Mahkemede Kendinizi İfade Etme Hakkı</h3>
-                        <p class="post-excerpt">Davalar belgelere, tanıklara ve kanıtlara dayanır—ama sizin açıklamanız da önemlidir. Mahkemede "kendini ifade etme hakkı" nedir, ne zaman kullanılır ve nasıl etkili bir şekilde sunabilirsiniz? Bu yazıda pratik ipuçları bulacaksınız.</p>
-                        <div class="post-meta">📅 29 Nisan 2025 • ⏱️ 7 dakika</div>
-                        <div class="post-share">
-                            <button class="share-btn" onclick="sharePost('Mahkemede Kendinizi İfade Etme Hakkı', 'twitter')" title="Twitter'da paylaş">
-                                <i class="fab fa-twitter"></i>
-                            </button>
-                            <button class="share-btn" onclick="sharePost('Mahkemede Kendinizi İfade Etme Hakkı', 'linkedin')" title="LinkedIn'de paylaş">
-                                <i class="fab fa-linkedin"></i>
-                            </button>
-                            <button class="share-btn" onclick="sharePost('Mahkemede Kendinizi İfade Etme Hakkı', 'whatsapp')" title="WhatsApp'ta paylaş">
-                                <i class="fab fa-whatsapp"></i>
-                            </button>
-                            <button class="share-btn" onclick="copyToClipboard()" title="Bağlantıyı kopyala">
-                                <i class="fas fa-link"></i>
-                            </button>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="post-card" data-category="Ceza Hukuku">
-                    <div class="post-header">
-                        <span class="post-category">Ceza Hukuku</span>
-                        <h3>Ceza Davalarında Zamanaşımı: Bilmeniz Gerekenler</h3>
-                        <p class="post-excerpt">Bir suç işlenmişse, ne kadar zaman sonra takibat başlatılamaz? Zamanaşımı süresi hangi suçlar için ne kadar? Bu hukuki koruma mekanizmasını detaylı olarak inceliyorum, örneklerle açıklıyorum.</p>
-                        <div class="post-meta">📅 25 Nisan 2025 • ⏱️ 9 dakika</div>
-                        <div class="post-share">
-                            <button class="share-btn" onclick="sharePost('Ceza Davalarında Zamanaşımı: Bilmeniz Gerekenler', 'twitter')" title="Twitter'da paylaş">
-                                <i class="fab fa-twitter"></i>
-                            </button>
-                            <button class="share-btn" onclick="sharePost('Ceza Davalarında Zamanaşımı: Bilmeniz Gerekenler', 'linkedin')" title="LinkedIn'de paylaş">
-                                <i class="fab fa-linkedin"></i>
-                            </button>
-                            <button class="share-btn" onclick="sharePost('Ceza Davalarında Zamanaşımı: Bilmeniz Gerekenler', 'whatsapp')" title="WhatsApp'ta paylaş">
-                                <i class="fab fa-whatsapp"></i>
-                            </button>
-                            <button class="share-btn" onclick="copyToClipboard()" title="Bağlantıyı kopyala">
-                                <i class="fas fa-link"></i>
-                            </button>
-                        </div>
-                    </div>
-                </article>
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="search-input" placeholder="Yazılarda ara...">
             </div>
+        </div>
 
-            <!-- NEWSLETTER SECTION -->
-            <div class="newsletter-section">
-                <div class="newsletter-content">
-                    <h3>📬 Yeni Yazılardan Haberdar Ol</h3>
-                    <p style="color: rgba(244, 241, 235, 0.8); margin-top: 0.5rem;">Her ayın en önemli yazılarını doğrudan e-postayla alın. Spam yok, sadece hukuki bilgi.</p>
-                    <form class="newsletter-form" onsubmit="handleNewsletterSubmit(event)">
-                        <input type="email" placeholder="E-posta adresiniz" required>
-                        <button type="submit">Abone Ol</button>
-                    </form>
+        <div class="posts-grid" id="posts-grid">
+            <!-- Kart 1 -->
+            <article class="post-card fade-in" data-cat="Mali Hukuk" data-title="Avukat Tutamayanlar İçin: Adli Yardım Nasıl Alınır?">
+                <div class="card-accent-bar"></div>
+                <div class="card-body">
+                    <div class="card-cat">Mali Hukuk</div>
+                    <h3>Avukat Tutamayanlar İçin: Adli Yardım Nasıl Alınır?</h3>
+                    <p class="card-excerpt">Ekonomik zorluk yaşayan vatandaşlar dava açmak istediğinde "avukat pahalı" diyerek vazgeçiyor. Oysa adli yardım sistemi tam da bu durum için tasarlanmış. Süreci ve başvuru yollarını detaylı anlattım.</p>
+                </div>
+                <div class="card-footer">
+                    <div class="card-meta">2 May 2025 · 6 dk</div>
+                    <div class="card-shares">
+                        <button class="share-ico" onclick="share('Avukat Tutamayanlar İçin: Adli Yardım Nasıl Alınır?','twitter'); event.stopPropagation();" title="Twitter"><i class="fab fa-twitter"></i></button>
+                        <button class="share-ico" onclick="share('Avukat Tutamayanlar İçin: Adli Yardım Nasıl Alınır?','whatsapp'); event.stopPropagation();" title="WhatsApp"><i class="fab fa-whatsapp"></i></button>
+                        <button class="share-ico" onclick="copyLink(); event.stopPropagation();" title="Kopyala"><i class="fas fa-link"></i></button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Kart 2 -->
+            <article class="post-card fade-in" data-cat="Ceza Hukuku" data-title="Ceza Davalarında Zamanaşımı: Bilmeniz Gerekenler">
+                <div class="card-accent-bar"></div>
+                <div class="card-body">
+                    <div class="card-cat">Ceza Hukuku</div>
+                    <h3>Ceza Davalarında Zamanaşımı: Bilmeniz Gerekenler</h3>
+                    <p class="card-excerpt">Bir suç işlenmişse, ne kadar zaman sonra takibat başlatılamaz? Zamanaşımı hangi suçlar için kaç yıl? Bu hukuki koruma mekanizmasını somut örneklerle açıklıyorum.</p>
+                </div>
+                <div class="card-footer">
+                    <div class="card-meta">25 Nis 2025 · 9 dk</div>
+                    <div class="card-shares">
+                        <button class="share-ico" onclick="share('Ceza Davalarında Zamanaşımı','twitter'); event.stopPropagation();" title="Twitter"><i class="fab fa-twitter"></i></button>
+                        <button class="share-ico" onclick="share('Ceza Davalarında Zamanaşımı','whatsapp'); event.stopPropagation();" title="WhatsApp"><i class="fab fa-whatsapp"></i></button>
+                        <button class="share-ico" onclick="copyLink(); event.stopPropagation();" title="Kopyala"><i class="fas fa-link"></i></button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Kart 3 -->
+            <article class="post-card fade-in" data-cat="Aile Hukuku" data-title="Boşanma Sürecinde Haklarınız: Mülk, Nafaka, Velayet">
+                <div class="card-accent-bar"></div>
+                <div class="card-body">
+                    <div class="card-cat">Aile Hukuku</div>
+                    <h3>Boşanma Sürecinde Haklarınız: Mülk, Nafaka, Velayet</h3>
+                    <p class="card-excerpt">Boşanma davası açmadan önce bilmeniz gerekenler: mal paylaşımı nasıl işler, nafaka şartları nelerdir ve çocukların velayeti nasıl belirlenir?</p>
+                </div>
+                <div class="card-footer">
+                    <div class="card-meta">18 Nis 2025 · 11 dk</div>
+                    <div class="card-shares">
+                        <button class="share-ico" onclick="share('Boşanma Sürecinde Haklarınız','twitter'); event.stopPropagation();" title="Twitter"><i class="fab fa-twitter"></i></button>
+                        <button class="share-ico" onclick="share('Boşanma Sürecinde Haklarınız','whatsapp'); event.stopPropagation();" title="WhatsApp"><i class="fab fa-whatsapp"></i></button>
+                        <button class="share-ico" onclick="copyLink(); event.stopPropagation();" title="Kopyala"><i class="fas fa-link"></i></button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Kart 4 -->
+            <article class="post-card fade-in" data-cat="İdare Hukuku" data-title="İdareye Karşı Nasıl Dava Açılır?">
+                <div class="card-accent-bar"></div>
+                <div class="card-body">
+                    <div class="card-cat">İdare Hukuku</div>
+                    <h3>İdareye Karşı Nasıl Dava Açılır?</h3>
+                    <p class="card-excerpt">Bir devlet kurumunun hatalı işlemi size zarar verdi mi? İdare mahkemelerinde dava açma hakkınız, süresi ve adımları hakkında kapsamlı bir rehber.</p>
+                </div>
+                <div class="card-footer">
+                    <div class="card-meta">10 Nis 2025 · 7 dk</div>
+                    <div class="card-shares">
+                        <button class="share-ico" onclick="share('İdareye Karşı Nasıl Dava Açılır?','twitter'); event.stopPropagation();" title="Twitter"><i class="fab fa-twitter"></i></button>
+                        <button class="share-ico" onclick="share('İdareye Karşı Nasıl Dava Açılır?','whatsapp'); event.stopPropagation();" title="WhatsApp"><i class="fab fa-whatsapp"></i></button>
+                        <button class="share-ico" onclick="copyLink(); event.stopPropagation();" title="Kopyala"><i class="fas fa-link"></i></button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Kart 5 -->
+            <article class="post-card fade-in" data-cat="Ceza Hukuku" data-title="Mahkemede Kendinizi İfade Etme Hakkı">
+                <div class="card-accent-bar"></div>
+                <div class="card-body">
+                    <div class="card-cat">Ceza Hukuku</div>
+                    <h3>Mahkemede Kendinizi İfade Etme Hakkı</h3>
+                    <p class="card-excerpt">Mahkemede susma hakkı ne zaman kullanılır, beyan nasıl verilir? Avukat olmaksızın kendinizi savunmak zorunda kalırsanız nelere dikkat etmelisiniz?</p>
+                </div>
+                <div class="card-footer">
+                    <div class="card-meta">2 Nis 2025 · 7 dk</div>
+                    <div class="card-shares">
+                        <button class="share-ico" onclick="share('Mahkemede Kendinizi İfade Etme Hakkı','twitter'); event.stopPropagation();" title="Twitter"><i class="fab fa-twitter"></i></button>
+                        <button class="share-ico" onclick="share('Mahkemede Kendinizi İfade Etme Hakkı','whatsapp'); event.stopPropagation();" title="WhatsApp"><i class="fab fa-whatsapp"></i></button>
+                        <button class="share-ico" onclick="copyLink(); event.stopPropagation();" title="Kopyala"><i class="fas fa-link"></i></button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Kart 6 -->
+            <article class="post-card fade-in" data-cat="Mali Hukuk" data-title="İş Yerinde Haksız Fesih: Tazminat Haklarınız">
+                <div class="card-accent-bar"></div>
+                <div class="card-body">
+                    <div class="card-cat">Mali Hukuk</div>
+                    <h3>İş Yerinde Haksız Fesih: Tazminat Haklarınız</h3>
+                    <p class="card-excerpt">İşten çıkarıldınız ve bunun haksız olduğunu düşünüyorsunuz. Kıdem tazminatı, ihbar tazminatı ve işe iade davası konusunda bilmeniz gerekenler.</p>
+                </div>
+                <div class="card-footer">
+                    <div class="card-meta">20 Mar 2025 · 10 dk</div>
+                    <div class="card-shares">
+                        <button class="share-ico" onclick="share('İş Yerinde Haksız Fesih','twitter'); event.stopPropagation();" title="Twitter"><i class="fab fa-twitter"></i></button>
+                        <button class="share-ico" onclick="share('İş Yerinde Haksız Fesih','whatsapp'); event.stopPropagation();" title="WhatsApp"><i class="fab fa-whatsapp"></i></button>
+                        <button class="share-ico" onclick="copyLink(); event.stopPropagation();" title="Kopyala"><i class="fas fa-link"></i></button>
+                    </div>
+                </div>
+            </article>
+
+            <div class="posts-no-result" id="no-result">
+                <i class="fas fa-search" style="font-size:2rem;margin-bottom:0.8rem;opacity:0.4;"></i><br>
+                Aradığınız kriterlere uygun yazı bulunamadı.
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section id="newsletter">
+    <div class="newsletter-inner fade-in">
+        <h3>📬 Yeni Yazılardan Haberdar Ol</h3>
+        <p>Her ay en önemli hukuki gelişmeleri ve yeni yazıları doğrudan e-posta kutunuza gönderelim. Spam yok.</p>
+        <form class="newsletter-form" onsubmit="handleNewsletter(event)">
+            <input type="email" placeholder="E-posta adresiniz" required>
+            <button type="submit">Abone Ol</button>
+        </form>
+    </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+    <div class="features-inner">
+        <div class="section-header fade-in" style="text-align:center;">
+            <div class="section-label">Neden KARAR?</div>
+            <h2 class="section-title">Platformun Farkı</h2>
+        </div>
+        <div class="features-grid">
+            <div class="feature-box fade-in">
+                <div class="feature-icon-wrap"><i class="fas fa-book-open"></i></div>
+                <h3>Derinlemesine Analizler</h3>
+                <p>Tek cümlelik yanıtlar değil; kaynakları, içtihatları ve pratik çıkarımlarıyla birlikte ele alınan kapsamlı yazılar.</p>
+            </div>
+            <div class="feature-box fade-in">
+                <div class="feature-icon-wrap"><i class="fas fa-balance-scale"></i></div>
+                <h3>Pratik Rehberler</h3>
+                <p>Teoriden pratiğe: her yazı, benzer durumda olan birinin adım adım ne yapması gerektiğini net bir şekilde gösterir.</p>
+            </div>
+            <div class="feature-box fade-in">
+                <div class="feature-icon-wrap"><i class="fas fa-user-shield"></i></div>
+                <h3>Gizli Danışmanlık</h3>
+                <p>Kimliğiniz gizli kalır. Kişisel durumunuzu bağımsız, deneyimli bir gözle değerlendirin. 48 saat içinde yanıt.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+    <div class="testimonials-inner">
+        <div class="section-header fade-in" style="text-align:center;">
+            <div class="section-label">Okuyuculardan</div>
+            <h2 class="section-title">Ne Dediler?</h2>
+        </div>
+        <div class="testimonials-grid">
+            <div class="testi-card fade-in">
+                <p class="testi-text">Gözaltı yazısını okumamış olsaydım, bana söylenenleri sorgusuz sualsiz kabul edecektim. O yazı yüzünden avukat talep ettim. Fark yarattı.</p>
+                <div class="testi-author">
+                    <div class="testi-avatar">MK</div>
+                    <div>
+                        <div class="testi-name">M. Kaya</div>
+                        <div class="testi-role">İstanbul</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testi-card fade-in">
+                <p class="testi-text">Adli yardım sisteminden haberim yoktu. Yazıyı okuduktan sonra başvurdum ve ücretsiz avukat talep edebildim. Bu platform gerçek anlamda eşitlik sağlıyor.</p>
+                <div class="testi-author">
+                    <div class="testi-avatar">FD</div>
+                    <div>
+                        <div class="testi-name">F. Doğan</div>
+                        <div class="testi-role">Ankara</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testi-card fade-in">
+                <p class="testi-text">İşten çıkarıldığımda haklarımı bilmiyordum. Danışmanlık formu aracılığıyla aldığım yanıt, iş mahkemesinde nasıl hareket edeceğimi anlamama yardımcı oldu.</p>
+                <div class="testi-author">
+                    <div class="testi-avatar">AY</div>
+                    <div>
+                        <div class="testi-name">A. Yıldız</div>
+                        <div class="testi-role">İzmir</div>
+                    </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- FEATURES BAND -->
-    <section id="features">
-        <div class="features-container">
-            <div class="features-grid">
-                <div class="feature-item">
-                    <div class="feature-icon">📖</div>
-                    <h3>Derinlemesine Analizler</h3>
-                    <p>Meseleler için tek bir cümlelik yanıt yoktur. Kaynaklarını, karşılığında olanları, pratik çıkarımlarını iç içe dokuyorum.</p>
-                </div>
-
-                <div class="feature-item">
-                    <div class="feature-icon">⚖️</div>
-                    <h3>Pratik Rehberler</h3>
-                    <p>Teoriden çıkıp, elinizi tutuyor gibi adım adım rehberlik ediyorum. Her yazı bir durumda nasıl hareket edeceğinizi gösteriyor.</p>
-                </div>
-
-                <div class="feature-item">
-                    <div class="feature-icon">🎯</div>
-                    <h3>Özel Danışmanlık</h3>
-                    <p>Genel bilgi yeterli değilse, kişisel durumunuzu değerlendirelim. Gizli, bağımsız ve deneyim sahibi bir gözden geçen.</p>
-                </div>
-            </div>
+<!-- CONSULTATION -->
+<section id="consultation">
+    <div class="consultation-inner">
+        <div class="section-header fade-in">
+            <div class="section-label">Kişisel Destek</div>
+            <h2 class="section-title">Hukuki Sorunlarınız İçin<br>Bağımsız Bir Bakış Açısı</h2>
+            <p class="section-sub">Yıllarca ağır ceza davalarına bakan bir hakimin deneyiminden yararlanın. Kimliğiniz gizli kalır.</p>
         </div>
-    </section>
-
-    <!-- CONSULTATION CTA -->
-    <section id="consultation">
-        <div class="consultation-container">
-            <div class="consultation-header">
-                <h2>Hukuki Sorunlarınız İçin Bağımsız Bir Bakış Açısına mı İhtiyacınız Var?</h2>
-                <p>Yıllarca ağır ceza davalarına bakan bir hakimin deneyiminden yararlanın. Kimliğiniz gizli kalır. Kişisel durumunuz değerlendirilerek tavsiye alabilirsiniz.</p>
-            </div>
-
-            <form class="consultation-form" onsubmit="handleFormSubmit(event)">
-                <div class="form-group">
-                    <label for="name">Ad (Opsiyonel)</label>
-                    <input type="text" id="name" name="name" placeholder="Adınız">
+        <div class="form-card fade-in">
+            <form onsubmit="handleConsult(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Ad (Opsiyonel)</label>
+                        <input type="text" placeholder="Adınız">
+                    </div>
+                    <div class="form-group">
+                        <label>E-posta *</label>
+                        <input type="email" id="c-email" placeholder="ornek@mail.com" required>
+                    </div>
                 </div>
-
                 <div class="form-group">
-                    <label for="email">E-posta *</label>
-                    <input type="email" id="email" name="email" placeholder="ornek@email.com" required>
+                    <label>Konu Türü *</label>
+                    <select required>
+                        <option value="">Seçiniz...</option>
+                        <option>Ceza Hukuku</option>
+                        <option>Mali / İş Hukuku</option>
+                        <option>Aile Hukuku</option>
+                        <option>İdare Hukuku</option>
+                        <option>Diğer</option>
+                    </select>
                 </div>
-
                 <div class="form-group">
-                    <label for="subject">Konusu *</label>
-                    <input type="text" id="subject" name="subject" placeholder="Hukuki sorunun başlığı" required>
+                    <label>Mesajınız *</label>
+                    <textarea id="c-msg" placeholder="Durumunuzu kısaca anlatınız..." required></textarea>
                 </div>
-
-                <div class="form-group">
-                    <label for="message">Mesajınız *</label>
-                    <textarea id="message" name="message" placeholder="Durumunuzu kısaca anlatınız..." required></textarea>
-                </div>
-
-                <div class="form-note">⏱️ Yanıt süresi: 48-72 saat içinde</div>
-
-                <button type="submit" class="cta-button">Gönder</button>
+                <div class="form-note"><i class="fas fa-shield-alt"></i> Mesajınız gizli tutulur. Yanıt süresi: 48–72 saat içinde.</div>
+                <button type="submit" class="form-submit">Danışmanlık Talebi Gönder</button>
             </form>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- ABOUT SECTION -->
-    <section id="about">
-        <div class="about-container">
-            <h2>Hakkında</h2>
-            <p>KARAR, Türk hukuk sisteminde onlarca yıl görev yapmış bir ağır ceza hakimi tarafından kurulmuştur. Buradaki yazılar içtihat bilgisi ve sahadan deneyimiyle kaleme alınmaktadır. Amacımız: hukuki süreçleri gizemden arındırmak ve her vatandaşın kendi haklarını bilmesini sağlamak. Kurucu kimliği gizli olsa da, platform ve içeriği tamamen gerçektir, işlevseldir ve sizi bilgilendirmek için var.</p>
+<!-- ABOUT -->
+<section id="about">
+    <div class="about-inner">
+        <div class="fade-in">
+            <div class="section-label">Platform</div>
+            <h2 class="section-title">KARAR Nedir?</h2>
         </div>
-    </section>
+        <blockquote class="about-quote fade-in">
+            KARAR, Türk hukuk sisteminde onlarca yıl görev yapmış bir ağır ceza hakimi tarafından kurulmuştur.
+            Buradaki yazılar içtihat bilgisi ve sahadan deneyimiyle kaleme alınmaktadır. Amacımız:
+            hukuki süreçleri gizemden arındırmak ve her vatandaşın kendi haklarını bilmesini sağlamak.
+            Kurucu kimliği gizli olsa da platform tamamen gerçektir, işlevseldir ve sizi bilgilendirmek için vardır.
+        </blockquote>
+    </div>
+</section>
 
-    <!-- FOOTER -->
-    <footer>
-        <div class="footer-container">
-            <div class="footer-section">
-                <h4>KARAR</h4>
-                <p style="margin-bottom: 1rem; color: rgba(244, 241, 235, 0.8); font-size: 0.9rem;">Hukuku anla. Hakkını bil.</p>
-                <p style="color: rgba(244, 241, 235, 0.6); font-size: 0.85rem;">Bağımsız hukuk danışmanlığı ve eğitim platformu.</p>
+<!-- FOOTER -->
+<footer>
+    <div class="footer-inner">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="brand-logo">KARAR</div>
+                <p>Türkiye'nin hukuk sistemini, haklarınızı ve kendinizi nasıl koruyacağınızı anlatan bağımsız bir platform.</p>
             </div>
-
-            <div class="footer-section">
-                <h4>Hızlı Linkler</h4>
+            <div class="footer-col">
+                <h4>İçerik</h4>
                 <ul>
-                    <li><a href="#posts">Yazılar</a></li>
-                    <li><a href="#about">Hakkında</a></li>
-                    <li><a href="#consultation">Danışmanlık</a></li>
-                    <li><a href="#consultation">İletişim</a></li>
+                    <li><a href="#posts">Tüm Yazılar</a></li>
+                    <li><a href="#posts">Ceza Hukuku</a></li>
+                    <li><a href="#posts">Mali Hukuk</a></li>
+                    <li><a href="#posts">Aile Hukuku</a></li>
                 </ul>
             </div>
-
-            <div class="footer-section">
-                <h4>Yardımcı Bilgiler</h4>
+            <div class="footer-col">
+                <h4>Platform</h4>
+                <ul>
+                    <li><a href="#about">Hakkında</a></li>
+                    <li><a href="#features">Nasıl Çalışır?</a></li>
+                    <li><a href="#testimonials">Yorumlar</a></li>
+                    <li><a href="#consultation">Danışmanlık</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Hukuki</h4>
                 <ul>
                     <li><a href="#">Gizlilik Politikası</a></li>
                     <li><a href="#">Kullanım Şartları</a></li>
@@ -1364,200 +1476,259 @@
                 </ul>
             </div>
         </div>
-
         <div class="footer-bottom">
-            <p class="legal-note">Bu site hukuki danışmanlık hizmeti değil, bilgi amaçlıdır. Özel danışmanlık için yukarıdaki form vasıtasıyla iletişime geçiniz. © 2025 KARAR — Tüm Hakları Saklıdır.</p>
+            <p class="footer-legal">Bu site hukuki danışmanlık hizmeti değildir; yalnızca bilgi amaçlıdır. Özel danışmanlık için formu doldurunuz.</p>
+            <span class="footer-copy">© 2025 KARAR — Tüm Hakları Saklıdır</span>
         </div>
-    </footer>
+    </div>
+</footer>
 
-    <!-- SCROLL TO TOP BUTTON -->
-    <button class="scroll-to-top" onclick="scrollToTop()" title="Başa dön">
-        <i class="fas fa-arrow-up"></i>
-    </button>
+<!-- SCROLL TO TOP -->
+<button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Başa dön">
+    <i class="fas fa-arrow-up"></i>
+</button>
 
-    <script>
-        // DARK MODE
-        const themeToggle = document.getElementById('themeToggle');
-        const isDarkMode = localStorage.getItem('darkMode') === 'true';
+<!-- BLOG POST MODAL -->
+<div id="modal-overlay" onclick="closeModal(event)">
+    <div class="modal-box">
+        <button class="modal-close" onclick="document.getElementById('modal-overlay').classList.remove('open')">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="modal-cat">Ceza Hukuku</div>
+        <h2>Gözaltına Alındığınızda İlk 24 Saatte Yapmanız Gereken 5 Şey</h2>
+        <div class="modal-meta">
+            <span><i class="far fa-calendar-alt"></i> 5 Mayıs 2025</span>
+            <span><i class="far fa-clock"></i> 8 dakika okuma</span>
+        </div>
+        <div class="modal-divider"></div>
+        <div class="modal-content">
+            <p>Gözaltına alınmak, önceden planlanmış bir şey değildir. Stres, korku ve belirsizlik içinde doğru kararlar vermek son derece güçtür. Oysa bu ilk 24 saat, davanın gidişatını büyük ölçüde şekillendirir.</p>
+            <h3>1. Susmak Bir Hak, Hem de Korunmanız</h3>
+            <p>Gözaltına alındığınızda ifade verme yükümlülüğünüz yoktur. "Avukatım olmadan konuşmayacağım" demek hakkınızdır ve bu asla suçluluk belirtisi sayılamaz. Aksine, en sık yapılan hata: panik halinde bilmeden suç sayılabilecek ifadeler vermektir.</p>
+            <h3>2. Avukat Talep Edin — Derhal</h3>
+            <p>Avukat talep etme hakkınız gözaltının ilk anından geçerlidir. Ekonomik gücünüz yoksa adli yardım kapsamında baro tarafından ücretsiz avukat atanması talep edilebilir. Bu talebi sözlü yapın ve tutanağa geçmesini isteyin.</p>
+            <h3>3. Gözaltı Gerekçesini Öğrenin</h3>
+            <p>Hangi suçlama ile gözaltına alındığınızı öğrenmek hakkınızdır. Yazılı bir belge talep edin. Bu bilgi hem sizi hem de avukatınızı yönlendirecektir.</p>
+            <h3>4. Bir Yakınınızı Haberdar Edin</h3>
+            <p>Gözaltına alındığınızı bir yakınınıza bildirme hakkınız bulunmaktadır. Bu talep engellenemez. İsim ve adres bilgisi vererek yetkililerin bildirim yapmasını isteyin.</p>
+            <h3>5. Her Şeyi Aklınızda Tutun, Not Alın</h3>
+            <p>Serbest bırakıldığınızda ya da görüşme fırsatı bulduğunuzda: saat, yer, size söylenenler, tanık isimler ve kimlik numaraları dahil her detayı yazın. Bu bilgiler ilerleyen süreçte kritik kanıt niteliği taşıyabilir.</p>
+        </div>
+    </div>
+</div>
 
-        if (isDarkMode) {
-            document.body.classList.add('dark-mode');
-            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-        }
+<script>
+    /* =============================================
+       THEME
+    ============================================= */
+    const html = document.documentElement;
+    const themeBtn = document.getElementById('theme-btn');
 
-        themeToggle.addEventListener('click', () => {
-            document.body.classList.toggle('dark-mode');
-            const isDark = document.body.classList.contains('dark-mode');
-            localStorage.setItem('darkMode', isDark);
-            themeToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+    if (localStorage.getItem('theme') === 'dark') {
+        html.setAttribute('data-theme', 'dark');
+        themeBtn.innerHTML = '<i class="fas fa-sun"></i>';
+    }
+
+    themeBtn.addEventListener('click', () => {
+        const isDark = html.getAttribute('data-theme') === 'dark';
+        html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+        themeBtn.innerHTML = isDark ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+        localStorage.setItem('theme', isDark ? 'light' : 'dark');
+    });
+
+    /* =============================================
+       MOBILE MENU
+    ============================================= */
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    hamburger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        mobileMenu.classList.toggle('open');
+        hamburger.innerHTML = mobileMenu.classList.contains('open')
+            ? '<i class="fas fa-times"></i>'
+            : '<i class="fas fa-bars"></i>';
+    });
+
+    function closeMobileMenu() {
+        mobileMenu.classList.remove('open');
+        hamburger.innerHTML = '<i class="fas fa-bars"></i>';
+    }
+
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('#header')) closeMobileMenu();
+    });
+
+    /* =============================================
+       SCROLL PROGRESS + SCROLL-TOP
+    ============================================= */
+    const progressBar = document.getElementById('progress-bar');
+    const scrollTopBtn = document.getElementById('scroll-top');
+
+    window.addEventListener('scroll', () => {
+        const scrolled = window.scrollY;
+        const total = document.documentElement.scrollHeight - window.innerHeight;
+        progressBar.style.width = ((scrolled / total) * 100) + '%';
+        scrollTopBtn.classList.toggle('visible', scrolled > 350);
+    }, { passive: true });
+
+    /* =============================================
+       SMOOTH SCROLL HELPER
+    ============================================= */
+    function scrollTo(selector) {
+        const el = document.querySelector(selector);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        closeMobileMenu();
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', e => {
+            const target = document.querySelector(a.getAttribute('href'));
+            if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); closeMobileMenu(); }
         });
+    });
 
-        // MOBILE MENU
-        const menuToggle = document.getElementById('menuToggle');
-        const mobileMenu = document.getElementById('mobileMenu');
+    /* =============================================
+       FADE-IN OBSERVER
+    ============================================= */
+    const io = new IntersectionObserver((entries) => {
+        entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('visible'); io.unobserve(en.target); } });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
 
-        menuToggle.addEventListener('click', () => {
-            mobileMenu.classList.toggle('active');
-        });
+    document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
 
-        function closeMobileMenu() {
-            mobileMenu.classList.remove('active');
-        }
+    /* =============================================
+       STATS COUNTER
+    ============================================= */
+    function animateCount(el) {
+        const target = +el.dataset.target;
+        const duration = 1600;
+        const step = target / (duration / 16);
+        let current = 0;
+        const timer = setInterval(() => {
+            current += step;
+            if (current >= target) { el.textContent = target.toLocaleString('tr'); clearInterval(timer); }
+            else el.textContent = Math.floor(current).toLocaleString('tr');
+        }, 16);
+    }
 
-        // Close menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('header')) {
-                closeMobileMenu();
+    const statsObserver = new IntersectionObserver((entries) => {
+        entries.forEach(en => {
+            if (en.isIntersecting) {
+                en.target.querySelectorAll('[data-target]').forEach(animateCount);
+                statsObserver.unobserve(en.target);
             }
         });
+    }, { threshold: 0.3 });
+    statsObserver.observe(document.getElementById('stats'));
 
-        // SCROLL PROGRESS BAR
-        const progressBar = document.querySelector('.progress-bar');
+    /* =============================================
+       FILTER + SEARCH
+    ============================================= */
+    const pills = document.querySelectorAll('.pill');
+    const cards = document.querySelectorAll('.post-card');
+    const searchInput = document.getElementById('search-input');
+    const noResult = document.getElementById('no-result');
 
-        window.addEventListener('scroll', () => {
-            const scrollTop = window.scrollY;
-            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-            const scrollPercent = (scrollTop / docHeight) * 100;
-            progressBar.style.width = scrollPercent + '%';
+    let activeCat = 'all';
 
-            // Scroll to top button
-            const scrollToTop = document.querySelector('.scroll-to-top');
-            if (scrollTop > 300) {
-                scrollToTop.classList.add('show');
-            } else {
-                scrollToTop.classList.remove('show');
-            }
+    function filterCards() {
+        const query = searchInput.value.toLowerCase().trim();
+        let visible = 0;
+        cards.forEach(card => {
+            const cat = card.dataset.cat;
+            const title = card.dataset.title.toLowerCase();
+            const excerpt = card.querySelector('.card-excerpt').textContent.toLowerCase();
+            const catMatch = activeCat === 'all' || cat === activeCat;
+            const queryMatch = !query || title.includes(query) || excerpt.includes(query);
+            const show = catMatch && queryMatch;
+            card.style.display = show ? 'flex' : 'none';
+            if (show) visible++;
         });
+        noResult.style.display = visible === 0 ? 'block' : 'none';
+    }
 
-        // SCROLL TO TOP BUTTON
-        function scrollToTop() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // CATEGORY FILTER
-        const filterBtns = document.querySelectorAll('.filter-btn');
-        const postCards = document.querySelectorAll('.post-card');
-
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                // Remove active class from all buttons
-                filterBtns.forEach(b => b.classList.remove('active'));
-                // Add active class to clicked button
-                btn.classList.add('active');
-
-                const filter = btn.getAttribute('data-filter');
-
-                // Filter posts
-                postCards.forEach(card => {
-                    const category = card.getAttribute('data-category');
-                    if (filter === 'all' || category === filter) {
-                        card.style.display = 'block';
-                        setTimeout(() => {
-                            card.style.opacity = '1';
-                            card.style.animation = 'fadeInUp 0.5s ease-out';
-                        }, 10);
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
-            });
+    pills.forEach(pill => {
+        pill.addEventListener('click', () => {
+            pills.forEach(p => p.classList.remove('active'));
+            pill.classList.add('active');
+            activeCat = pill.dataset.cat;
+            filterCards();
         });
+    });
 
-        // SHARE FUNCTIONALITY
-        function sharePost(title, platform) {
-            const url = window.location.href;
-            const text = `"${title}" — KARAR platformundan\n`;
+    searchInput.addEventListener('input', filterCards);
 
-            const shareUrls = {
-                twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
-                linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
-                whatsapp: `https://wa.me/?text=${encodeURIComponent(text + url)}`
-            };
-
-            if (shareUrls[platform]) {
-                window.open(shareUrls[platform], '_blank');
-            }
-        }
-
-        function copyToClipboard() {
-            const url = window.location.href;
-            navigator.clipboard.writeText(url).then(() => {
-                alert('Bağlantı kopyalandı!');
-            });
-        }
-
-        // NEWSLETTER SUBSCRIPTION
-        function handleNewsletterSubmit(event) {
-            event.preventDefault();
-            const email = event.target.querySelector('input[type="email"]').value;
-            alert(`Teşekkür ederiz!\n\n${email} adresine doğrulama e-postası gönderdik. Lütfen kontrol edin.`);
-            event.target.reset();
-        }
-
-        // Scroll-triggered fade-in animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
+    /* =============================================
+       SHARE
+    ============================================= */
+    function share(title, platform) {
+        const url = window.location.href;
+        const text = `"${title}" — KARAR platformundan`;
+        const urls = {
+            twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
+            linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
+            whatsapp: `https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`
         };
+        if (urls[platform]) window.open(urls[platform], '_blank');
+    }
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.animation = 'fadeInUp 0.8s ease-out';
-                }
+    function copyLink() {
+        navigator.clipboard.writeText(window.location.href).then(() => {
+            const msg = document.createElement('div');
+            msg.textContent = 'Bağlantı kopyalandı!';
+            Object.assign(msg.style, {
+                position: 'fixed', bottom: '5rem', left: '50%', transform: 'translateX(-50%)',
+                background: 'var(--accent)', color: 'var(--bg-dark)',
+                padding: '0.6rem 1.4rem', borderRadius: '20px', fontSize: '0.88rem',
+                fontWeight: '700', zIndex: '9999', pointerEvents: 'none',
+                transition: 'opacity 0.4s', opacity: '1'
             });
-        }, observerOptions);
-
-        // Observe all cards and sections
-        document.querySelectorAll('.featured-card, .post-card, .newsletter-section').forEach(el => {
-            el.style.opacity = '0';
-            observer.observe(el);
+            document.body.appendChild(msg);
+            setTimeout(() => { msg.style.opacity = '0'; setTimeout(() => msg.remove(), 400); }, 1800);
         });
+    }
 
-        // Form submission handler
-        function handleFormSubmit(event) {
-            event.preventDefault();
-
-            const name = document.getElementById('name').value || 'Değerli Ziyaretçi';
-            const email = document.getElementById('email').value;
-            const subject = document.getElementById('subject').value;
-
-            alert(`Teşekkür ederiz ${name}!\n\nMesajınız alındı:\n"${subject}"\n\nSize ${email} adresine 48-72 saat içinde yanıt döneceğiz.`);
-
-            // Reset form
-            event.target.reset();
+    /* =============================================
+       MODAL
+    ============================================= */
+    function openModal(id) {
+        document.getElementById('modal-overlay').classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeModal(e) {
+        if (e.target === document.getElementById('modal-overlay')) {
+            document.getElementById('modal-overlay').classList.remove('open');
+            document.body.style.overflow = '';
         }
+    }
+    document.querySelector('.modal-close').addEventListener('click', () => {
+        document.getElementById('modal-overlay').classList.remove('open');
+        document.body.style.overflow = '';
+    });
 
-        // Smooth scroll for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                const href = this.getAttribute('href');
-                if (href !== '#' && document.querySelector(href)) {
-                    e.preventDefault();
-                    closeMobileMenu();
-                    document.querySelector(href).scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
+    // Post cards click → modal
+    cards.forEach(card => {
+        card.addEventListener('click', e => {
+            if (!e.target.closest('.card-footer')) openModal('post');
         });
+    });
 
-        // Add hover effects to post cards
-        document.querySelectorAll('.post-card').forEach(card => {
-            card.addEventListener('click', (e) => {
-                if (!e.target.closest('.post-share')) {
-                    alert('Yazının tam metni için lütfen bağlantıya tıklayınız. Bu bir demo platformdur.');
-                }
-            });
-        });
+    /* =============================================
+       FORMS
+    ============================================= */
+    function handleNewsletter(e) {
+        e.preventDefault();
+        const email = e.target.querySelector('input').value;
+        e.target.innerHTML = `<p style="color:var(--accent);font-weight:700;font-size:1rem;">✓ ${email} adresi başarıyla eklendi!</p>`;
+    }
 
-        // Prevent body scroll when mobile menu is open
-        const mobileMenuEls = document.querySelectorAll('.mobile-menu a, .mobile-menu button');
-        mobileMenuEls.forEach(el => {
-            el.addEventListener('click', closeMobileMenu);
-        });
-    </script>
+    function handleConsult(e) {
+        e.preventDefault();
+        const email = document.getElementById('c-email').value;
+        alert(`Mesajınız alındı!\n\n${email} adresine 48–72 saat içinde yanıt verilecektir.\n\nGizliliğiniz korunmaktadır.`);
+        e.target.reset();
+    }
+</script>
 </body>
 </html>
