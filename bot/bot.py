@@ -5,8 +5,8 @@ import re
 import logging
 from datetime import datetime
 import requests
-from telegram import Update
-from telegram.ext import Application, CommandHandler, MessageHandler, filters
+from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
+from telegram.ext import Application, CommandHandler, MessageHandler, CallbackQueryHandler, filters
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -20,24 +20,41 @@ ALLOWED_IDS = {7284939267, 8092559336} | set(
 MONTHS = ['', 'Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran',
           'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık']
 
+CATEGORY_KEYWORDS = {
+    'Ceza Hukuku':  ['gözaltı', 'tutuklama', 'suç', 'hapis', 'ceza', 'sanık', 'beraat',
+                     'savcı', 'kovuşturma', 'soruşturma', 'adli', 'cezai', 'iddianame',
+                     'susma', 'ifade', 'zamanaşımı', 'mahkeme', 'duruşma'],
+    'Mali Hukuk':   ['tazminat', 'işçi', 'işveren', 'ücret', 'vergi', 'borç', 'alacak',
+                     'sözleşme', 'kira', 'icra', 'iflas', 'kıdem', 'ihbar', 'fesih',
+                     'adli yardım', 'baro', 'harç'],
+    'Aile Hukuku':  ['boşanma', 'nafaka', 'velayet', 'evlilik', 'çocuk', 'miras',
+                     'aile', 'eş', 'nişan', 'evlat', 'mal paylaşımı'],
+    'İdare Hukuku': ['idare', 'devlet', 'belediye', 'kamu', 'ihale', 'disiplin',
+                     'memur', 'yönetim', 'bakanlık', 'kurum', 'iptal', 'danıştay'],
+}
+
+# Onay bekleyen yazılar
+pending = {}
+
 HELP_TEXT = (
     "👨‍⚖️ *KURT Blog Botu*\n\n"
-    "Yeni yazı eklemek için şu formatı kullan:\n\n"
+    "Herhangi bir yazı gönder — başlık, kategori ve özeti otomatik çıkarırım, "
+    "onayını aldıktan sonra yayınlarım.\n\n"
+    "*Ya da yapılandırılmış format:*\n"
     "```\n"
-    "Başlık: Yazı başlığı buraya\n"
+    "Başlık: Yazı başlığı\n"
     "Kategori: Ceza Hukuku\n"
-    "Özet: Okuyucuyu çeken kısa açıklama.\n\n"
-    "Yazı içeriği buraya gelecek.\n\n"
-    "Her boş satır yeni paragraf demek.\n"
+    "Özet: Kısa açıklama\n\n"
+    "Yazı içeriği...\n"
     "```\n\n"
-    "*Kategoriler:*\n"
-    "• Ceza Hukuku\n"
-    "• Mali Hukuk\n"
-    "• Aile Hukuku\n"
-    "• İdare Hukuku\n\n"
-    "Yeni yazı otomatik olarak öne çıkan yazı olur ve site 1-2 dakikada güncellenir."
+    "*Kategoriler:* Ceza Hukuku · Mali Hukuk · Aile Hukuku · İdare Hukuku\n\n"
+    "*Komutlar:*\n"
+    "/liste — yayındaki yazılar\n"
+    "/sil yazı\\-id — yazı sil"
 )
 
+
+# ── GitHub API ──────────────────────────────────────────────────────────────
 
 def get_posts():
     url = f"https://api.github.com/repos/{REPO}/contents/posts.json"
@@ -56,79 +73,100 @@ def save_posts(posts, sha, title):
     encoded = base64.b64encode(
         json.dumps(posts, ensure_ascii=False, indent=2).encode('utf-8')
     ).decode('utf-8')
-    payload = {"message": f"Yeni yazı: {title}", "content": encoded, "sha": sha}
-    res = requests.put(url, headers=headers, json=payload, timeout=15)
+    res = requests.put(url, headers=headers,
+                       json={"message": f"Yeni yazı: {title}", "content": encoded, "sha": sha},
+                       timeout=15)
     if res.status_code not in (200, 201):
         raise Exception(f"GitHub yazma hatası: {res.status_code}")
 
 
-def parse_post(text):
-    title_m = re.search(r'Başlık:\s*(.+)', text)
-    cat_m = re.search(r'Kategori:\s*(.+)', text)
-    excerpt_m = re.search(r'Özet:\s*(.+)', text)
+# ── Yazı ayrıştırma ─────────────────────────────────────────────────────────
 
-    if not (title_m and cat_m and excerpt_m):
-        return None
+def detect_category(text):
+    text_lower = text.lower()
+    scores = {cat: sum(1 for kw in kws if kw in text_lower)
+              for cat, kws in CATEGORY_KEYWORDS.items()}
+    best = max(scores, key=scores.get)
+    return best if scores[best] > 0 else 'Ceza Hukuku'
 
-    # İçerik: son header'dan sonraki ilk boş satırdan itibaren
-    headers_end = max(title_m.end(), cat_m.end(), excerpt_m.end())
-    raw_content = text[headers_end:].strip()
 
-    # Paragrafları HTML'e çevir
-    paragraphs = [p.strip() for p in raw_content.split('\n\n') if p.strip()]
-    content_html = ''.join(
-        f'<p>{p.replace(chr(10), " ")}</p>' for p in paragraphs
-    ) if paragraphs else f'<p>{excerpt_m.group(1).strip()}</p>'
+def text_to_html(text):
+    paragraphs = [p.strip() for p in text.split('\n\n') if p.strip()]
+    return ''.join(f'<p>{p.replace(chr(10), " ")}</p>' for p in paragraphs)
 
-    # Slug oluştur
-    slug = re.sub(r'[^a-z0-9]+', '-', title_m.group(1).lower().strip()[:50]).strip('-')
 
-    # Okuma süresi tahmini (200 kelime/dk)
-    word_count = len(raw_content.split())
-    read_time = max(1, round(word_count / 200))
+def make_slug(title):
+    tr = str.maketrans('çğıöşüÇĞİÖŞÜ', 'cgiosuCGIOSU')
+    slug = title.translate(tr).lower()
+    return re.sub(r'[^a-z0-9]+', '-', slug)[:50].strip('-')
 
+
+def build_post(title, category, excerpt, content_raw):
     now = datetime.now()
     return {
-        "id": slug,
+        "id": make_slug(title),
         "featured": False,
-        "title": title_m.group(1).strip(),
-        "category": cat_m.group(1).strip(),
-        "excerpt": excerpt_m.group(1).strip(),
+        "title": title,
+        "category": category,
+        "excerpt": excerpt,
         "date": f"{now.day} {MONTHS[now.month]} {now.year}",
-        "readTime": f"{read_time} dk",
-        "content": content_html
+        "readTime": f"{max(1, round(len(content_raw.split()) / 200))} dk",
+        "content": text_to_html(content_raw) or f"<p>{excerpt}</p>"
     }
 
+
+def parse_structured(text):
+    """Başlık/Kategori/Özet formatı."""
+    title_m = re.search(r'Başlık:\s*(.+)', text)
+    cat_m   = re.search(r'Kategori:\s*(.+)', text)
+    exc_m   = re.search(r'Özet:\s*(.+)', text)
+    if not (title_m and cat_m and exc_m):
+        return None
+    headers_end = max(title_m.end(), cat_m.end(), exc_m.end())
+    content_raw = text[headers_end:].strip()
+    return build_post(title_m.group(1).strip(),
+                      cat_m.group(1).strip(),
+                      exc_m.group(1).strip(),
+                      content_raw)
+
+
+def parse_auto(text):
+    """Serbest metin → otomatik ayrıştırma."""
+    paragraphs = [p.strip() for p in text.strip().split('\n\n') if p.strip()]
+    if not paragraphs:
+        return None
+
+    # İlk paragraf kısa ise başlık, değilse ilk cümle başlık
+    if len(paragraphs[0]) <= 120:
+        title = paragraphs[0]
+        content_paragraphs = paragraphs[1:]
+    else:
+        first_sentence = re.split(r'[.!?]\s', paragraphs[0])[0]
+        title = first_sentence[:100].strip()
+        content_paragraphs = paragraphs
+
+    content_raw = '\n\n'.join(content_paragraphs)
+    excerpt_raw = content_paragraphs[0] if content_paragraphs else title
+    excerpt = excerpt_raw[:280] + ('…' if len(excerpt_raw) > 280 else '')
+    category = detect_category(text)
+
+    return build_post(title, category, excerpt, content_raw)
+
+
+def confirm_keyboard():
+    return InlineKeyboardMarkup([[
+        InlineKeyboardButton("✅ Yayınla", callback_data="confirm"),
+        InlineKeyboardButton("✏️ Düzenle", callback_data="edit"),
+        InlineKeyboardButton("❌ İptal",  callback_data="cancel"),
+    ]])
+
+
+# ── Komutlar ────────────────────────────────────────────────────────────────
 
 async def cmd_start(update: Update, context):
     if update.effective_user.id not in ALLOWED_IDS:
         return
     await update.message.reply_text(HELP_TEXT, parse_mode='Markdown')
-
-
-async def cmd_sil(update: Update, context):
-    if update.effective_user.id not in ALLOWED_IDS:
-        return
-    if not context.args:
-        await update.message.reply_text("Kullanım: /sil <yazı-id>")
-        return
-    post_id = context.args[0]
-    try:
-        posts, sha = get_posts()
-        before = len(posts)
-        posts = [p for p in posts if p['id'] != post_id]
-        if len(posts) == before:
-            await update.message.reply_text(f"❌ '{post_id}' ID'li yazı bulunamadı.")
-            return
-        # İlk yazıyı featured yap
-        if posts:
-            for p in posts:
-                p['featured'] = False
-            posts[0]['featured'] = True
-        save_posts(posts, sha, f"Silindi: {post_id}")
-        await update.message.reply_text(f"✅ '{post_id}' silindi. Site 1-2 dakikada güncellenir.")
-    except Exception as e:
-        await update.message.reply_text(f"❌ Hata: {e}")
 
 
 async def cmd_liste(update: Update, context):
@@ -148,50 +186,110 @@ async def cmd_liste(update: Update, context):
         await update.message.reply_text(f"❌ Hata: {e}")
 
 
+async def cmd_sil(update: Update, context):
+    if update.effective_user.id not in ALLOWED_IDS:
+        return
+    if not context.args:
+        await update.message.reply_text("Kullanım: /sil <yazı-id>")
+        return
+    post_id = context.args[0]
+    try:
+        posts, sha = get_posts()
+        before = len(posts)
+        posts = [p for p in posts if p['id'] != post_id]
+        if len(posts) == before:
+            await update.message.reply_text(f"❌ '{post_id}' bulunamadı.")
+            return
+        if posts:
+            for p in posts:
+                p['featured'] = False
+            posts[0]['featured'] = True
+        save_posts(posts, sha, f"Silindi: {post_id}")
+        await update.message.reply_text(f"✅ '{post_id}' silindi.")
+    except Exception as e:
+        await update.message.reply_text(f"❌ Hata: {e}")
+
+
+# ── Mesaj işleme ────────────────────────────────────────────────────────────
+
 async def handle_message(update: Update, context):
     if update.effective_user.id not in ALLOWED_IDS:
         return
 
     text = update.message.text
-    post = parse_post(text)
+    post = parse_structured(text) or parse_auto(text)
 
-    if not post:
-        await update.message.reply_text(
-            "❌ Format hatalı. Başlık, Kategori ve Özet alanları zorunlu.\n\n"
-            "/start yazarak formatı görebilirsin."
+    if not post or not post.get('title'):
+        await update.message.reply_text("❌ Yazı çok kısa. Lütfen daha uzun bir metin gönder.")
+        return
+
+    pending[update.effective_user.id] = post
+
+    preview = (
+        f"📝 *Şu şekilde yayınlayayım mı?*\n\n"
+        f"📌 *Başlık:* {post['title']}\n"
+        f"🏷️ *Kategori:* {post['category']}\n"
+        f"⏱️ *Okuma süresi:* {post['readTime']}\n"
+        f"📅 *Tarih:* {post['date']}\n\n"
+        f"📋 *Özet:*\n{post['excerpt']}"
+    )
+    await update.message.reply_text(preview, parse_mode='Markdown', reply_markup=confirm_keyboard())
+
+
+async def handle_callback(update: Update, context):
+    query = update.callback_query
+    await query.answer()
+
+    if query.from_user.id not in ALLOWED_IDS:
+        return
+
+    uid = query.from_user.id
+
+    if query.data == "cancel":
+        pending.pop(uid, None)
+        await query.edit_message_text("❌ İptal edildi.")
+        return
+
+    if query.data == "edit":
+        pending.pop(uid, None)
+        await query.edit_message_text(
+            "✏️ Düzenlenmiş metni gönder.\n\n"
+            "İstersen şu formatı kullan:\n"
+            "Başlık: ...\nKategori: ...\nÖzet: ...\n\nİçerik..."
         )
+        return
+
+    post = pending.pop(uid, None)
+    if not post:
+        await query.edit_message_text("❌ Bekleyen yazı bulunamadı.")
         return
 
     try:
         posts, sha = get_posts()
-
-        # Mevcut yazıların featured durumunu kaldır
         for p in posts:
             p['featured'] = False
-
-        # Yeni yazı en başa, öne çıkan olarak ekle
         post['featured'] = True
         posts.insert(0, post)
-
         save_posts(posts, sha, post['title'])
-
-        await update.message.reply_text(
-            f"✅ *Yazı yayınlandı!*\n\n"
+        await query.edit_message_text(
+            f"✅ *Yayınlandı!*\n\n"
             f"📌 {post['title']}\n"
-            f"🏷️ {post['category']}\n"
-            f"📅 {post['date']} · {post['readTime']}\n\n"
+            f"🏷️ {post['category']} · {post['date']} · {post['readTime']}\n\n"
             f"Site 1-2 dakika içinde güncellenecek.",
             parse_mode='Markdown'
         )
     except Exception as e:
-        await update.message.reply_text(f"❌ Hata oluştu:\n{e}")
+        await query.edit_message_text(f"❌ Hata: {e}")
 
+
+# ── Başlat ──────────────────────────────────────────────────────────────────
 
 def main():
     app = Application.builder().token(TOKEN).build()
     app.add_handler(CommandHandler("start", cmd_start))
-    app.add_handler(CommandHandler("sil", cmd_sil))
     app.add_handler(CommandHandler("liste", cmd_liste))
+    app.add_handler(CommandHandler("sil", cmd_sil))
+    app.add_handler(CallbackQueryHandler(handle_callback))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
     logging.info(f"Bot başlatıldı. ALLOWED_IDS={ALLOWED_IDS}")
     app.run_polling()
