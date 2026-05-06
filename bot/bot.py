@@ -13,7 +13,9 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 TOKEN = os.getenv('TELEGRAM_TOKEN', '')
 GITHUB_TOKEN = os.getenv('GITHUB_TOKEN', '')
 REPO = os.getenv('GITHUB_REPO', 'erdemkapkara/Kurt')
-ALLOWED_ID = int(os.getenv('ALLOWED_USER_ID', '0').strip())
+ALLOWED_IDS = set(
+    int(x.strip()) for x in os.getenv('ALLOWED_USER_ID', '0').split(',') if x.strip().isdigit()
+)
 
 MONTHS = ['', 'Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran',
           'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık']
@@ -99,13 +101,13 @@ def parse_post(text):
 
 
 async def cmd_start(update: Update, context):
-    if update.effective_user.id != ALLOWED_ID:
+    if update.effective_user.id not in ALLOWED_IDS:
         return
     await update.message.reply_text(HELP_TEXT, parse_mode='Markdown')
 
 
 async def cmd_sil(update: Update, context):
-    if update.effective_user.id != ALLOWED_ID:
+    if update.effective_user.id not in ALLOWED_IDS:
         return
     if not context.args:
         await update.message.reply_text("Kullanım: /sil <yazı-id>")
@@ -130,7 +132,7 @@ async def cmd_sil(update: Update, context):
 
 
 async def cmd_liste(update: Update, context):
-    if update.effective_user.id != ALLOWED_ID:
+    if update.effective_user.id not in ALLOWED_IDS:
         return
     try:
         posts, _ = get_posts()
@@ -147,7 +149,7 @@ async def cmd_liste(update: Update, context):
 
 
 async def handle_message(update: Update, context):
-    if update.effective_user.id != ALLOWED_ID:
+    if update.effective_user.id not in ALLOWED_IDS:
         return
 
     text = update.message.text
@@ -191,7 +193,7 @@ def main():
     app.add_handler(CommandHandler("sil", cmd_sil))
     app.add_handler(CommandHandler("liste", cmd_liste))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
-    logging.info(f"Bot başlatıldı. ALLOWED_ID={ALLOWED_ID}")
+    logging.info(f"Bot başlatıldı. ALLOWED_IDS={ALLOWED_IDS}")
     app.run_polling()
 
 
