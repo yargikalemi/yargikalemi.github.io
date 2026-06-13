@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(claude mcp *)",
+      "Bash(python bot/bot.py*)",
+      "Bash(pip install *)",
+      "Bash(python -c *)",
+      "Bash(python -m *)",
+      "Read(//c/Users/erdem/.claude/projects/c--Users-erdem-Projects-Kurt/memory/**)",
+      "Bash(npx -y @modelcontextprotocol/server-puppeteer --version)",
+      "Bash(npx @modelcontextprotocol/server-puppeteer)",
+      "Bash(kill %1)",
+      "Bash(cat ~/.claude.json 2>/dev/null | python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\('mcpServers',{}\\), indent=2\\)\\)\")",
+      "Read(//c/Users/erdem/**)",
+      "Read(//c/Program Files/Google/Chrome/Application/**)",
+      "Read(//c/Program Files \\(x86\\)/Google/Chrome/Application/**)",
+      "PowerShell(Get-Command chrome, msedge, chromium -ErrorAction SilentlyContinue)",
+      "Bash(npx -y puppeteer browsers install chrome)",
+      "PowerShell(Get-ChildItem \"$env:LOCALAPPDATA\\\\ms-playwright\\\\chrome\" -Recurse -Filter \"chrome.exe\" -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName | Select-Object -First 1)",
+      "PowerShell(Get-ChildItem \"$env:LOCALAPPDATA\\\\ms-playwright\\\\chrome\" -ErrorAction SilentlyContinue | Select-Object Name, FullName)",
+      "PowerShell(Get-ChildItem \"$env:LOCALAPPDATA\\\\ms-playwright\" | Select-Object Name, FullName)",
+      "PowerShell(Get-ChildItem \"$env:USERPROFILE\\\\.cache\" -ErrorAction SilentlyContinue | Select-Object Name)",
+      "PowerShell(Get-ChildItem \"$env:USERPROFILE\\\\.cache\\\\puppeteer\" -Recurse -Filter \"chrome.exe\" -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName | Select-Object -First 1)"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\erdem\\.claude\\projects\\c--Users-erdem-Projects-Kurt\\memory"
+    ]
+  }
+}
