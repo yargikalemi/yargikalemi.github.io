@@ -20,7 +20,8 @@
       "PowerShell(Get-ChildItem \"$env:LOCALAPPDATA\\\\ms-playwright\\\\chrome\" -ErrorAction SilentlyContinue | Select-Object Name, FullName)",
       "PowerShell(Get-ChildItem \"$env:LOCALAPPDATA\\\\ms-playwright\" | Select-Object Name, FullName)",
       "PowerShell(Get-ChildItem \"$env:USERPROFILE\\\\.cache\" -ErrorAction SilentlyContinue | Select-Object Name)",
-      "PowerShell(Get-ChildItem \"$env:USERPROFILE\\\\.cache\\\\puppeteer\" -Recurse -Filter \"chrome.exe\" -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName | Select-Object -First 1)"
+      "PowerShell(Get-ChildItem \"$env:USERPROFILE\\\\.cache\\\\puppeteer\" -Recurse -Filter \"chrome.exe\" -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName | Select-Object -First 1)",
+      "Bash(git pull *)"
     ],
     "additionalDirectories": [
       "c:\\Users\\erdem\\.claude\\projects\\c--Users-erdem-Projects-Kurt\\memory"
