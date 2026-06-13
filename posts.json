@@ -1,7 +1,18 @@
 [
   {
-    "id": "brent-petrol-100-dolarin-altina-geriledi-dun-114-4",
+    "id": "cey-cey-cey",
     "featured": true,
+    "title": "Cey cey Cey",
+    "category": "Ceza Hukuku",
+    "excerpt": "Cey cey Cey",
+    "date": "13 Haziran 2026",
+    "readTime": "1 dk",
+    "content": "<p>Cey cey Cey</p>",
+    "image": "https://raw.githubusercontent.com/yargikalemi/yargikalemi.github.io/main/images/cey-cey-cey-AQADiRBrG6efaVF9.jpg"
+  },
+  {
+    "id": "brent-petrol-100-dolarin-altina-geriledi-dun-114-4",
+    "featured": false,
     "title": "BRENT PETROL 100 DOLARIN ALTINA GERİLEDİ\nDün 114,44 dolara kadar çıkan Brent petrol, günü 109,87 dol",
     "category": "Ceza Hukuku",
     "excerpt": "BRENT PETROL 100 DOLARIN ALTINA GERİLEDİ\nDün 114,44 dolara kadar çıkan Brent petrol, günü 109,87 dolardan kapattı. Ancak bugün gelen haber akışı sonrası fiyatlarda sert düşüş görüldü. Brent petrolün varil fiyatı yüzde 9,3 gerileyerek 99,62 dolara düştü. Aynı saatlerde Batı Teksas…",
