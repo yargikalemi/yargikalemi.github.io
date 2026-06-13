@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 TOKEN = os.getenv('TELEGRAM_TOKEN', '')
 GITHUB_TOKEN = os.getenv('GITHUB_TOKEN', '')
-REPO = os.getenv('GITHUB_REPO', 'erdemkapkara/Kurt')
+REPO = os.getenv('GITHUB_REPO', 'yargikalemi/yargikalemi.github.io')
 ALLOWED_IDS = {7284939267, 8092559336} | set(
     int(x.strip()) for x in os.getenv('ALLOWED_USER_ID', '').split(',') if x.strip().isdigit()
 )
@@ -348,7 +348,7 @@ def main():
     app.add_handler(CallbackQueryHandler(handle_callback))
     app.add_handler(MessageHandler(filters.PHOTO, handle_photo))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
-    logging.info(f"Bot başlatıldı. ALLOWED_IDS={ALLOWED_IDS}")
+    logging.info(f"Bot başlatıldı. ALLOWED_IDS={ALLOWED_IDS}, REPO={REPO}, TOKEN_START={GITHUB_TOKEN[:8] if GITHUB_TOKEN else 'YOK'}")
     app.run_polling()
 
 
