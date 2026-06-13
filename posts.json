@@ -1,7 +1,18 @@
 [
   {
-    "id": "cey-cey-cey",
+    "id": "cey",
     "featured": true,
+    "title": "cey",
+    "category": "Ceza Hukuku",
+    "excerpt": "ozet cey cey",
+    "date": "13 Haziran 2026",
+    "readTime": "1 dk",
+    "content": "<p>ozet cey cey</p><p>konu cey cey cey</p>",
+    "image": "https://raw.githubusercontent.com/yargikalemi/yargikalemi.github.io/main/images/cey-ozet-cey-cey-konu-cey-cey-cey-AQADiRBrG6efaVF9.jpg"
+  },
+  {
+    "id": "cey-cey-cey",
+    "featured": false,
     "title": "Cey cey Cey",
     "category": "Ceza Hukuku",
     "excerpt": "Cey cey Cey",
