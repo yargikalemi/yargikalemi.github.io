@@ -316,7 +316,7 @@
             margin: 0 auto;
             padding: 2.5rem 5%;
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             gap: 1rem;
             text-align: center;
         }
@@ -1128,18 +1128,8 @@
         </div>
         <div class="stat-sep"></div>
         <div class="stat-item fade-in">
-            <div class="stat-number" data-target="2400">0</div>
+            <div class="stat-number" data-target="1500" data-suffix="+">0</div>
             <div class="stat-label">Dava Deneyimi</div>
-        </div>
-        <div class="stat-sep"></div>
-        <div class="stat-item fade-in">
-            <div class="stat-number" data-target="48">0</div>
-            <div class="stat-label">Yayımlanmış Yazı</div>
-        </div>
-        <div class="stat-sep"></div>
-        <div class="stat-item fade-in">
-            <div class="stat-number" data-target="12000">0</div>
-            <div class="stat-label">Aylık Okuyucu</div>
         </div>
     </div>
 </div>
@@ -1480,12 +1470,13 @@
     ============================================= */
     function animateCount(el) {
         const target = +el.dataset.target;
+        const suffix = el.dataset.suffix || '';
         const duration = 1600;
         const step = target / (duration / 16);
         let current = 0;
         const timer = setInterval(() => {
             current += step;
-            if (current >= target) { el.textContent = target.toLocaleString('tr'); clearInterval(timer); }
+            if (current >= target) { el.textContent = target.toLocaleString('tr') + suffix; clearInterval(timer); }
             else el.textContent = Math.floor(current).toLocaleString('tr');
         }, 16);
     }
