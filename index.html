@@ -1096,7 +1096,7 @@
         <div class="header-actions">
             <button class="btn-icon" id="theme-btn" title="Tema değiştir"><i class="fas fa-moon"></i></button>
             <button class="btn-icon" id="hamburger" title="Menü"><i class="fas fa-bars"></i></button>
-            <button class="btn-cta" onclick="scrollTo('#consultation')">Danışmanlık Al</button>
+            <button class="btn-cta" onclick="scrollToSection('#consultation')">Danışmanlık Al</button>
         </div>
     </div>
 
@@ -1105,7 +1105,7 @@
         <a href="#features" onclick="closeMobileMenu()">Platform</a>
         <a href="#about" onclick="closeMobileMenu()">Hakkında</a>
         <a href="#consultation" onclick="closeMobileMenu()">Danışmanlık</a>
-        <button class="btn-cta" onclick="scrollTo('#consultation'); closeMobileMenu();">Danışmanlık Al</button>
+        <button class="btn-cta" onclick="scrollToSection('#consultation'); closeMobileMenu();">Danışmanlık Al</button>
     </div>
 </div>
 
@@ -1115,8 +1115,8 @@
         <h1>Hukuku anlamak,<br>hakkını korumanın<br>ilk adımıdır.</h1>
         <p>Hukuki süreçleri anlamak için bağımsız, güvenilir bir kaynak. Yargı içtihatları ve saha deneyimiyle yazılmış yazılar — herkese açık, yalın ve anlaşılır.</p>
         <div class="hero-btns">
-            <button class="btn-outline" onclick="scrollTo('#posts')">Yazıları Oku</button>
-            <button class="btn-filled" onclick="scrollTo('#consultation')">Danışmanlık Al</button>
+            <button class="btn-outline" onclick="scrollToSection('#posts')">Yazıları Oku</button>
+            <button class="btn-filled" onclick="scrollToSection('#consultation')">Danışmanlık Al</button>
         </div>
     </div>
 </section>
@@ -1431,7 +1431,7 @@
     /* =============================================
        SMOOTH SCROLL HELPER
     ============================================= */
-    function scrollTo(selector) {
+    function scrollToSection(selector) {
         const el = document.querySelector(selector);
         if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
         closeMobileMenu();
