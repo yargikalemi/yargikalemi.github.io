@@ -51,11 +51,12 @@ HELP_TEXT = (
     "```\n\n"
     "*Kategoriler:* Ceza Hukuku · Mali Hukuk · Aile Hukuku · İdare Hukuku\n\n"
     "*Komutlar:*\n"
-    "/liste — yayındaki yazılar\n"
-    "/sil yazı\\-id — yazı sil\n"
-    "/duzenle yazı\\-id — yazı güncelle\n"
-    "/onecikart yazı\\-id — yazıyı öne çıkar\n"
+    "/liste — yayındaki yazılar (ID numaralarıyla)\n"
+    "/sil 3 — 3 numaralı yazıyı sil\n"
+    "/duzenle 3 — 3 numaralı yazıyı güncelle\n"
+    "/onecikart 3 — 3 numaralı yazıyı öne çıkar\n"
     "/istatistik — yazı sayısı ve kategoriler\n"
+    "/migrate — eski yazı ID'lerini 1\\-2\\-3 formatına çevir\n"
     "/iptal — düzenlemeyi iptal et"
 )
 
@@ -242,7 +243,7 @@ async def cmd_liste(update: Update, context):
         lines = [f"📋 *Yayındaki Yazılar ({len(posts)})*\n"]
         for p in posts:
             star = "⭐ " if p.get('featured') else ""
-            lines.append(f"{star}`{p['id']}`\n  {p['title']}\n")
+            lines.append(f"{star}*{p['id']}* — {p['title']}")
         await update.message.reply_text('\n'.join(lines), parse_mode='Markdown')
     except Exception as e:
         await update.message.reply_text(f"❌ Hata: {e}")
@@ -342,6 +343,24 @@ async def cmd_istatistik(update: Update, context):
         if featured:
             lines.append(f"\n⭐ Öne çıkan: {featured['title']}")
         await update.message.reply_text('\n'.join(lines), parse_mode='Markdown')
+    except Exception as e:
+        await update.message.reply_text(f"❌ Hata: {e}")
+
+
+async def cmd_migrate(update: Update, context):
+    if update.effective_user.id not in ALLOWED_IDS:
+        return
+    try:
+        posts, sha = get_posts()
+        for i, p in enumerate(posts, 1):
+            p['id'] = str(i)
+        save_posts(posts, sha, "Yazı ID'leri 1-2-3 formatına güncellendi")
+        lines = [f"✅ *{len(posts)} yazı güncellendi\\!*\n"]
+        for p in posts:
+            star = "⭐ " if p.get('featured') else ""
+            lines.append(f"{star}*{p['id']}* — {p['title']}")
+        lines.append("\nArtık `/sil 1`, `/duzenle 2` gibi kullanabilirsin\\.")
+        await update.message.reply_text('\n'.join(lines), parse_mode='MarkdownV2')
     except Exception as e:
         await update.message.reply_text(f"❌ Hata: {e}")
 
@@ -462,6 +481,7 @@ def main():
     app.add_handler(CommandHandler("duzenle", cmd_duzenle))
     app.add_handler(CommandHandler("onecikart", cmd_onecikart))
     app.add_handler(CommandHandler("istatistik", cmd_istatistik))
+    app.add_handler(CommandHandler("migrate", cmd_migrate))
     app.add_handler(CommandHandler("iptal", cmd_iptal))
     app.add_handler(CallbackQueryHandler(handle_callback))
     app.add_handler(MessageHandler(filters.PHOTO, handle_photo))
