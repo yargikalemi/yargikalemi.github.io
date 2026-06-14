@@ -6,7 +6,7 @@
     <title>Yargı Kalemi — Hukuk Blog & Danışmanlık Platformu</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="icon" type="image/png" href="logo1.png">
     <style>
         /* =============================================
            THEME VARIABLES — tüm renkler buradan
@@ -860,10 +860,17 @@
            FOOTER
         ============================================= */
         footer {
-            background: var(--bg-dark-2);
-            color: #E8E4DC;
+            background: #FFFFFF;
+            color: #1A2B3C;
             padding: 3rem 5% 1.5rem;
+            border-top: 1px solid #E0DBD3;
             transition: background var(--transition);
+        }
+        /* Dark modda da footer beyaz kalır */
+        [data-theme="dark"] footer {
+            background: #FFFFFF;
+            color: #1A2B3C;
+            border-top-color: #E0DBD3;
         }
         .footer-inner {
             max-width: 1280px;
@@ -874,10 +881,10 @@
             grid-template-columns: 2fr 1fr 1fr 1fr;
             gap: 2rem;
             padding-bottom: 2rem;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
+            border-bottom: 1px solid #E0DBD3;
         }
-        .footer-brand .brand-logo { font-size: 1.5rem; margin-bottom: 0.5rem; color: #E8E4DC; }
-        .footer-brand p { font-size: 0.85rem; color: rgba(232,228,220,0.65); line-height: 1.6; margin-bottom: 1rem; }
+        .footer-brand .brand-logo { font-size: 1.5rem; margin-bottom: 0.5rem; color: #1A2B3C; }
+        .footer-brand p { font-size: 0.85rem; color: #4A5568; line-height: 1.6; margin-bottom: 1rem; }
         .footer-col h4 {
             font-size: 0.82rem;
             font-weight: 700;
@@ -890,7 +897,7 @@
         .footer-col ul li { margin-bottom: 0.6rem; }
         .footer-col a {
             font-size: 0.88rem;
-            color: rgba(232,228,220,0.62);
+            color: #4A5568;
             transition: color var(--transition);
         }
         .footer-col a:hover { color: var(--accent); }
@@ -902,8 +909,8 @@
             flex-wrap: wrap;
             gap: 0.8rem;
         }
-        .footer-legal { font-size: 0.78rem; color: rgba(232,228,220,0.52); line-height: 1.5; max-width: 600px; }
-        .footer-copy { font-size: 0.78rem; color: rgba(232,228,220,0.42); white-space: nowrap; }
+        .footer-legal { font-size: 0.78rem; color: #8896A4; line-height: 1.5; max-width: 600px; }
+        .footer-copy { font-size: 0.78rem; color: #8896A4; white-space: nowrap; }
 
         /* =============================================
            BLOG POST MODAL
@@ -1078,7 +1085,7 @@
     <div class="header-inner">
         <a href="#" class="brand">
             <div style="display:flex;align-items:center;gap:0.55rem;">
-                <img src="logo.png" alt="Yargı Kalemi" style="height:64px;width:auto;flex-shrink:0;">
+                <img src="logo1.png" alt="Yargı Kalemi" style="height:64px;width:auto;flex-shrink:0;">
                 <div>
                     <div class="brand-logo">Yargı Kalemi</div>
                     <div class="brand-tagline">Hukuku anla. Hakkını bil.</div>
@@ -1317,7 +1324,7 @@
         <div class="footer-grid">
             <div class="footer-brand">
                 <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.9rem;">
-                    <img src="logo.png" alt="Yargı Kalemi" style="height:68px;width:auto;flex-shrink:0;">
+                    <img src="logo1.png" alt="Yargı Kalemi" style="height:68px;width:auto;flex-shrink:0;">
                     <div class="brand-logo" style="font-size:1.3rem;">Yargı Kalemi</div>
                 </div>
                 <p>Türkiye'nin hukuk sistemini, haklarınızı ve kendinizi nasıl koruyacağınızı anlatan bağımsız bir platform.</p>
