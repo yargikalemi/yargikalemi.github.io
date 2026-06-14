@@ -434,6 +434,8 @@ async def handle_callback(update: Update, context):
 
     try:
         posts, sha = get_posts()
+        nums = [int(p['id']) for p in posts if str(p['id']).isdigit()]
+        post['id'] = str(max(nums, default=0) + 1)
         for p in posts:
             p['featured'] = False
         post['featured'] = True
