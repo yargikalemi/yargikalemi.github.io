@@ -2,22 +2,22 @@
   {
     "id": "1",
     "featured": true,
-    "title": "Mahkemede Kendinizi İfade Etme Hakkı",
-    "category": "Ceza Hukuku",
-    "excerpt": "Mahkemede susma hakkı ne zaman kullanılır, beyan nasıl verilir? Avukat olmaksızın kendinizi savunmak zorunda kalırsanız nelere dikkat etmelisiniz?",
-    "date": "2 Nisan 2025",
-    "readTime": "7 dk",
-    "content": "<p>Ceza yargılamasında sanık sıfatı, beraberinde hem haklar hem de riskler getirir. Mahkemede yanlış zamanda yanlış söylenen bir sözcük, lehte delilleri anlamsız kılabilir.</p><h3>Susma Hakkı</h3><p>Anayasa ve CMK kapsamında her sanık, kendisini suçlayacak beyan vermekten kaçınma hakkına sahiptir. Bu hakkı kullanmak suçluluk karinesi oluşturmaz. Mahkeme, susma hakkının aleyhte delil olarak kullanılmasına izin veremez. Avukatınız olmadan yapılan tüm beyanlar potansiyel risk taşır.</p><h3>İfade Vermeyi Seçerseniz</h3><p>Eğer ifade vermeyi tercih ediyorsanız, yalnızca doğrudan bilgi sahibi olduğunuz konularda konuşun. \"Hatırlamıyorum\" veya \"bilmiyorum\" demek, yanlış ya da tutarsız bir beyan vermekten her zaman daha güvenlidir. Verilen her beyan kayıt altına alınır ve ilerleyen aşamalarda sizi bağlar.</p><h3>Avukatsız Duruşma</h3><p>Zorunlu müdafilik kapsamına girmeyen davalarda sanık avukatsız yargılanabilir. Bu durumda mahkemeden yeterli süre talep edin, belgeleri önceden inceleyin ve gereksiz konuşmaktan kaçının. Mahkemenin görevi tarafları temsil etmek değil, hukuku uygulamaktır.</p>"
-  },
-  {
-    "id": "2",
-    "featured": false,
     "title": "İş Yerinde Haksız Fesih: Tazminat Haklarınız",
     "category": "Mali Hukuk",
     "excerpt": "İşten çıkarıldınız ve bunun haksız olduğunu düşünüyorsunuz. Kıdem tazminatı, ihbar tazminatı ve işe iade davası konusunda bilmeniz gerekenler.",
     "date": "20 Mart 2025",
     "readTime": "10 dk",
     "content": "<p>İşten çıkarılmak hem ekonomik hem de psikolojik açıdan sarsıcı bir deneyimdir. Pek çok çalışan bu süreçte haklarının farkında olmadığı için önemli tazminat alacaklarından mahrum kalıyor.</p><h3>Kıdem Tazminatı</h3><p>En az bir yıl çalışmış olan ve iş akdi belirli koşullarda sona eren işçiler kıdem tazminatına hak kazanır. Her tam yıl için bir aylık brüt ücret esas alınır; ancak tavan miktarı her altı ayda bir devlet tarafından güncellenen bir sınırla kısıtlanmıştır. Kendi isteğiyle istifa eden işçiler kural olarak kıdem tazminatı alamaz.</p><h3>İhbar Tazminatı</h3><p>Belirsiz süreli iş sözleşmelerinde işveren belirli bildirim sürelerine uymak zorundadır: 0-6 ay çalışmada 2 hafta, 6 ay-1,5 yıl arasında 4 hafta, 1,5-3 yıl arasında 6 hafta, 3 yılı aşanlarda 8 hafta. Bu süreye uyulmaksızın yapılan fesihlerde ihbar tazminatı ödenmesi gerekir.</p><h3>İşe İade Davası</h3><p>En az 30 işçi çalıştıran işyerlerinde en az 6 ay kıdemi olan işçiler, geçersiz nedenle işten çıkarılmaları durumunda işe iade davası açabilir. Bu davanın fesih tebliğinden itibaren 1 ay içinde açılması zorunludur. Mahkeme işe iade kararı verirse işveren ya işçiyi geri almak ya da 4-8 aylık tazminat ödemek durumunda kalır.</p>"
+  },
+  {
+    "id": "2",
+    "featured": false,
+    "title": "Mahkemede Kendinizi İfade Etme Hakkı",
+    "category": "Ceza Hukuku",
+    "excerpt": "Mahkemede susma hakkı ne zaman kullanılır, beyan nasıl verilir? Avukat olmaksızın kendinizi savunmak zorunda kalırsanız nelere dikkat etmelisiniz?",
+    "date": "2 Nisan 2025",
+    "readTime": "7 dk",
+    "content": "<p>Ceza yargılamasında sanık sıfatı, beraberinde hem haklar hem de riskler getirir. Mahkemede yanlış zamanda yanlış söylenen bir sözcük, lehte delilleri anlamsız kılabilir.</p><h3>Susma Hakkı</h3><p>Anayasa ve CMK kapsamında her sanık, kendisini suçlayacak beyan vermekten kaçınma hakkına sahiptir. Bu hakkı kullanmak suçluluk karinesi oluşturmaz. Mahkeme, susma hakkının aleyhte delil olarak kullanılmasına izin veremez. Avukatınız olmadan yapılan tüm beyanlar potansiyel risk taşır.</p><h3>İfade Vermeyi Seçerseniz</h3><p>Eğer ifade vermeyi tercih ediyorsanız, yalnızca doğrudan bilgi sahibi olduğunuz konularda konuşun. \"Hatırlamıyorum\" veya \"bilmiyorum\" demek, yanlış ya da tutarsız bir beyan vermekten her zaman daha güvenlidir. Verilen her beyan kayıt altına alınır ve ilerleyen aşamalarda sizi bağlar.</p><h3>Avukatsız Duruşma</h3><p>Zorunlu müdafilik kapsamına girmeyen davalarda sanık avukatsız yargılanabilir. Bu durumda mahkemeden yeterli süre talep edin, belgeleri önceden inceleyin ve gereksiz konuşmaktan kaçının. Mahkemenin görevi tarafları temsil etmek değil, hukuku uygulamaktır.</p>"
   },
   {
     "id": "3",
