@@ -2,6 +2,16 @@
   {
     "id": "1",
     "featured": true,
+    "title": "İş Yerinde Haksız Fesih: Tazminat Haklarınız",
+    "category": "Mali Hukuk",
+    "excerpt": "İşten çıkarıldınız ve bunun haksız olduğunu düşünüyorsunuz. Kıdem tazminatı, ihbar tazminatı ve işe iade davası konusunda bilmeniz gerekenler.",
+    "date": "20 Mart 2025",
+    "readTime": "10 dk",
+    "content": "<p>İşten çıkarılmak hem ekonomik hem de psikolojik açıdan sarsıcı bir deneyimdir. Pek çok çalışan bu süreçte haklarının farkında olmadığı için önemli tazminat alacaklarından mahrum kalıyor.</p><h3>Kıdem Tazminatı</h3><p>En az bir yıl çalışmış olan ve iş akdi belirli koşullarda sona eren işçiler kıdem tazminatına hak kazanır. Her tam yıl için bir aylık brüt ücret esas alınır; ancak tavan miktarı her altı ayda bir devlet tarafından güncellenen bir sınırla kısıtlanmıştır. Kendi isteğiyle istifa eden işçiler kural olarak kıdem tazminatı alamaz.</p><h3>İhbar Tazminatı</h3><p>Belirsiz süreli iş sözleşmelerinde işveren belirli bildirim sürelerine uymak zorundadır: 0-6 ay çalışmada 2 hafta, 6 ay-1,5 yıl arasında 4 hafta, 1,5-3 yıl arasında 6 hafta, 3 yılı aşanlarda 8 hafta. Bu süreye uyulmaksızın yapılan fesihlerde ihbar tazminatı ödenmesi gerekir.</p><h3>İşe İade Davası</h3><p>En az 30 işçi çalıştıran işyerlerinde en az 6 ay kıdemi olan işçiler, geçersiz nedenle işten çıkarılmaları durumunda işe iade davası açabilir. Bu davanın fesih tebliğinden itibaren 1 ay içinde açılması zorunludur. Mahkeme işe iade kararı verirse işveren ya işçiyi geri almak ya da 4-8 aylık tazminat ödemek durumunda kalır.</p>"
+  },
+  {
+    "id": "2",
+    "featured": false,
     "title": "Ceza Davalarında Zamanaşımı: Bilmeniz Gerekenler",
     "category": "Ceza Hukuku",
     "excerpt": "Bir suç işlenmişse, ne kadar zaman sonra takibat başlatılamaz? Zamanaşımı hangi suçlar için kaç yıl? Bu hukuki koruma mekanizmasını somut örneklerle açıklıyorum.",
@@ -10,7 +20,7 @@
     "content": "<p>Zamanaşımı, devletin belirli bir süre geçtikten sonra suçlama hakkını yitirdiği anlamına gelir. Bu ilke, hem hukuki güvenlik hem de delillerin zamanla anlamsızlaşması nedeniyle tüm modern hukuk sistemlerinde mevcuttur.</p><h3>Dava Zamanaşımı Süreleri</h3><p>Türk Ceza Kanunu'na göre zamanaşımı süreleri suçun öngördüğü azami cezaya bağlıdır. Ağırlaştırılmış müebbet hapis cezasını gerektiren suçlarda süre yoktur. Ağır ceza suçlarında 30 yıl, 5-10 yıl arası hapis gerektiren suçlarda 15 yıl, daha hafif suçlarda 8 veya 4 yıl uygulanır.</p><h3>Zamanaşımı Ne Zaman Başlar?</h3><p>Kural olarak suçun işlendiği gün zamanaşımı başlar. Ancak kesintisiz suçlarda son hareket tarihinde, sonradan ortaya çıkan suçlarda ise sonucun gerçekleştiği anda başlangıç sayılır.</p><h3>Durma ve Kesilme</h3><p>Soruşturma başladığında, dava açıldığında veya sanık yurt dışına kaçtığında zamanaşımı durabilir ya da kesilebilir. Kesilmesi halinde süre sıfırlanarak yeniden işlemeye başlar. Bu nedenle zamanaşımının hesabı her somut olayda ayrı teknik analiz gerektirir.</p>"
   },
   {
-    "id": "2",
+    "id": "3",
     "featured": false,
     "title": "Mahkemede Kendinizi İfade Etme Hakkı",
     "category": "Ceza Hukuku",
@@ -20,7 +30,7 @@
     "content": "<p>Ceza yargılamasında sanık sıfatı, beraberinde hem haklar hem de riskler getirir. Mahkemede yanlış zamanda yanlış söylenen bir sözcük, lehte delilleri anlamsız kılabilir.</p><h3>Susma Hakkı</h3><p>Anayasa ve CMK kapsamında her sanık, kendisini suçlayacak beyan vermekten kaçınma hakkına sahiptir. Bu hakkı kullanmak suçluluk karinesi oluşturmaz. Mahkeme, susma hakkının aleyhte delil olarak kullanılmasına izin veremez. Avukatınız olmadan yapılan tüm beyanlar potansiyel risk taşır.</p><h3>İfade Vermeyi Seçerseniz</h3><p>Eğer ifade vermeyi tercih ediyorsanız, yalnızca doğrudan bilgi sahibi olduğunuz konularda konuşun. \"Hatırlamıyorum\" veya \"bilmiyorum\" demek, yanlış ya da tutarsız bir beyan vermekten her zaman daha güvenlidir. Verilen her beyan kayıt altına alınır ve ilerleyen aşamalarda sizi bağlar.</p><h3>Avukatsız Duruşma</h3><p>Zorunlu müdafilik kapsamına girmeyen davalarda sanık avukatsız yargılanabilir. Bu durumda mahkemeden yeterli süre talep edin, belgeleri önceden inceleyin ve gereksiz konuşmaktan kaçının. Mahkemenin görevi tarafları temsil etmek değil, hukuku uygulamaktır.</p>"
   },
   {
-    "id": "3",
+    "id": "4",
     "featured": false,
     "title": "İdareye Karşı Nasıl Dava Açılır?",
     "category": "İdare Hukuku",
@@ -30,7 +40,7 @@
     "content": "<p>Devlet kurumları vatandaşlara karşı hatalı işlem tesis edebilir, haksız para cezası uygulayabilir ya da hukuka aykırı disiplin kararı verebilir. Tüm bu durumlarda başvurulacak yargı yolu idari yargıdır.</p><h3>Hangi Mahkemeler?</h3><p>İdare mahkemesi, Danıştay ve Vergi Mahkemeleri idari yargının üç temel ayağını oluşturur. Genel kural olarak idare mahkemeleri ilk derece yargı merciidir; davalar burada açılır. Danıştay ise bazı davalarda ilk derece, diğerlerinde temyiz mercii olarak görev yapar.</p><h3>Süre Çok Kritik</h3><p>İdari işlemlere karşı dava açma süresi kural olarak 60 gündür. Bu süre işlemin tebliğinden itibaren işlemeye başlar. 60 günlük süreyi geçiren başvurular, hakkın ne kadar güçlü olduğundan bağımsız olarak usul yönünden reddedilir.</p><h3>İptal ve Tam Yargı Davaları</h3><p>İdari davaların iki ana türü vardır: iptal davaları (hukuka aykırı işlemin ortadan kaldırılması) ve tam yargı davaları (uğranılan zararın tazmini). Bu ikisi aynı anda ya da ayrı ayrı açılabilir; tam yargı davası için iptal kararının beklenmesi zorunlu değildir.</p>"
   },
   {
-    "id": "4",
+    "id": "5",
     "featured": false,
     "title": "Gözaltına Alındığınızda İlk 24 Saatte Yapmanız Gereken 5 Şey\nGözaltına alınmak, sıradan bir vatandaş",
     "category": "Ceza Hukuku",
@@ -38,15 +48,5 @@
     "date": "6 Mayıs 2026",
     "readTime": "1 dk",
     "content": "<p>Gözaltına Alındığınızda İlk 24 Saatte Yapmanız Gereken 5 Şey Gözaltına alınmak, sıradan bir vatandaşın karşılaşabileceği en stresli deneyimlerden biridir. Panikte alınan yanlış kararlar, ilerleyen süreçte telafisi güç sonuçlara yol açabilir.</p>"
-  },
-  {
-    "id": "5",
-    "featured": false,
-    "title": "İş Yerinde Haksız Fesih: Tazminat Haklarınız",
-    "category": "Mali Hukuk",
-    "excerpt": "İşten çıkarıldınız ve bunun haksız olduğunu düşünüyorsunuz. Kıdem tazminatı, ihbar tazminatı ve işe iade davası konusunda bilmeniz gerekenler.",
-    "date": "20 Mart 2025",
-    "readTime": "10 dk",
-    "content": "<p>İşten çıkarılmak hem ekonomik hem de psikolojik açıdan sarsıcı bir deneyimdir. Pek çok çalışan bu süreçte haklarının farkında olmadığı için önemli tazminat alacaklarından mahrum kalıyor.</p><h3>Kıdem Tazminatı</h3><p>En az bir yıl çalışmış olan ve iş akdi belirli koşullarda sona eren işçiler kıdem tazminatına hak kazanır. Her tam yıl için bir aylık brüt ücret esas alınır; ancak tavan miktarı her altı ayda bir devlet tarafından güncellenen bir sınırla kısıtlanmıştır. Kendi isteğiyle istifa eden işçiler kural olarak kıdem tazminatı alamaz.</p><h3>İhbar Tazminatı</h3><p>Belirsiz süreli iş sözleşmelerinde işveren belirli bildirim sürelerine uymak zorundadır: 0-6 ay çalışmada 2 hafta, 6 ay-1,5 yıl arasında 4 hafta, 1,5-3 yıl arasında 6 hafta, 3 yılı aşanlarda 8 hafta. Bu süreye uyulmaksızın yapılan fesihlerde ihbar tazminatı ödenmesi gerekir.</p><h3>İşe İade Davası</h3><p>En az 30 işçi çalıştıran işyerlerinde en az 6 ay kıdemi olan işçiler, geçersiz nedenle işten çıkarılmaları durumunda işe iade davası açabilir. Bu davanın fesih tebliğinden itibaren 1 ay içinde açılması zorunludur. Mahkeme işe iade kararı verirse işveren ya işçiyi geri almak ya da 4-8 aylık tazminat ödemek durumunda kalır.</p>"
   }
 ]
