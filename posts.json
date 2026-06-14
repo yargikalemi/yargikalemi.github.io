@@ -2,6 +2,16 @@
   {
     "id": "1",
     "featured": true,
+    "title": "Boşanma Sürecinde Haklarınız: Mülk, Nafaka, Velayet",
+    "category": "Aile Hukuku",
+    "excerpt": "Boşanma davası açmadan önce bilmeniz gerekenler: mal paylaşımı nasıl işler, nafaka şartları nelerdir ve çocukların velayeti nasıl belirlenir?",
+    "date": "18 Nisan 2025",
+    "readTime": "11 dk",
+    "content": "<p>Boşanma, hukuki boyutu en karmaşık kişisel süreçlerden biridir. Mal paylaşımı, nafaka ve velayet birbirinden bağımsız değerlendirilmesi gereken üç ayrı hukuki başlıktır.</p><h3>Mal Paylaşımı</h3><p>2002'de yürürlüğe giren Türk Medeni Kanunu, evlilik birliği içinde edinilen mallar için \"edinilmiş mallara katılma\" rejimini esas almaktadır. Evlilik süresince kazanılan gelir, satın alınan mülk ve biriken tasarruflar bu kapsama girer. Evlilik öncesinde sahip olunan mallar, miras ve bağış yoluyla edinilen varlıklar kural olarak bu paya dahil değildir; ancak bunu ispat etmek pratikte güçtür.</p><h3>Nafaka</h3><p>Nafaka iki biçimde ortaya çıkar: tedbir nafakası (dava süresince ödenen) ve yoksulluk nafakası (karar sonrası ödenen). Yoksulluk nafakasına hükmedilmesi için boşanmadan sonra yoksulluğa düşeceği kanıtlanmalı ve talep eden tarafın ağır kusuru bulunmamalıdır.</p><h3>Velayet</h3><p>Velayet kararlarında belirleyici tek ölçüt \"çocuğun üstün yararı\"dır. Mahkemeler çocuğun yaşını, sağlığını, eğitim durumunu ve ebeveynlerin bakım kapasitesini gözetir. 12 yaşını doldurmuş çocukların görüşü özellikle dikkate alınır. Velayet kararları kesin değildir; koşulların değişmesi halinde revize ettirilebilir.</p>"
+  },
+  {
+    "id": "2",
+    "featured": false,
     "title": "İdareye Karşı Nasıl Dava Açılır?",
     "category": "İdare Hukuku",
     "excerpt": "Bir devlet kurumunun hatalı işlemi size zarar verdi mi? İdare mahkemelerinde dava açma hakkınız, süresi ve adımları hakkında kapsamlı bir rehber.",
@@ -10,7 +20,7 @@
     "content": "<p>Devlet kurumları vatandaşlara karşı hatalı işlem tesis edebilir, haksız para cezası uygulayabilir ya da hukuka aykırı disiplin kararı verebilir. Tüm bu durumlarda başvurulacak yargı yolu idari yargıdır.</p><h3>Hangi Mahkemeler?</h3><p>İdare mahkemesi, Danıştay ve Vergi Mahkemeleri idari yargının üç temel ayağını oluşturur. Genel kural olarak idare mahkemeleri ilk derece yargı merciidir; davalar burada açılır. Danıştay ise bazı davalarda ilk derece, diğerlerinde temyiz mercii olarak görev yapar.</p><h3>Süre Çok Kritik</h3><p>İdari işlemlere karşı dava açma süresi kural olarak 60 gündür. Bu süre işlemin tebliğinden itibaren işlemeye başlar. 60 günlük süreyi geçiren başvurular, hakkın ne kadar güçlü olduğundan bağımsız olarak usul yönünden reddedilir.</p><h3>İptal ve Tam Yargı Davaları</h3><p>İdari davaların iki ana türü vardır: iptal davaları (hukuka aykırı işlemin ortadan kaldırılması) ve tam yargı davaları (uğranılan zararın tazmini). Bu ikisi aynı anda ya da ayrı ayrı açılabilir; tam yargı davası için iptal kararının beklenmesi zorunlu değildir.</p>"
   },
   {
-    "id": "2",
+    "id": "3",
     "featured": false,
     "title": "Gözaltına Alındığınızda İlk 24 Saatte Yapmanız Gereken 5 Şey\nGözaltına alınmak, sıradan bir vatandaş",
     "category": "Ceza Hukuku",
@@ -20,7 +30,7 @@
     "content": "<p>Gözaltına Alındığınızda İlk 24 Saatte Yapmanız Gereken 5 Şey Gözaltına alınmak, sıradan bir vatandaşın karşılaşabileceği en stresli deneyimlerden biridir. Panikte alınan yanlış kararlar, ilerleyen süreçte telafisi güç sonuçlara yol açabilir.</p>"
   },
   {
-    "id": "3",
+    "id": "4",
     "featured": false,
     "title": "Ceza Davalarında Zamanaşımı: Bilmeniz Gerekenler",
     "category": "Ceza Hukuku",
@@ -28,16 +38,6 @@
     "date": "25 Nisan 2025",
     "readTime": "9 dk",
     "content": "<p>Zamanaşımı, devletin belirli bir süre geçtikten sonra suçlama hakkını yitirdiği anlamına gelir. Bu ilke, hem hukuki güvenlik hem de delillerin zamanla anlamsızlaşması nedeniyle tüm modern hukuk sistemlerinde mevcuttur.</p><h3>Dava Zamanaşımı Süreleri</h3><p>Türk Ceza Kanunu'na göre zamanaşımı süreleri suçun öngördüğü azami cezaya bağlıdır. Ağırlaştırılmış müebbet hapis cezasını gerektiren suçlarda süre yoktur. Ağır ceza suçlarında 30 yıl, 5-10 yıl arası hapis gerektiren suçlarda 15 yıl, daha hafif suçlarda 8 veya 4 yıl uygulanır.</p><h3>Zamanaşımı Ne Zaman Başlar?</h3><p>Kural olarak suçun işlendiği gün zamanaşımı başlar. Ancak kesintisiz suçlarda son hareket tarihinde, sonradan ortaya çıkan suçlarda ise sonucun gerçekleştiği anda başlangıç sayılır.</p><h3>Durma ve Kesilme</h3><p>Soruşturma başladığında, dava açıldığında veya sanık yurt dışına kaçtığında zamanaşımı durabilir ya da kesilebilir. Kesilmesi halinde süre sıfırlanarak yeniden işlemeye başlar. Bu nedenle zamanaşımının hesabı her somut olayda ayrı teknik analiz gerektirir.</p>"
-  },
-  {
-    "id": "4",
-    "featured": false,
-    "title": "Boşanma Sürecinde Haklarınız: Mülk, Nafaka, Velayet",
-    "category": "Aile Hukuku",
-    "excerpt": "Boşanma davası açmadan önce bilmeniz gerekenler: mal paylaşımı nasıl işler, nafaka şartları nelerdir ve çocukların velayeti nasıl belirlenir?",
-    "date": "18 Nisan 2025",
-    "readTime": "11 dk",
-    "content": "<p>Boşanma, hukuki boyutu en karmaşık kişisel süreçlerden biridir. Mal paylaşımı, nafaka ve velayet birbirinden bağımsız değerlendirilmesi gereken üç ayrı hukuki başlıktır.</p><h3>Mal Paylaşımı</h3><p>2002'de yürürlüğe giren Türk Medeni Kanunu, evlilik birliği içinde edinilen mallar için \"edinilmiş mallara katılma\" rejimini esas almaktadır. Evlilik süresince kazanılan gelir, satın alınan mülk ve biriken tasarruflar bu kapsama girer. Evlilik öncesinde sahip olunan mallar, miras ve bağış yoluyla edinilen varlıklar kural olarak bu paya dahil değildir; ancak bunu ispat etmek pratikte güçtür.</p><h3>Nafaka</h3><p>Nafaka iki biçimde ortaya çıkar: tedbir nafakası (dava süresince ödenen) ve yoksulluk nafakası (karar sonrası ödenen). Yoksulluk nafakasına hükmedilmesi için boşanmadan sonra yoksulluğa düşeceği kanıtlanmalı ve talep eden tarafın ağır kusuru bulunmamalıdır.</p><h3>Velayet</h3><p>Velayet kararlarında belirleyici tek ölçüt \"çocuğun üstün yararı\"dır. Mahkemeler çocuğun yaşını, sağlığını, eğitim durumunu ve ebeveynlerin bakım kapasitesini gözetir. 12 yaşını doldurmuş çocukların görüşü özellikle dikkate alınır. Velayet kararları kesin değildir; koşulların değişmesi halinde revize ettirilebilir.</p>"
   },
   {
     "id": "5",
