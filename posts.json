@@ -1,7 +1,7 @@
 [
   {
     "id": "1",
-    "featured": false,
+    "featured": true,
     "title": "asdasddas",
     "category": "Ceza Hukuku",
     "excerpt": "Vasdas\nvbasda",
@@ -12,7 +12,7 @@
   },
   {
     "id": "2",
-    "featured": true,
+    "featured": false,
     "title": "*TÜKETİCİNİN GÜVENCESİ:TÜKETİCİ HAKEM HEYETLERİ*",
     "category": "Tüketici Hukuku",
     "excerpt": "Tuketici HUKUKU",
