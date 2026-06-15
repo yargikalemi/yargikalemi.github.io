@@ -35,17 +35,6 @@
   {
     "id": "4",
     "featured": false,
-    "title": "asdasddas",
-    "category": "Ceza Hukuku",
-    "excerpt": "Vasdas\nvbasda",
-    "date": "15 Haziran 2026",
-    "readTime": 1,
-    "content": "sadasdasd<div>asdasdasdasda</div><div>asdasd</div>",
-    "slug": "asdasddas"
-  },
-  {
-    "id": "5",
-    "featured": false,
     "title": "İdareye Karşı Nasıl Dava Açılır?",
     "category": "İdare Hukuku",
     "excerpt": "Bir devlet kurumunun hatalı işlemi size zarar verdi mi? İdare mahkemelerinde dava açma hakkınız, süresi ve adımları hakkında kapsamlı bir rehber.",
@@ -55,7 +44,7 @@
     "slug": "idareye-karsi-nasil-dava-acilir"
   },
   {
-    "id": "6",
+    "id": "5",
     "featured": false,
     "title": "*TÜKETİCİNİN GÜVENCESİ:TÜKETİCİ HAKEM HEYETLERİ*",
     "category": "Tüketici Hukuku",
@@ -66,7 +55,7 @@
     "slug": "tuketicinin-guvencesi-tuketici-hakem-heyetleri-2"
   },
   {
-    "id": "7",
+    "id": "6",
     "featured": false,
     "title": "Mahkemede Kendinizi İfade Etme Hakkı",
     "category": "Ceza Hukuku",
@@ -77,7 +66,7 @@
     "slug": "mahkemede-kendinizi-ifade-etme-hakki"
   },
   {
-    "id": "8",
+    "id": "7",
     "featured": false,
     "title": "Gözaltına Alındığınızda İlk 24 Saatte Yapmanız Gereken 5 Şey\nGözaltına alınmak, sıradan bir vatandaş",
     "category": "Ceza Hukuku",
