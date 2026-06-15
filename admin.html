@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yargı Kalemi — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="icon" type="image/png" href="logo1.png">
+<style>
+:root {
+    --bg-base:       #F7F5F0;
+    --bg-card:       #FFFFFF;
+    --bg-dark:       #0D1B2A;
+    --bg-dark-2:     #091524;
+    --accent:        #0D9488;
+    --accent-hover:  #0F766E;
+    --accent-light:  rgba(13,148,136,0.10);
+    --text-primary:  #1A2B3C;
+    --text-secondary:#4A5568;
+    --text-muted:    #8896A4;
+    --border:        #E0DBD3;
+    --shadow-sm:     0 2px 8px rgba(0,0,0,0.06);
+    --shadow-md:     0 8px 24px rgba(0,0,0,0.09);
+    --radius:        6px;
+    --transition:    0.22s ease;
+}
+
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+html { font-size:16px; }
+body { font-family:'Inter',sans-serif; background:var(--bg-base); color:var(--text-primary); min-height:100vh; }
+img { max-width:100%; display:block; }
+button { font-family:inherit; cursor:pointer; border:none; outline:none; }
+input,textarea,select { font-family:inherit; outline:none; }
+a { text-decoration:none; color:inherit; }
+
+/* ────────────────────────────────────────────────
+   LOGIN
+──────────────────────────────────────────────── */
+#login-screen {
+    min-height:100vh;
+    display:flex; align-items:center; justify-content:center;
+    padding:2rem;
+    background:linear-gradient(135deg, #0D1B2A 0%, #0f3254 100%);
+}
+.login-box {
+    background:#fff;
+    border-radius:12px;
+    padding:2.5rem;
+    width:100%; max-width:420px;
+    box-shadow:0 24px 64px rgba(0,0,0,0.35);
+}
+.login-logo { display:flex; align-items:center; gap:.75rem; margin-bottom:2rem; }
+.login-logo img { height:48px; width:auto; }
+.login-logo-name { font-family:'Playfair Display',serif; font-size:1.15rem; font-weight:700; line-height:1.2; color:var(--text-primary); }
+.login-logo-sub  { font-size:.7rem; color:var(--text-muted); }
+.login-title { font-size:1.3rem; font-weight:700; margin-bottom:.35rem; }
+.login-sub   { font-size:.84rem; color:var(--text-secondary); margin-bottom:1.75rem; line-height:1.55; }
+.form-group  { margin-bottom:.9rem; }
+.form-label  { display:block; font-size:.76rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--text-muted); margin-bottom:.35rem; }
+.form-input-wrap { position:relative; }
+.form-input {
+    width:100%; padding:.62rem .82rem;
+    border:1.5px solid var(--border); border-radius:var(--radius);
+    font-size:.9rem; color:var(--text-primary); background:var(--bg-base);
+    transition:border-color var(--transition);
+}
+.form-input:focus { border-color:var(--accent); }
+.pw-eye {
+    position:absolute; right:.75rem; top:50%; transform:translateY(-50%);
+    background:none; border:none; color:var(--text-muted); cursor:pointer; padding:.2rem;
+}
+.btn-primary {
+    width:100%; padding:.72rem;
+    background:var(--accent); color:#fff;
+    border:none; border-radius:var(--radius);
+    font-size:.95rem; font-weight:600; cursor:pointer;
+    transition:background var(--transition); margin-top:.4rem;
+    display:flex; align-items:center; justify-content:center; gap:.4rem;
+}
+.btn-primary:hover  { background:var(--accent-hover); }
+.btn-primary:disabled { opacity:.6; cursor:not-allowed; }
+#login-error {
+    display:none; margin-top:.75rem; padding:.6rem .82rem;
+    background:#FEF2F2; border:1px solid #FECACA;
+    color:#DC2626; border-radius:var(--radius); font-size:.84rem;
+}
+
+/* ────────────────────────────────────────────────
+   APP SHELL
+──────────────────────────────────────────────── */
+#admin-app { display:none; min-height:100vh; }
+
+/* SIDEBAR */
+#sidebar {
+    position:fixed; top:0; left:0;
+    width:240px; height:100vh;
+    background:var(--bg-dark);
+    display:flex; flex-direction:column;
+    z-index:200; transition:transform var(--transition);
+}
+.sb-logo {
+    display:flex; align-items:center; gap:.6rem;
+    padding:1.2rem 1.1rem .9rem;
+    border-bottom:1px solid rgba(255,255,255,.07);
+}
+.sb-logo img { height:34px; width:auto; }
+.sb-logo-name { font-family:'Playfair Display',serif; font-size:.92rem; font-weight:700; color:#E8E4DC; line-height:1.2; }
+.sb-logo-sub  { font-size:.65rem; color:rgba(255,255,255,.35); }
+.sb-nav { flex:1; padding:.85rem .65rem; overflow-y:auto; }
+.sb-label { font-size:.62rem; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.28); padding:.65rem .5rem .35rem; }
+.sb-item {
+    display:flex; align-items:center; gap:.6rem;
+    padding:.52rem .7rem; border-radius:var(--radius);
+    color:rgba(255,255,255,.6); font-size:.88rem; font-weight:500;
+    cursor:pointer; transition:all var(--transition);
+    border:none; background:none; width:100%; text-align:left; margin-bottom:2px;
+}
+.sb-item i { width:15px; text-align:center; font-size:.82rem; }
+.sb-item:hover { background:rgba(255,255,255,.08); color:#fff; }
+.sb-item.active { background:var(--accent); color:#fff; }
+.sb-footer { padding:.9rem .65rem; border-top:1px solid rgba(255,255,255,.07); }
+.sb-user { display:flex; align-items:center; gap:.55rem; margin-bottom:.65rem; }
+.sb-avatar {
+    width:32px; height:32px; border-radius:50%;
+    background:var(--accent); color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    font-size:.8rem; font-weight:700; flex-shrink:0;
+}
+.sb-user-name { font-size:.8rem; font-weight:600; color:#E8E4DC; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.sb-user-role { font-size:.68rem; color:rgba(255,255,255,.35); }
+.btn-logout {
+    width:100%; padding:.48rem;
+    background:rgba(255,255,255,.06); color:rgba(255,255,255,.5);
+    border:none; border-radius:var(--radius);
+    font-size:.8rem; cursor:pointer; transition:all var(--transition);
+    display:flex; align-items:center; justify-content:center; gap:.4rem;
+}
+.btn-logout:hover { background:rgba(220,38,38,.15); color:#FCA5A5; }
+#sb-overlay {
+    display:none; position:fixed; inset:0;
+    background:rgba(0,0,0,.45); z-index:199;
+}
+#sb-overlay.show { display:block; }
+
+/* MAIN */
+#main-content { margin-left:240px; min-height:100vh; display:flex; flex-direction:column; }
+
+/* TOPBAR */
+#topbar {
+    height:58px; background:#fff;
+    border-bottom:1px solid var(--border);
+    display:flex; align-items:center; padding:0 1.4rem; gap:.9rem;
+    position:sticky; top:0; z-index:100;
+}
+#topbar-title { font-size:.98rem; font-weight:700; flex:1; }
+#ham-btn { display:none; background:none; border:none; font-size:1.1rem; color:var(--text-secondary); cursor:pointer; }
+.btn-new {
+    display:flex; align-items:center; gap:.35rem;
+    padding:.45rem .9rem;
+    background:var(--accent); color:#fff;
+    border:none; border-radius:var(--radius);
+    font-size:.83rem; font-weight:600; cursor:pointer;
+    transition:background var(--transition);
+}
+.btn-new:hover { background:var(--accent-hover); }
+
+/* PAGES */
+.page { display:none; flex:1; padding:1.6rem; }
+.page.active { display:block; }
+.page-hdr { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.35rem; flex-wrap:wrap; gap:.75rem; }
+.page-title { font-size:1.25rem; font-weight:700; }
+
+/* ────────────────────────────────────────────────
+   POSTS LIST
+──────────────────────────────────────────────── */
+.stats-row { display:flex; gap:.75rem; flex-wrap:wrap; }
+.stat-chip {
+    background:#fff; border:1px solid var(--border);
+    border-radius:99px; padding:.27rem .8rem;
+    font-size:.78rem; color:var(--text-secondary); font-weight:500;
+}
+.stat-chip b { color:var(--accent); }
+.posts-table { background:#fff; border:1px solid var(--border); border-radius:8px; overflow:hidden; }
+.tbl-head {
+    display:grid; grid-template-columns:2fr 1.2fr 110px 70px 110px;
+    padding:.55rem 1rem; background:#F9F8F6;
+    border-bottom:1px solid var(--border);
+    font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--text-muted);
+}
+.post-row {
+    display:grid; grid-template-columns:2fr 1.2fr 110px 70px 110px;
+    padding:.78rem 1rem; border-bottom:1px solid var(--border);
+    align-items:center; transition:background var(--transition);
+}
+.post-row:last-child { border-bottom:none; }
+.post-row:hover { background:#FAFAF8; }
+.pr-title { display:flex; align-items:center; gap:.45rem; min-width:0; }
+.pr-star { color:#F59E0B; font-size:.75rem; flex-shrink:0; }
+.pr-title strong { font-size:.88rem; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:block; }
+.pr-id { font-size:.72rem; color:var(--text-muted); }
+.cat-pill {
+    display:inline-block; padding:.18rem .52rem;
+    background:var(--accent-light); color:var(--accent);
+    border-radius:99px; font-size:.7rem; font-weight:600; white-space:nowrap;
+}
+.pr-date,.pr-time { font-size:.8rem; color:var(--text-muted); }
+.pr-actions { display:flex; gap:.28rem; justify-content:flex-end; }
+.btn-act {
+    width:30px; height:30px; border:1px solid var(--border); border-radius:4px;
+    background:#fff; color:var(--text-muted);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; transition:all var(--transition); font-size:.74rem;
+}
+.btn-act:hover { background:var(--bg-base); }
+.btn-act.edit:hover   { color:var(--accent); border-color:var(--accent); }
+.btn-act.feat:hover   { color:#F59E0B; border-color:#FDE68A; background:#FFFBEB; }
+.btn-act.feat.on      { color:#F59E0B; border-color:#FDE68A; background:#FFFBEB; }
+.btn-act.del:hover    { color:#DC2626; border-color:#FECACA; background:#FEF2F2; }
+.empty-state { text-align:center; padding:3.5rem 2rem; color:var(--text-muted); }
+.empty-state i { font-size:2.5rem; opacity:.25; margin-bottom:.75rem; display:block; }
+.loading { display:flex; align-items:center; justify-content:center; padding:3rem; gap:.5rem; color:var(--text-muted); }
+.spinner { width:20px; height:20px; border:2px solid var(--border); border-top-color:var(--accent); border-radius:50%; animation:spin .65s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+
+/* ────────────────────────────────────────────────
+   EDITOR
+──────────────────────────────────────────────── */
+.editor-grid { display:grid; grid-template-columns:1fr 272px; gap:1.15rem; align-items:start; }
+.editor-col  { min-width:0; }
+.editor-side { position:sticky; top:76px; }
+.card { background:#fff; border:1px solid var(--border); border-radius:8px; overflow:hidden; margin-bottom:1rem; }
+.card:last-child { margin-bottom:0; }
+.card-hdr {
+    padding:.75rem 1rem; border-bottom:1px solid var(--border);
+    font-size:.74rem; font-weight:700; text-transform:uppercase;
+    letter-spacing:.06em; color:var(--text-muted);
+    display:flex; align-items:center; justify-content:space-between;
+}
+.card-body { padding:1rem; }
+
+/* Title textarea */
+#inp-title {
+    width:100%; border:none; outline:none;
+    font-family:'Playfair Display',serif;
+    font-size:1.6rem; font-weight:700;
+    color:var(--text-primary); resize:none; background:transparent;
+    line-height:1.3; overflow:hidden;
+}
+#inp-title::placeholder { color:#D1CCC4; }
+.ed-divider { height:1px; background:var(--border); margin:.7rem 0; }
+
+/* Excerpt */
+#inp-excerpt {
+    width:100%; border:none; outline:none;
+    font-size:.9rem; color:var(--text-secondary);
+    resize:none; background:transparent; line-height:1.65; overflow:hidden;
+    min-height:52px;
+}
+#inp-excerpt::placeholder { color:#D1CCC4; }
+
+/* Toolbar */
+.toolbar {
+    display:flex; flex-wrap:wrap; gap:2px;
+    padding:.45rem .7rem;
+    border-bottom:1px solid var(--border);
+    background:#F9F8F6;
+}
+.tb-btn {
+    width:29px; height:29px;
+    display:flex; align-items:center; justify-content:center;
+    border:none; background:none; border-radius:4px;
+    color:var(--text-secondary); font-size:.78rem;
+    cursor:pointer; transition:all var(--transition);
+}
+.tb-btn:hover { background:var(--border); color:var(--text-primary); }
+.tb-sep { width:1px; background:var(--border); margin:4px 2px; }
+.tb-sel {
+    height:29px; padding:0 .45rem;
+    border:none; background:none; border-radius:4px;
+    font-size:.78rem; color:var(--text-secondary); cursor:pointer;
+}
+.tb-sel:hover { background:var(--border); }
+.tb-src-btn {
+    font-size:.72rem; background:none;
+    border:1px solid var(--border); border-radius:4px;
+    padding:.18rem .48rem; color:var(--text-muted); cursor:pointer;
+    transition:all var(--transition);
+}
+.tb-src-btn.on { background:var(--accent); color:#fff; border-color:var(--accent); }
+
+/* Content editable */
+#editor-content {
+    min-height:340px; padding:1rem;
+    outline:none; font-size:.93rem; line-height:1.72;
+    color:var(--text-primary);
+}
+#editor-content:empty::before {
+    content:attr(data-placeholder); color:#D1CCC4; pointer-events:none;
+}
+#editor-content h2 { font-family:'Playfair Display',serif; font-size:1.25rem; font-weight:700; margin:1.1rem 0 .45rem; }
+#editor-content h3 { font-family:'Playfair Display',serif; font-size:1.05rem; font-weight:700; margin:.9rem 0 .35rem; }
+#editor-content p  { margin-bottom:.7rem; }
+#editor-content ul,
+#editor-content ol { padding-left:1.5rem; margin-bottom:.7rem; }
+#editor-content li { margin-bottom:.22rem; }
+#editor-content blockquote {
+    border-left:3px solid var(--accent); padding:.45rem .9rem;
+    color:var(--text-secondary); font-style:italic;
+    background:rgba(13,148,136,.04); margin:.7rem 0;
+}
+#editor-content a     { color:var(--accent); text-decoration:underline; }
+#editor-content strong{ font-weight:700; }
+#editor-content em    { font-style:italic; }
+#editor-content hr    { border:none; border-top:2px solid var(--border); margin:1.1rem 0; }
+
+/* HTML source */
+#html-source {
+    display:none; width:100%; min-height:340px; padding:1rem;
+    border:none; font-family:'Courier New',monospace;
+    font-size:.8rem; line-height:1.6; color:var(--text-primary);
+    background:#FAFAF8; resize:none;
+}
+
+/* Editor footer */
+.ed-footer {
+    padding:.42rem 1rem; border-top:1px solid var(--border); background:#FAFAF8;
+    font-size:.73rem; color:var(--text-muted); display:flex; gap:1rem;
+}
+
+/* Sidebar fields */
+.field { margin-bottom:.8rem; }
+.field:last-child { margin-bottom:0; }
+.field-label { display:block; font-size:.73rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--text-muted); margin-bottom:.3rem; }
+.field-input,.field-sel {
+    width:100%; padding:.52rem .68rem;
+    border:1.5px solid var(--border); border-radius:var(--radius);
+    font-size:.86rem; color:var(--text-primary); background:#fff;
+    transition:border-color var(--transition);
+}
+.field-input:focus,.field-sel:focus { border-color:var(--accent); }
+
+/* Toggle */
+.toggle-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:.8rem; }
+.toggle-info .toggle-lbl { font-size:.86rem; font-weight:500; }
+.toggle-info .toggle-sub { font-size:.73rem; color:var(--text-muted); }
+.toggle { position:relative; width:40px; height:22px; flex-shrink:0; }
+.toggle input { opacity:0; width:0; height:0; }
+.toggle-sl { position:absolute; inset:0; background:#D1D5DB; border-radius:99px; cursor:pointer; transition:background var(--transition); }
+.toggle-sl::before { content:''; position:absolute; width:16px; height:16px; left:3px; top:3px; background:#fff; border-radius:50%; transition:transform var(--transition); }
+input:checked + .toggle-sl { background:var(--accent); }
+input:checked + .toggle-sl::before { transform:translateX(18px); }
+
+/* Image preview */
+#img-preview { width:100%; height:110px; border-radius:var(--radius); object-fit:cover; margin-top:.45rem; border:1px solid var(--border); display:none; }
+.img-ph { width:100%; height:72px; border:2px dashed var(--border); border-radius:var(--radius); display:flex; align-items:center; justify-content:center; color:var(--text-muted); font-size:.76rem; margin-top:.45rem; gap:.4rem; }
+
+/* Publish buttons */
+.btn-save {
+    width:100%; padding:.65rem;
+    background:var(--accent); color:#fff; border:none; border-radius:var(--radius);
+    font-size:.9rem; font-weight:600; cursor:pointer; transition:background var(--transition);
+    margin-bottom:.45rem;
+    display:flex; align-items:center; justify-content:center; gap:.4rem;
+}
+.btn-save:hover { background:var(--accent-hover); }
+.btn-save:disabled { opacity:.6; cursor:not-allowed; }
+.btn-cancel {
+    width:100%; padding:.6rem;
+    background:#fff; color:var(--text-secondary);
+    border:1px solid var(--border); border-radius:var(--radius);
+    font-size:.86rem; font-weight:500; cursor:pointer; transition:all var(--transition);
+}
+.btn-cancel:hover { background:var(--bg-base); }
+
+/* ────────────────────────────────────────────────
+   SETTINGS
+──────────────────────────────────────────────── */
+.settings-wrap { max-width:520px; }
+.btn-danger {
+    padding:.52rem .95rem; background:#FEF2F2; color:#DC2626;
+    border:1px solid #FECACA; border-radius:var(--radius);
+    font-size:.86rem; font-weight:600; cursor:pointer; transition:all var(--transition);
+    display:inline-flex; align-items:center; gap:.4rem;
+}
+.btn-danger:hover { background:#FEE2E2; }
+
+/* ────────────────────────────────────────────────
+   TOAST
+──────────────────────────────────────────────── */
+#toast-wrap {
+    position:fixed; bottom:1.4rem; right:1.4rem;
+    z-index:9999; display:flex; flex-direction:column; gap:.4rem;
+}
+.toast {
+    display:flex; align-items:center; gap:.6rem;
+    padding:.7rem .95rem;
+    background:var(--bg-dark); color:#fff;
+    border-radius:8px; font-size:.86rem; font-weight:500;
+    box-shadow:0 8px 24px rgba(0,0,0,.22); min-width:240px;
+    animation:slideUp .22s ease;
+    transition:opacity .28s ease, transform .28s ease;
+}
+.toast.success { border-left:3px solid #10B981; }
+.toast.error   { border-left:3px solid #EF4444; }
+.toast.info    { border-left:3px solid var(--accent); }
+@keyframes slideUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+
+/* ────────────────────────────────────────────────
+   CONFIRM DIALOG
+──────────────────────────────────────────────── */
+#confirm-overlay {
+    display:none; position:fixed; inset:0;
+    background:rgba(0,0,0,.42); z-index:8000;
+    align-items:center; justify-content:center;
+}
+#confirm-overlay.show { display:flex; }
+.confirm-box {
+    background:#fff; border-radius:10px; padding:1.65rem;
+    max-width:370px; width:90%;
+    box-shadow:0 24px 64px rgba(0,0,0,.25);
+}
+.confirm-box h3 { font-size:.98rem; font-weight:700; margin-bottom:.4rem; }
+.confirm-box p  { font-size:.86rem; color:var(--text-secondary); margin-bottom:1.2rem; line-height:1.55; }
+.confirm-btns { display:flex; gap:.45rem; justify-content:flex-end; }
+.btn-cf-cancel { padding:.5rem .9rem; background:#fff; border:1px solid var(--border); border-radius:var(--radius); font-size:.86rem; cursor:pointer; }
+.btn-cf-ok     { padding:.5rem .9rem; background:#DC2626; color:#fff; border:none; border-radius:var(--radius); font-size:.86rem; font-weight:600; cursor:pointer; }
+
+/* ────────────────────────────────────────────────
+   RESPONSIVE
+──────────────────────────────────────────────── */
+@media (max-width:900px) {
+    #sidebar { transform:translateX(-100%); }
+    #sidebar.open { transform:translateX(0); box-shadow:4px 0 24px rgba(0,0,0,.3); }
+    #main-content { margin-left:0; }
+    #ham-btn { display:flex; }
+    .editor-grid { grid-template-columns:1fr; }
+    .editor-side { position:static; }
+    .tbl-head { display:none; }
+    .post-row { grid-template-columns:1fr; gap:.35rem; padding:.9rem 1rem; }
+    .pr-actions { justify-content:flex-start; }
+}
+@media (max-width:560px) {
+    .page { padding:1rem; }
+    .login-box { padding:1.75rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOAST -->
+<div id="toast-wrap"></div>
+
+<!-- CONFIRM -->
+<div id="confirm-overlay">
+    <div class="confirm-box">
+        <h3 id="cf-title">Emin misiniz?</h3>
+        <p id="cf-msg"></p>
+        <div class="confirm-btns">
+            <button class="btn-cf-cancel" id="cf-cancel">Vazgeç</button>
+            <button class="btn-cf-ok" id="cf-ok">Evet, Sil</button>
+        </div>
+    </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     LOGIN
+════════════════════════════════════════════ -->
+<div id="login-screen">
+    <div class="login-box">
+        <div class="login-logo">
+            <img src="logo1.png" alt="">
+            <div>
+                <div class="login-logo-name">Yargı Kalemi</div>
+                <div class="login-logo-sub">Admin Paneli</div>
+            </div>
+        </div>
+        <div class="login-title">Giriş Yap</div>
+        <div class="login-sub">GitHub Personal Access Token'ınızı girin. Token yalnızca tarayıcınızda saklanır, hiçbir sunucuya gönderilmez.</div>
+
+        <div class="form-group">
+            <label class="form-label" for="inp-pat">GitHub Token</label>
+            <div class="form-input-wrap">
+                <input type="password" id="inp-pat" class="form-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off">
+                <button class="pw-eye" id="pw-toggle" tabindex="-1"><i class="fas fa-eye" id="pw-icon"></i></button>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-label" for="inp-repo">GitHub Repo</label>
+            <input type="text" id="inp-repo" class="form-input" value="yargikalemi/yargikalemi.github.io">
+        </div>
+
+        <button class="btn-primary" id="login-btn"><i class="fas fa-sign-in-alt"></i> Giriş Yap</button>
+        <div id="login-error"></div>
+    </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     ADMIN APP
+════════════════════════════════════════════ -->
+<div id="admin-app">
+
+    <div id="sb-overlay"></div>
+
+    <!-- SIDEBAR -->
+    <aside id="sidebar">
+        <div class="sb-logo">
+            <img src="logo1.png" alt="">
+            <div>
+                <div class="sb-logo-name">Yargı Kalemi</div>
+                <div class="sb-logo-sub">Admin Panel</div>
+            </div>
+        </div>
+        <nav class="sb-nav">
+            <div class="sb-label">İçerik</div>
+            <button class="sb-item active" data-page="posts"><i class="fas fa-newspaper"></i> Yazılar</button>
+            <button class="sb-item" id="nav-new"><i class="fas fa-plus-circle"></i> Yeni Yazı</button>
+            <div class="sb-label" style="margin-top:.65rem">Sistem</div>
+            <button class="sb-item" data-page="settings"><i class="fas fa-cog"></i> Ayarlar</button>
+            <a class="sb-item" href="/" target="_blank"><i class="fas fa-external-link-alt"></i> Siteyi Gör</a>
+        </nav>
+        <div class="sb-footer">
+            <div class="sb-user">
+                <div class="sb-avatar" id="sb-avatar">Y</div>
+                <div>
+                    <div class="sb-user-name" id="sb-uname">Yükleniyor…</div>
+                    <div class="sb-user-role">Admin</div>
+                </div>
+            </div>
+            <button class="btn-logout" id="btn-logout"><i class="fas fa-sign-out-alt"></i> Çıkış Yap</button>
+        </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main id="main-content">
+
+        <div id="topbar">
+            <button id="ham-btn"><i class="fas fa-bars"></i></button>
+            <div id="topbar-title">Yazılar</div>
+            <div id="topbar-actions">
+                <button class="btn-new" id="topbar-new-btn"><i class="fas fa-plus"></i> Yeni Yazı</button>
+            </div>
+        </div>
+
+        <!-- ── POSTS PAGE ── -->
+        <div class="page active" id="page-posts">
+            <div class="page-hdr">
+                <h1 class="page-title">Tüm Yazılar</h1>
+                <div class="stats-row" id="posts-stats"></div>
+            </div>
+            <div class="posts-table">
+                <div class="tbl-head">
+                    <div>Başlık</div>
+                    <div>Kategori</div>
+                    <div>Tarih</div>
+                    <div>Süre</div>
+                    <div style="text-align:right">İşlemler</div>
+                </div>
+                <div id="posts-list">
+                    <div class="loading"><div class="spinner"></div> Yazılar yükleniyor…</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── EDITOR PAGE ── -->
+        <div class="page" id="page-editor">
+            <div class="page-hdr">
+                <h1 class="page-title" id="ed-page-title">Yeni Yazı</h1>
+            </div>
+
+            <div class="editor-grid">
+
+                <!-- Left col -->
+                <div class="editor-col">
+                    <!-- Title + excerpt -->
+                    <div class="card">
+                        <div class="card-body">
+                            <textarea id="inp-title" rows="2" placeholder="Yazı başlığı…"></textarea>
+                            <div class="ed-divider"></div>
+                            <textarea id="inp-excerpt" placeholder="Kısa özet (2–3 cümle)…"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Rich text editor -->
+                    <div class="card">
+                        <div class="card-hdr">
+                            <span>İçerik</span>
+                            <button class="tb-src-btn" id="src-btn">
+                                <i class="fas fa-code"></i> HTML
+                            </button>
+                        </div>
+
+                        <div class="toolbar" id="toolbar">
+                            <select class="tb-sel" id="fmt-sel">
+                                <option value="">Biçim</option>
+                                <option value="h2">Başlık 2</option>
+                                <option value="h3">Başlık 3</option>
+                                <option value="p">Normal</option>
+                            </select>
+                            <div class="tb-sep"></div>
+                            <button class="tb-btn" title="Kalın (Ctrl+B)" data-cmd="bold"><i class="fas fa-bold"></i></button>
+                            <button class="tb-btn" title="İtalik (Ctrl+I)" data-cmd="italic"><i class="fas fa-italic"></i></button>
+                            <button class="tb-btn" title="Altı çizili" data-cmd="underline"><i class="fas fa-underline"></i></button>
+                            <div class="tb-sep"></div>
+                            <button class="tb-btn" title="Madde listesi" data-cmd="insertUnorderedList"><i class="fas fa-list-ul"></i></button>
+                            <button class="tb-btn" title="Numaralı liste" data-cmd="insertOrderedList"><i class="fas fa-list-ol"></i></button>
+                            <div class="tb-sep"></div>
+                            <button class="tb-btn" title="Alıntı" id="btn-quote"><i class="fas fa-quote-left"></i></button>
+                            <button class="tb-btn" title="Link" id="btn-link"><i class="fas fa-link"></i></button>
+                            <button class="tb-btn" title="Yatay çizgi" data-cmd="insertHorizontalRule"><i class="fas fa-minus"></i></button>
+                            <div class="tb-sep"></div>
+                            <button class="tb-btn" title="Geri al (Ctrl+Z)" data-cmd="undo"><i class="fas fa-undo"></i></button>
+                            <button class="tb-btn" title="İleri al (Ctrl+Y)" data-cmd="redo"><i class="fas fa-redo"></i></button>
+                        </div>
+
+                        <div id="editor-content" contenteditable="true"
+                             data-placeholder="Yazınızı buraya yazın…"></div>
+                        <textarea id="html-source"></textarea>
+                        <div class="ed-footer">
+                            <span id="word-count">0 kelime</span>
+                            <span id="char-count">0 karakter</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right col (sidebar) -->
+                <div class="editor-side">
+                    <!-- Publish -->
+                    <div class="card">
+                        <div class="card-hdr">Yayınla</div>
+                        <div class="card-body">
+                            <button class="btn-save" id="btn-publish">
+                                <i class="fas fa-cloud-upload-alt"></i> Yayınla
+                            </button>
+                            <button class="btn-cancel" id="btn-cancel-ed">Vazgeç</button>
+                        </div>
+                    </div>
+
+                    <!-- Post settings -->
+                    <div class="card">
+                        <div class="card-hdr">Yazı Ayarları</div>
+                        <div class="card-body">
+                            <div class="field">
+                                <label class="field-label" for="inp-cat">Kategori</label>
+                                <select id="inp-cat" class="field-sel">
+                                    <option value="">Seçin…</option>
+                                    <option>Ceza Hukuku</option>
+                                    <option>Ticaret Hukuku</option>
+                                    <option>Tüketici Hukuku</option>
+                                    <option>Medeni Hukuk</option>
+                                    <option>Aile Hukuku</option>
+                                    <option>Ceza Muhakemeleri Hukuku</option>
+                                    <option>İdare Hukuku</option>
+                                    <option>Borçlar Hukuku</option>
+                                    <option>KVKK</option>
+                                    <option>Gayrimenkul / Kira</option>
+                                    <option>İcra ve İflas</option>
+                                    <option>Anayasa Mahkemesi</option>
+                                    <option>AİHM</option>
+                                </select>
+                            </div>
+                            <div class="field">
+                                <label class="field-label" for="inp-date">Tarih</label>
+                                <input type="date" id="inp-date" class="field-input">
+                            </div>
+                            <div class="field">
+                                <label class="field-label" for="inp-rt">Okuma Süresi (dk)</label>
+                                <input type="number" id="inp-rt" class="field-input" min="1" max="99" value="3">
+                            </div>
+                            <div class="toggle-row">
+                                <div class="toggle-info">
+                                    <div class="toggle-lbl">⭐ Öne Çıkar</div>
+                                    <div class="toggle-sub">Ana sayfada öne çıkar</div>
+                                </div>
+                                <label class="toggle">
+                                    <input type="checkbox" id="inp-feat">
+                                    <span class="toggle-sl"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Image -->
+                    <div class="card">
+                        <div class="card-hdr">Kapak Görseli</div>
+                        <div class="card-body">
+                            <div class="field">
+                                <label class="field-label" for="inp-img">Görsel URL veya dosya adı</label>
+                                <input type="text" id="inp-img" class="field-input" placeholder="yazifoto.jpg veya https://…">
+                            </div>
+                            <img id="img-preview" alt="Önizleme">
+                            <div class="img-ph" id="img-ph"><i class="fas fa-image"></i> Boş bırakılırsa varsayılan görsel kullanılır</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ── SETTINGS PAGE ── -->
+        <div class="page" id="page-settings">
+            <div class="page-hdr">
+                <h1 class="page-title">Ayarlar</h1>
+            </div>
+            <div class="settings-wrap">
+                <div class="card">
+                    <div class="card-hdr">GitHub Bağlantısı</div>
+                    <div class="card-body">
+                        <div class="field">
+                            <label class="field-label">Token (gizli)</label>
+                            <input type="password" class="field-input" id="set-token" readonly>
+                        </div>
+                        <div class="field">
+                            <label class="field-label">Repo</label>
+                            <input type="text" class="field-input" id="set-repo" readonly>
+                        </div>
+                        <div class="field">
+                            <label class="field-label">Bağlantı Durumu</label>
+                            <div id="set-status" style="font-size:.86rem;color:var(--text-secondary)">—</div>
+                        </div>
+                        <button class="btn-danger" id="set-logout">
+                            <i class="fas fa-sign-out-alt"></i> Çıkış Yap &amp; Token Sil
+                        </button>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-hdr">Kısayollar</div>
+                    <div class="card-body" style="font-size:.86rem;color:var(--text-secondary);line-height:1.9">
+                        <div><kbd style="background:#F3F4F6;border:1px solid #D1D5DB;border-radius:3px;padding:1px 5px;font-size:.78rem">Ctrl + S</kbd> — Yazıyı kaydet</div>
+                        <div><kbd style="background:#F3F4F6;border:1px solid #D1D5DB;border-radius:3px;padding:1px 5px;font-size:.78rem">Ctrl + B</kbd> — Kalın</div>
+                        <div><kbd style="background:#F3F4F6;border:1px solid #D1D5DB;border-radius:3px;padding:1px 5px;font-size:.78rem">Ctrl + I</kbd> — İtalik</div>
+                        <div><kbd style="background:#F3F4F6;border:1px solid #D1D5DB;border-radius:3px;padding:1px 5px;font-size:.78rem">Esc</kbd> — Diyalog kapat / Menü kapat</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<script>
+// ════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════
+const MONTHS = ['','Ocak','Şubat','Mart','Nisan','Mayıs','Haziran',
+                'Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+
+let GH_TOKEN  = '';
+let GH_REPO   = '';
+let allPosts  = [];
+let postsSHA  = '';
+let editingId = null;
+let sourceMode = false;
+let confirmCb  = null;
+
+// ════════════════════════════════════════════
+// BOOT
+// ════════════════════════════════════════════
+(function boot() {
+    const saved = localStorage.getItem('yk_admin_v2');
+    if (saved) {
+        try {
+            const cfg = JSON.parse(saved);
+            if (cfg.token && cfg.repo) {
+                GH_TOKEN = cfg.token;
+                GH_REPO  = cfg.repo;
+                launchApp();
+                return;
+            }
+        } catch(e) {}
+    }
+    document.getElementById('inp-date').value = todayISO();
+})();
+
+function todayISO() {
+    return new Date().toISOString().split('T')[0];
+}
+
+// ════════════════════════════════════════════
+// LOGIN
+// ════════════════════════════════════════════
+document.getElementById('pw-toggle').addEventListener('click', function() {
+    const inp = document.getElementById('inp-pat');
+    const ico = document.getElementById('pw-icon');
+    if (inp.type === 'password') { inp.type = 'text';     ico.className = 'fas fa-eye-slash'; }
+    else                         { inp.type = 'password'; ico.className = 'fas fa-eye'; }
+});
+
+document.getElementById('login-btn').addEventListener('click', doLogin);
+['inp-pat','inp-repo'].forEach(id => {
+    document.getElementById(id).addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+});
+
+async function doLogin() {
+    const pat  = document.getElementById('inp-pat').value.trim();
+    const repo = document.getElementById('inp-repo').value.trim();
+    const btn  = document.getElementById('login-btn');
+    const err  = document.getElementById('login-error');
+
+    if (!pat)  { showLoginErr('GitHub token boş olamaz.'); return; }
+    if (!repo) { showLoginErr('Repo adı boş olamaz.'); return; }
+
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Doğrulanıyor…';
+    err.style.display = 'none';
+
+    try {
+        const res = await fetch(`https://api.github.com/repos/${repo}`, {
+            headers: { 'Authorization': `token ${pat}` }
+        });
+        if      (res.status === 401) { showLoginErr('Token geçersiz. Lütfen kontrol edin.'); return; }
+        else if (res.status === 404) { showLoginErr('Repo bulunamadı. Adı doğru yazdınız mı?'); return; }
+        else if (!res.ok)            { showLoginErr(`GitHub hatası: HTTP ${res.status}`); return; }
+
+        GH_TOKEN = pat;
+        GH_REPO  = repo;
+        localStorage.setItem('yk_admin_v2', JSON.stringify({ token: pat, repo }));
+        launchApp();
+    } catch(e) {
+        showLoginErr('Bağlantı hatası. İnternet bağlantınızı kontrol edin.');
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Giriş Yap';
+    }
+}
+
+function showLoginErr(msg) {
+    const el = document.getElementById('login-error');
+    el.textContent = msg;
+    el.style.display = 'block';
+}
+
+// ════════════════════════════════════════════
+// LAUNCH APP
+// ════════════════════════════════════════════
+async function launchApp() {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('admin-app').style.display    = 'block';
+
+    // Set today's date in editor
+    document.getElementById('inp-date').value = todayISO();
+
+    // Settings page
+    document.getElementById('set-token').value = GH_TOKEN;
+    document.getElementById('set-repo').value  = GH_REPO;
+
+    // Fetch GitHub user info
+    try {
+        const res = await fetch('https://api.github.com/user', {
+            headers: { 'Authorization': `token ${GH_TOKEN}` }
+        });
+        if (res.ok) {
+            const u = await res.json();
+            const name = u.name || u.login || 'Admin';
+            document.getElementById('sb-uname').textContent  = name;
+            document.getElementById('sb-avatar').textContent = name[0].toUpperCase();
+            document.getElementById('set-status').textContent = `✅ Bağlı — @${u.login}`;
+            document.getElementById('set-status').style.color = '#059669';
+        }
+    } catch(e) {}
+
+    await loadPosts();
+}
+
+function doLogout() {
+    localStorage.removeItem('yk_admin_v2');
+    location.reload();
+}
+
+document.getElementById('btn-logout').addEventListener('click', doLogout);
+document.getElementById('set-logout').addEventListener('click', doLogout);
+
+// ════════════════════════════════════════════
+// GITHUB API
+// ════════════════════════════════════════════
+function ghHeaders() {
+    return { 'Authorization': `token ${GH_TOKEN}`, 'Content-Type': 'application/json' };
+}
+
+async function loadPosts() {
+    try {
+        const res = await fetch(
+            `https://api.github.com/repos/${GH_REPO}/contents/posts.json`,
+            { headers: ghHeaders() }
+        );
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        allPosts  = JSON.parse(b64Decode(data.content.replace(/\n/g, '')));
+        postsSHA  = data.sha;
+        renderList();
+    } catch(e) {
+        document.getElementById('posts-list').innerHTML =
+            `<div class="empty-state"><i class="fas fa-exclamation-circle"></i><p>Yazılar yüklenemedi: ${esc(e.message)}</p></div>`;
+        toast('Yükleme hatası: ' + e.message, 'error');
+    }
+}
+
+async function savePosts(commitMsg) {
+    renumber(allPosts);
+    const body = JSON.stringify(allPosts, null, 2);
+    const res = await fetch(
+        `https://api.github.com/repos/${GH_REPO}/contents/posts.json`,
+        {
+            method: 'PUT',
+            headers: ghHeaders(),
+            body: JSON.stringify({ message: commitMsg, content: b64Encode(body), sha: postsSHA })
+        }
+    );
+    if (!res.ok) {
+        const d = await res.json().catch(() => ({}));
+        throw new Error(d.message || `HTTP ${res.status}`);
+    }
+    const d = await res.json();
+    postsSHA = d.content.sha;
+}
+
+// ════════════════════════════════════════════
+// BASE64 (UTF-8 safe)
+// ════════════════════════════════════════════
+function b64Encode(str) {
+    const bytes = new TextEncoder().encode(str);
+    let bin = '';
+    bytes.forEach(b => { bin += String.fromCharCode(b); });
+    return btoa(bin);
+}
+
+function b64Decode(b64) {
+    const bin   = atob(b64);
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return new TextDecoder('utf-8').decode(bytes);
+}
+
+// ════════════════════════════════════════════
+// HELPERS
+// ════════════════════════════════════════════
+function renumber(posts) {
+    posts.forEach((p, i) => { p.id = String(i + 1); });
+}
+
+function esc(s) {
+    if (!s) return '';
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function isoToTR(iso) {
+    if (!iso) return '';
+    const [y, m, d] = iso.split('-');
+    return `${parseInt(d, 10)} ${MONTHS[parseInt(m, 10)]} ${y}`;
+}
+
+function trToISO(tr) {
+    if (!tr) return '';
+    const parts = tr.trim().split(' ');
+    if (parts.length !== 3) return '';
+    const d = parts[0].padStart(2, '0');
+    const m = String(MONTHS.indexOf(parts[1])).padStart(2, '0');
+    return `${parts[2]}-${m}-${d}`;
+}
+
+// ════════════════════════════════════════════
+// RENDER LIST
+// ════════════════════════════════════════════
+function renderList() {
+    const featured = allPosts.filter(p => p.featured).length;
+    document.getElementById('posts-stats').innerHTML =
+        `<div class="stat-chip">Toplam: <b>${allPosts.length}</b></div>` +
+        `<div class="stat-chip">Öne çıkan: <b>${featured}</b></div>`;
+
+    const list = document.getElementById('posts-list');
+    if (!allPosts.length) {
+        list.innerHTML = `<div class="empty-state"><i class="fas fa-file-alt"></i><p>Henüz yazı yok. Yeni yazı ekleyin.</p></div>`;
+        return;
+    }
+
+    list.innerHTML = allPosts.map(p => `
+        <div class="post-row">
+            <div class="pr-title">
+                ${p.featured ? '<span class="pr-star"><i class="fas fa-star"></i></span>' : ''}
+                <div>
+                    <strong title="${esc(p.title)}">${esc(p.title)}</strong>
+                    <div class="pr-id">#${esc(p.id)}</div>
+                </div>
+            </div>
+            <div><span class="cat-pill">${esc(p.category || '—')}</span></div>
+            <div class="pr-date">${esc(p.date || '—')}</div>
+            <div class="pr-time">${p.readTime ? p.readTime + ' dk' : '—'}</div>
+            <div class="pr-actions">
+                <button class="btn-act edit" title="Düzenle" onclick="openEdit('${esc(p.id)}')"><i class="fas fa-pen"></i></button>
+                <button class="btn-act feat ${p.featured ? 'on' : ''}" title="${p.featured ? 'Öne çıkarıldı' : 'Öne çıkar'}" onclick="toggleFeat('${esc(p.id)}')"><i class="fas fa-star"></i></button>
+                <button class="btn-act del" title="Sil" onclick="deletePost('${esc(p.id)}')"><i class="fas fa-trash"></i></button>
+            </div>
+        </div>
+    `).join('');
+}
+
+// ════════════════════════════════════════════
+// POST ACTIONS (from list)
+// ════════════════════════════════════════════
+async function toggleFeat(id) {
+    const post = allPosts.find(p => p.id === id);
+    if (!post) return;
+
+    if (!post.featured) {
+        allPosts.forEach(p => { p.featured = false; });
+        post.featured = true;
+        const idx = allPosts.indexOf(post);
+        allPosts.splice(idx, 1);
+        allPosts.unshift(post);
+    } else {
+        post.featured = false;
+    }
+    renderList();
+
+    try {
+        await savePosts(`Öne çıkarıldı: ${post.title}`);
+        toast('⭐ Güncellendi', 'success');
+        await loadPosts();
+    } catch(e) {
+        toast('Hata: ' + e.message, 'error');
+        await loadPosts();
+    }
+}
+
+function deletePost(id) {
+    const post = allPosts.find(p => p.id === id);
+    if (!post) return;
+    showConfirm(
+        'Yazıyı Sil',
+        `"${post.title}" yazısı kalıcı olarak silinecek. Bu işlem geri alınamaz.`,
+        async () => {
+            allPosts = allPosts.filter(p => p.id !== id);
+            if (allPosts.length && !allPosts.some(p => p.featured)) {
+                allPosts[0].featured = true;
+            }
+            renderList();
+            try {
+                await savePosts(`Silindi: ${post.title}`);
+                toast('Yazı silindi', 'success');
+                await loadPosts();
+            } catch(e) {
+                toast('Hata: ' + e.message, 'error');
+                await loadPosts();
+            }
+        }
+    );
+}
+
+// ════════════════════════════════════════════
+// EDITOR — OPEN
+// ════════════════════════════════════════════
+function openNewPost() {
+    editingId = null;
+    clearEditor();
+    setEditorTitle('Yeni Yazı');
+    document.getElementById('btn-publish').innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Yayınla';
+    showPage('editor');
+}
+
+function openEdit(id) {
+    const post = allPosts.find(p => p.id === id);
+    if (!post) return;
+    editingId = id;
+
+    document.getElementById('inp-title').value   = post.title   || '';
+    document.getElementById('inp-excerpt').value = post.excerpt || '';
+    document.getElementById('editor-content').innerHTML = post.content || '';
+    document.getElementById('inp-cat').value     = post.category || '';
+    document.getElementById('inp-rt').value      = post.readTime || 3;
+    document.getElementById('inp-feat').checked  = !!post.featured;
+    document.getElementById('inp-img').value     = post.image || '';
+    document.getElementById('inp-date').value    = trToISO(post.date) || todayISO();
+
+    autoResize(document.getElementById('inp-title'));
+    autoResize(document.getElementById('inp-excerpt'));
+    updateCounts();
+    previewImg();
+    setEditorTitle('Yazıyı Düzenle');
+    document.getElementById('btn-publish').innerHTML = '<i class="fas fa-save"></i> Kaydet';
+    showPage('editor');
+}
+
+function clearEditor() {
+    document.getElementById('inp-title').value   = '';
+    document.getElementById('inp-excerpt').value = '';
+    document.getElementById('editor-content').innerHTML = '';
+    document.getElementById('inp-cat').value     = '';
+    document.getElementById('inp-rt').value      = '3';
+    document.getElementById('inp-feat').checked  = false;
+    document.getElementById('inp-img').value     = '';
+    document.getElementById('inp-date').value    = todayISO();
+    // reset source mode
+    if (sourceMode) toggleSourceMode();
+    autoResize(document.getElementById('inp-title'));
+    autoResize(document.getElementById('inp-excerpt'));
+    updateCounts();
+    previewImg();
+}
+
+function setEditorTitle(t) {
+    document.getElementById('ed-page-title').textContent = t;
+    document.getElementById('topbar-title').textContent  = t;
+}
+
+// ════════════════════════════════════════════
+// EDITOR — SAVE
+// ════════════════════════════════════════════
+document.getElementById('btn-publish').addEventListener('click', savePost);
+document.getElementById('btn-cancel-ed').addEventListener('click', () => showPage('posts'));
+
+async function savePost() {
+    const title    = document.getElementById('inp-title').value.trim();
+    const excerpt  = document.getElementById('inp-excerpt').value.trim();
+    const content  = sourceMode
+        ? document.getElementById('html-source').value
+        : document.getElementById('editor-content').innerHTML;
+    const category = document.getElementById('inp-cat').value;
+    const readTime = parseInt(document.getElementById('inp-rt').value, 10) || 3;
+    const featured = document.getElementById('inp-feat').checked;
+    const image    = document.getElementById('inp-img').value.trim();
+    const date     = isoToTR(document.getElementById('inp-date').value);
+    const rawText  = document.getElementById('editor-content').innerText || '';
+
+    if (!title)    { toast('Başlık zorunlu!', 'error'); document.getElementById('inp-title').focus(); return; }
+    if (!category) { toast('Kategori seçin!', 'error'); document.getElementById('inp-cat').focus();   return; }
+    if (!rawText.trim() && !content.trim()) { toast('İçerik boş olamaz!', 'error'); return; }
+
+    const btn = document.getElementById('btn-publish');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Kaydediliyor…';
+
+    try {
+        // Unfeature all if new post will be featured
+        if (featured) allPosts.forEach(p => { p.featured = false; });
+
+        if (editingId) {
+            const idx = allPosts.findIndex(p => p.id === editingId);
+            if (idx === -1) throw new Error('Yazı bulunamadı.');
+            const updated = { ...allPosts[idx], title, excerpt, content, category, readTime, featured, date };
+            if (image) updated.image = image; else delete updated.image;
+            allPosts[idx] = updated;
+            if (featured) { allPosts.splice(idx, 1); allPosts.unshift(updated); }
+            await savePosts(`Güncellendi: ${title}`);
+            toast('✅ Yazı güncellendi', 'success');
+        } else {
+            const post = { id: '', featured, title, category, excerpt, date, readTime, content };
+            if (image) post.image = image;
+            if (featured) allPosts.unshift(post); else allPosts.push(post);
+            await savePosts(`Yeni yazı: ${title}`);
+            toast('✅ Yazı yayınlandı', 'success');
+        }
+
+        await loadPosts();
+        showPage('posts');
+    } catch(e) {
+        toast('Kaydetme hatası: ' + e.message, 'error');
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = editingId
+            ? '<i class="fas fa-save"></i> Kaydet'
+            : '<i class="fas fa-cloud-upload-alt"></i> Yayınla';
+    }
+}
+
+// ════════════════════════════════════════════
+// RICH TEXT EDITOR
+// ════════════════════════════════════════════
+// Toolbar button clicks
+document.querySelectorAll('.tb-btn[data-cmd]').forEach(btn => {
+    btn.addEventListener('click', () => {
+        execCmd(btn.dataset.cmd);
+    });
+});
+
+document.getElementById('fmt-sel').addEventListener('change', function() {
+    if (!this.value) return;
+    document.getElementById('editor-content').focus();
+    document.execCommand('formatBlock', false, this.value);
+    this.value = '';
+    onEditorChange();
+});
+
+document.getElementById('btn-quote').addEventListener('click', () => {
+    document.getElementById('editor-content').focus();
+    document.execCommand('formatBlock', false, 'blockquote');
+    onEditorChange();
+});
+
+document.getElementById('btn-link').addEventListener('click', () => {
+    const sel = window.getSelection();
+    const defaultText = sel && sel.toString() ? sel.toString() : '';
+    const url = prompt('Link URL girin:');
+    if (!url) return;
+    document.getElementById('editor-content').focus();
+    if (!defaultText) {
+        const text = prompt('Link metni:', url) || url;
+        document.execCommand('insertHTML', false, `<a href="${url}">${text}</a>`);
+    } else {
+        document.execCommand('createLink', false, url);
+    }
+    onEditorChange();
+});
+
+document.getElementById('editor-content').addEventListener('input', onEditorChange);
+document.getElementById('editor-content').addEventListener('keydown', function(e) {
+    if (e.key === 'Tab') { e.preventDefault(); document.execCommand('insertHTML', false, '    '); }
+});
+
+function execCmd(cmd) {
+    document.getElementById('editor-content').focus();
+    document.execCommand(cmd, false, null);
+    onEditorChange();
+}
+
+function onEditorChange() {
+    updateCounts();
+    autoReadTime();
+    if (sourceMode) {
+        document.getElementById('html-source').value = document.getElementById('editor-content').innerHTML;
+    }
+}
+
+function updateCounts() {
+    const text  = document.getElementById('editor-content').innerText || '';
+    const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+    document.getElementById('word-count').textContent = `${words} kelime`;
+    document.getElementById('char-count').textContent = `${text.length} karakter`;
+}
+
+function autoReadTime() {
+    const titleText = document.getElementById('inp-title').value || '';
+    const bodyText  = document.getElementById('editor-content').innerText || '';
+    const words = (titleText + ' ' + bodyText).trim().split(/\s+/).filter(Boolean).length;
+    const mins  = Math.max(1, Math.round(words / 200));
+    document.getElementById('inp-rt').value = mins;
+}
+
+// HTML source toggle
+document.getElementById('src-btn').addEventListener('click', toggleSourceMode);
+
+function toggleSourceMode() {
+    const editor  = document.getElementById('editor-content');
+    const source  = document.getElementById('html-source');
+    const toolbar = document.getElementById('toolbar');
+    const btn     = document.getElementById('src-btn');
+
+    if (!sourceMode) {
+        source.value = editor.innerHTML;
+        editor.style.display = 'none';
+        source.style.display = 'block';
+        toolbar.style.opacity = '.4';
+        toolbar.style.pointerEvents = 'none';
+        btn.classList.add('on');
+        sourceMode = true;
+    } else {
+        editor.innerHTML = source.value;
+        editor.style.display = '';
+        source.style.display = 'none';
+        toolbar.style.opacity = '';
+        toolbar.style.pointerEvents = '';
+        btn.classList.remove('on');
+        sourceMode = false;
+        updateCounts();
+    }
+}
+
+// Auto-resize textareas
+document.getElementById('inp-title').addEventListener('input', function() {
+    autoResize(this); autoReadTime();
+});
+document.getElementById('inp-excerpt').addEventListener('input', function() {
+    autoResize(this);
+});
+
+function autoResize(el) {
+    el.style.height = 'auto';
+    el.style.height = el.scrollHeight + 'px';
+}
+
+// Image preview
+document.getElementById('inp-img').addEventListener('input', previewImg);
+
+function previewImg() {
+    const url = document.getElementById('inp-img').value.trim();
+    const img = document.getElementById('img-preview');
+    const ph  = document.getElementById('img-ph');
+    if (url) {
+        img.src = url;
+        img.style.display = 'block';
+        ph.style.display  = 'none';
+        img.onerror = () => { img.style.display = 'none'; ph.style.display = 'flex'; };
+    } else {
+        img.style.display = 'none';
+        ph.style.display  = 'flex';
+    }
+}
+
+// ════════════════════════════════════════════
+// NAVIGATION
+// ════════════════════════════════════════════
+const PAGE_TITLES = { posts: 'Yazılar', editor: 'Yeni Yazı', settings: 'Ayarlar' };
+
+function showPage(name) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    document.querySelectorAll('.sb-item[data-page]').forEach(b => b.classList.remove('active'));
+    const match = document.querySelector(`.sb-item[data-page="${name}"]`);
+    if (match) match.classList.add('active');
+    if (name !== 'editor') {
+        document.getElementById('topbar-title').textContent = PAGE_TITLES[name] || '';
+    }
+    closeSidebar();
+    if (name === 'posts') loadPosts();
+}
+
+// Sidebar nav
+document.querySelectorAll('.sb-item[data-page]').forEach(btn => {
+    btn.addEventListener('click', () => showPage(btn.dataset.page));
+});
+
+document.getElementById('nav-new').addEventListener('click', openNewPost);
+document.getElementById('topbar-new-btn').addEventListener('click', openNewPost);
+
+// Hamburger
+document.getElementById('ham-btn').addEventListener('click', () => {
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('sb-overlay').classList.toggle('show');
+});
+
+document.getElementById('sb-overlay').addEventListener('click', closeSidebar);
+
+function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sb-overlay').classList.remove('show');
+}
+
+// ════════════════════════════════════════════
+// CONFIRM DIALOG
+// ════════════════════════════════════════════
+function showConfirm(title, msg, cb) {
+    document.getElementById('cf-title').textContent = title;
+    document.getElementById('cf-msg').textContent   = msg;
+    document.getElementById('confirm-overlay').classList.add('show');
+    confirmCb = cb;
+}
+
+function closeConfirm() {
+    document.getElementById('confirm-overlay').classList.remove('show');
+    confirmCb = null;
+}
+
+document.getElementById('cf-cancel').addEventListener('click', closeConfirm);
+document.getElementById('cf-ok').addEventListener('click', () => {
+    closeConfirm();
+    if (confirmCb) confirmCb();
+});
+document.getElementById('confirm-overlay').addEventListener('click', function(e) {
+    if (e.target === this) closeConfirm();
+});
+
+// ════════════════════════════════════════════
+// TOAST
+// ════════════════════════════════════════════
+function toast(msg, type) {
+    type = type || 'info';
+    const wrap = document.getElementById('toast-wrap');
+    const el   = document.createElement('div');
+    el.className = 'toast ' + type;
+    const icons = { success:'fa-check-circle', error:'fa-times-circle', info:'fa-info-circle' };
+    el.innerHTML = `<i class="fas ${icons[type] || icons.info}"></i> ${esc(msg)}`;
+    wrap.appendChild(el);
+    setTimeout(() => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(8px)';
+        setTimeout(() => { if (el.parentNode) el.parentNode.removeChild(el); }, 300);
+    }, 3500);
+}
+
+// ════════════════════════════════════════════
+// KEYBOARD SHORTCUTS
+// ════════════════════════════════════════════
+document.addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        if (document.getElementById('page-editor').classList.contains('active')) savePost();
+    }
+    if (e.key === 'Escape') { closeConfirm(); closeSidebar(); }
+});
+</script>
+</body>
+</html>
