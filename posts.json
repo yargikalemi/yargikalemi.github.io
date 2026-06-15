@@ -2,17 +2,6 @@
   {
     "id": "1",
     "featured": true,
-    "title": "Ceza Davalarında Zamanaşımı: Bilmeniz Gerekenler",
-    "category": "Ceza Hukuku",
-    "excerpt": "Bir suç işlenmişse, ne kadar zaman sonra takibat başlatılamaz? Zamanaşımı hangi suçlar için kaç yıl? Bu hukuki koruma mekanizmasını somut örneklerle açıklıyorum.",
-    "date": "25 Nisan 2025",
-    "readTime": "9 dk",
-    "content": "<p>Zamanaşımı, devletin belirli bir süre geçtikten sonra suçlama hakkını yitirdiği anlamına gelir. Bu ilke, hem hukuki güvenlik hem de delillerin zamanla anlamsızlaşması nedeniyle tüm modern hukuk sistemlerinde mevcuttur.</p><h3>Dava Zamanaşımı Süreleri</h3><p>Türk Ceza Kanunu'na göre zamanaşımı süreleri suçun öngördüğü azami cezaya bağlıdır. Ağırlaştırılmış müebbet hapis cezasını gerektiren suçlarda süre yoktur. Ağır ceza suçlarında 30 yıl, 5-10 yıl arası hapis gerektiren suçlarda 15 yıl, daha hafif suçlarda 8 veya 4 yıl uygulanır.</p><h3>Zamanaşımı Ne Zaman Başlar?</h3><p>Kural olarak suçun işlendiği gün zamanaşımı başlar. Ancak kesintisiz suçlarda son hareket tarihinde, sonradan ortaya çıkan suçlarda ise sonucun gerçekleştiği anda başlangıç sayılır.</p><h3>Durma ve Kesilme</h3><p>Soruşturma başladığında, dava açıldığında veya sanık yurt dışına kaçtığında zamanaşımı durabilir ya da kesilebilir. Kesilmesi halinde süre sıfırlanarak yeniden işlemeye başlar. Bu nedenle zamanaşımının hesabı her somut olayda ayrı teknik analiz gerektirir.</p>",
-    "slug": "ceza-davalarinda-zamanasimi-bilmeniz-gerekenler"
-  },
-  {
-    "id": "2",
-    "featured": false,
     "title": "Başlık: Pratik Rehberler\n             Tüketici Hakem Heyetine Nasıl Başvurulur?",
     "category": "Tüketici Hukuku",
     "excerpt": "Ceyda",
@@ -20,6 +9,17 @@
     "readTime": 3,
     "content": "<p>Kategori: Tüketici Hukuku</p><p>Özet : Örnek olayla Tüketici Hakem Heyetlerine nasıl başvurulabileceğine dair pratik bilgi verilmiştir.</p><p>Örnek olay:</p><p>“Online aldığım ürün ayıplı çıktı, satıcı oyalıyor, iade de yapmıyor…”</p><p>İlgili mevzuat:</p><p>1) 6502 sayılı Tüketicinin Korunması Hakkında Kanunun 68. maddesi</p><p>2) Tüketici Hakem Heyetleri Yönetmeliğinin 11. maddesi.</p><p>2026 yılı için 186.000.TL ve altındaki tutarlar için Tüketici Hakem Heyetine başvuru yapılması gerekir.</p><p>186.000 TL üzeri için doğrudan Tüketici Mahkemelerine başvurulur. Hakem heyeti mahkeme öncesi bir ön çözüm yoludur.</p><p>Pratik Başvuru Haritası:</p><p>1. e-Devlet → Tüketici Hakem Heyeti Başvurusu (Tüketici Bilgi Sistemi üzerinden)</p><p>2. Fatura, sözleşme, ekran görüntüsü gibi delilleri yüklenmeli</p><p>3. Talebini net olarak yaz (iade / değişim / bedel indirimi)</p><p>4. Başvurunu tamamlarsın</p><p>5. Süreci sistemden takip edersin</p><p>Şu Hataları Yapmamalısın:</p><p>• Belgelerini yüklemeyi unutmak</p><p>• Talebini açıkça yazılmaması (“mağdurum” demek yetmez)</p><p>• Adresinin bağlı olduğu heyete başvurmamak</p><p>• Süreleri kaçırmak</p><p>Ne Zaman Avukat Gerekir?</p><p>• Yüksek bedelli uyuşmazlıklarda</p><p>• Teknik/ayıp tartışmalı dosyalarda</p><p>• Banka/finans işlemlerinde</p>",
     "slug": "baslik-pratik-rehberler-tuketici-hakem-heyetine-nasil-basvurulur"
+  },
+  {
+    "id": "2",
+    "featured": false,
+    "title": "Ceza Davalarında Zamanaşımı: Bilmeniz Gerekenler",
+    "category": "Ceza Hukuku",
+    "excerpt": "Bir suç işlenmişse, ne kadar zaman sonra takibat başlatılamaz? Zamanaşımı hangi suçlar için kaç yıl? Bu hukuki koruma mekanizmasını somut örneklerle açıklıyorum.",
+    "date": "25 Nisan 2025",
+    "readTime": "9 dk",
+    "content": "<p>Zamanaşımı, devletin belirli bir süre geçtikten sonra suçlama hakkını yitirdiği anlamına gelir. Bu ilke, hem hukuki güvenlik hem de delillerin zamanla anlamsızlaşması nedeniyle tüm modern hukuk sistemlerinde mevcuttur.</p><h3>Dava Zamanaşımı Süreleri</h3><p>Türk Ceza Kanunu'na göre zamanaşımı süreleri suçun öngördüğü azami cezaya bağlıdır. Ağırlaştırılmış müebbet hapis cezasını gerektiren suçlarda süre yoktur. Ağır ceza suçlarında 30 yıl, 5-10 yıl arası hapis gerektiren suçlarda 15 yıl, daha hafif suçlarda 8 veya 4 yıl uygulanır.</p><h3>Zamanaşımı Ne Zaman Başlar?</h3><p>Kural olarak suçun işlendiği gün zamanaşımı başlar. Ancak kesintisiz suçlarda son hareket tarihinde, sonradan ortaya çıkan suçlarda ise sonucun gerçekleştiği anda başlangıç sayılır.</p><h3>Durma ve Kesilme</h3><p>Soruşturma başladığında, dava açıldığında veya sanık yurt dışına kaçtığında zamanaşımı durabilir ya da kesilebilir. Kesilmesi halinde süre sıfırlanarak yeniden işlemeye başlar. Bu nedenle zamanaşımının hesabı her somut olayda ayrı teknik analiz gerektirir.</p>",
+    "slug": "ceza-davalarinda-zamanasimi-bilmeniz-gerekenler"
   },
   {
     "id": "3",
