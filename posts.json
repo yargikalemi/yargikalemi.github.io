@@ -2,6 +2,17 @@
   {
     "id": "1",
     "featured": true,
+    "title": "Başlık: Pratik Rehberler\n             Tüketici Hakem Heyetine Nasıl Başvurulur?",
+    "category": "Tüketici Hukuku",
+    "excerpt": "Ceyda",
+    "date": "15 Haziran 2026",
+    "readTime": 3,
+    "content": "<p>Kategori: Tüketici Hukuku</p><p>Özet : Örnek olayla Tüketici Hakem Heyetlerine nasıl başvurulabileceğine dair pratik bilgi verilmiştir.</p><p>Örnek olay:</p><p>“Online aldığım ürün ayıplı çıktı, satıcı oyalıyor, iade de yapmıyor…”</p><p>İlgili mevzuat:</p><p>1) 6502 sayılı Tüketicinin Korunması Hakkında Kanunun 68. maddesi</p><p>2) Tüketici Hakem Heyetleri Yönetmeliğinin 11. maddesi.</p><p>2026 yılı için 186.000.TL ve altındaki tutarlar için Tüketici Hakem Heyetine başvuru yapılması gerekir.</p><p>186.000 TL üzeri için doğrudan Tüketici Mahkemelerine başvurulur. Hakem heyeti mahkeme öncesi bir ön çözüm yoludur.</p><p>Pratik Başvuru Haritası:</p><p>1. e-Devlet → Tüketici Hakem Heyeti Başvurusu (Tüketici Bilgi Sistemi üzerinden)</p><p>2. Fatura, sözleşme, ekran görüntüsü gibi delilleri yüklenmeli</p><p>3. Talebini net olarak yaz (iade / değişim / bedel indirimi)</p><p>4. Başvurunu tamamlarsın</p><p>5. Süreci sistemden takip edersin</p><p>Şu Hataları Yapmamalısın:</p><p>• Belgelerini yüklemeyi unutmak</p><p>• Talebini açıkça yazılmaması (“mağdurum” demek yetmez)</p><p>• Adresinin bağlı olduğu heyete başvurmamak</p><p>• Süreleri kaçırmak</p><p>Ne Zaman Avukat Gerekir?</p><p>• Yüksek bedelli uyuşmazlıklarda</p><p>• Teknik/ayıp tartışmalı dosyalarda</p><p>• Banka/finans işlemlerinde</p>",
+    "slug": "baslik-pratik-rehberler-tuketici-hakem-heyetine-nasil-basvurulur"
+  },
+  {
+    "id": "2",
+    "featured": false,
     "title": "*TÜKETİCİNİN GÜVENCESİ:TÜKETİCİ HAKEM HEYETLERİ*",
     "category": "Tüketici Hukuku",
     "excerpt": "Tuketici HUKUKU",
@@ -11,7 +22,7 @@
     "slug": "tuketicinin-guvencesi-tuketici-hakem-heyetleri"
   },
   {
-    "id": "2",
+    "id": "3",
     "featured": false,
     "title": "asdasddas",
     "category": "Ceza Hukuku",
@@ -20,17 +31,6 @@
     "readTime": 1,
     "content": "sadasdasd<div>asdasdasdasda</div><div>asdasd</div>",
     "slug": "asdasddas"
-  },
-  {
-    "id": "3",
-    "featured": false,
-    "title": "Başlık: Pratik Rehberler\n             Tüketici Hakem Heyetine Nasıl Başvurulur?",
-    "category": "Tüketici Hukuku",
-    "excerpt": "Ceyda",
-    "date": "15 Haziran 2026",
-    "readTime": 3,
-    "content": "<p>Kategori: Tüketici Hukuku</p><p>Özet : Örnek olayla Tüketici Hakem Heyetlerine nasıl başvurulabileceğine dair pratik bilgi verilmiştir.</p><p>Örnek olay:</p><p>“Online aldığım ürün ayıplı çıktı, satıcı oyalıyor, iade de yapmıyor…”</p><p>İlgili mevzuat:</p><p>1) 6502 sayılı Tüketicinin Korunması Hakkında Kanunun 68. maddesi</p><p>2) Tüketici Hakem Heyetleri Yönetmeliğinin 11. maddesi.</p><p>2026 yılı için 186.000.TL ve altındaki tutarlar için Tüketici Hakem Heyetine başvuru yapılması gerekir.</p><p>186.000 TL üzeri için doğrudan Tüketici Mahkemelerine başvurulur. Hakem heyeti mahkeme öncesi bir ön çözüm yoludur.</p><p>Pratik Başvuru Haritası:</p><p>1. e-Devlet → Tüketici Hakem Heyeti Başvurusu (Tüketici Bilgi Sistemi üzerinden)</p><p>2. Fatura, sözleşme, ekran görüntüsü gibi delilleri yüklenmeli</p><p>3. Talebini net olarak yaz (iade / değişim / bedel indirimi)</p><p>4. Başvurunu tamamlarsın</p><p>5. Süreci sistemden takip edersin</p><p>Şu Hataları Yapmamalısın:</p><p>• Belgelerini yüklemeyi unutmak</p><p>• Talebini açıkça yazılmaması (“mağdurum” demek yetmez)</p><p>• Adresinin bağlı olduğu heyete başvurmamak</p><p>• Süreleri kaçırmak</p><p>Ne Zaman Avukat Gerekir?</p><p>• Yüksek bedelli uyuşmazlıklarda</p><p>• Teknik/ayıp tartışmalı dosyalarda</p><p>• Banka/finans işlemlerinde</p>",
-    "slug": "baslik-pratik-rehberler-tuketici-hakem-heyetine-nasil-basvurulur"
   },
   {
     "id": "4",
