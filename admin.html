@@ -475,22 +475,52 @@ input:checked + .toggle-sl::before { transform:translateX(18px); }
                 <div class="login-logo-sub">Admin Paneli</div>
             </div>
         </div>
-        <div class="login-title">Giriş Yap</div>
-        <div class="login-sub">GitHub Personal Access Token'ınızı girin. Token yalnızca tarayıcınızda saklanır, hiçbir sunucuya gönderilmez.</div>
 
-        <div class="form-group">
-            <label class="form-label" for="inp-pat">GitHub Token</label>
-            <div class="form-input-wrap">
-                <input type="password" id="inp-pat" class="form-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off">
-                <button class="pw-eye" id="pw-toggle" tabindex="-1"><i class="fas fa-eye" id="pw-icon"></i></button>
+        <!-- İLK KURULUM — sadece ilk seferinde gösterilir -->
+        <div id="setup-view">
+            <div class="login-title">İlk Kurulum</div>
+            <div class="login-sub">Bu adımı yalnızca bir kez yapacaksınız. Bundan sonra sadece şifrenizle giriş yapacaksınız.</div>
+
+            <div class="form-group">
+                <label class="form-label" for="inp-pw1">Şifre Belirle</label>
+                <input type="password" id="inp-pw1" class="form-input" placeholder="Kolayca hatırlayacağınız bir şifre" autocomplete="new-password">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="inp-pw2">Şifre (tekrar)</label>
+                <input type="password" id="inp-pw2" class="form-input" placeholder="Aynı şifreyi tekrar girin" autocomplete="new-password">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="inp-pat">GitHub Token</label>
+                <div class="form-input-wrap">
+                    <input type="password" id="inp-pat" class="form-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off">
+                    <button class="pw-eye" id="pw-toggle" tabindex="-1"><i class="fas fa-eye" id="pw-icon"></i></button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="inp-repo">GitHub Repo</label>
+                <input type="text" id="inp-repo" class="form-input" value="yargikalemi/yargikalemi.github.io">
+            </div>
+            <button class="btn-primary" id="setup-btn"><i class="fas fa-check-circle"></i> Kurulumu Tamamla</button>
+        </div>
+
+        <!-- NORMAL GİRİŞ — kurulum sonrası her zaman gösterilir -->
+        <div id="login-view" style="display:none">
+            <div class="login-title">Giriş Yap</div>
+            <div class="login-sub">Admin şifrenizi girin.</div>
+
+            <div class="form-group">
+                <label class="form-label" for="inp-pw-login">Şifre</label>
+                <div class="form-input-wrap">
+                    <input type="password" id="inp-pw-login" class="form-input" placeholder="Şifreniz" autocomplete="current-password">
+                    <button class="pw-eye" id="pw-toggle-login" tabindex="-1"><i class="fas fa-eye" id="pw-icon-login"></i></button>
+                </div>
+            </div>
+            <button class="btn-primary" id="login-btn"><i class="fas fa-sign-in-alt"></i> Giriş Yap</button>
+            <div style="text-align:center; margin-top:.9rem;">
+                <button id="reset-setup-btn" style="background:none;border:none;color:var(--text-muted);font-size:.8rem;cursor:pointer;text-decoration:underline;">Şifre veya token değişti mi? Sıfırla</button>
             </div>
         </div>
-        <div class="form-group">
-            <label class="form-label" for="inp-repo">GitHub Repo</label>
-            <input type="text" id="inp-repo" class="form-input" value="yargikalemi/yargikalemi.github.io">
-        </div>
 
-        <button class="btn-primary" id="login-btn"><i class="fas fa-sign-in-alt"></i> Giriş Yap</button>
         <div id="login-error"></div>
     </div>
 </div>
@@ -707,10 +737,6 @@ input:checked + .toggle-sl::before { transform:translateX(18px); }
                     <div class="card-hdr">GitHub Bağlantısı</div>
                     <div class="card-body">
                         <div class="field">
-                            <label class="field-label">Token (gizli)</label>
-                            <input type="password" class="field-input" id="set-token" readonly>
-                        </div>
-                        <div class="field">
                             <label class="field-label">Repo</label>
                             <input type="text" class="field-input" id="set-repo" readonly>
                         </div>
@@ -718,9 +744,14 @@ input:checked + .toggle-sl::before { transform:translateX(18px); }
                             <label class="field-label">Bağlantı Durumu</label>
                             <div id="set-status" style="font-size:.86rem;color:var(--text-secondary)">—</div>
                         </div>
-                        <button class="btn-danger" id="set-logout">
-                            <i class="fas fa-sign-out-alt"></i> Çıkış Yap &amp; Token Sil
-                        </button>
+                        <div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.25rem;">
+                            <button class="btn-danger" id="set-logout">
+                                <i class="fas fa-sign-out-alt"></i> Oturumu Kapat
+                            </button>
+                            <button class="btn-danger" id="set-reset" style="background:#FFF7ED;color:#C2410C;border-color:#FED7AA;">
+                                <i class="fas fa-trash-alt"></i> Şifre &amp; Token Sıfırla
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div class="card">
@@ -757,11 +788,13 @@ let confirmCb  = null;
 // BOOT
 // ════════════════════════════════════════════
 (function boot() {
-    const saved = localStorage.getItem('yk_admin_v2');
-    if (saved) {
+    const saved   = localStorage.getItem('yk_admin_v2');
+    const session = sessionStorage.getItem('yk_session');
+
+    if (saved && session) {
         try {
             const cfg = JSON.parse(saved);
-            if (cfg.token && cfg.repo) {
+            if (cfg.passwordHash && cfg.token && cfg.repo) {
                 GH_TOKEN = cfg.token;
                 GH_REPO  = cfg.repo;
                 launchApp();
@@ -769,6 +802,20 @@ let confirmCb  = null;
             }
         } catch(e) {}
     }
+
+    // Kurulum yapılmış ama oturum yok → şifre ekranı
+    if (saved) {
+        try {
+            const cfg = JSON.parse(saved);
+            if (cfg.passwordHash) {
+                document.getElementById('setup-view').style.display = 'none';
+                document.getElementById('login-view').style.display = 'block';
+                return;
+            }
+        } catch(e) {}
+    }
+
+    // Hiç kurulum yapılmamış → kurulum ekranı (zaten default görünüm)
     document.getElementById('inp-date').value = todayISO();
 })();
 
@@ -777,7 +824,15 @@ function todayISO() {
 }
 
 // ════════════════════════════════════════════
-// LOGIN
+// SHA-256 (Web Crypto API)
+// ════════════════════════════════════════════
+async function sha256(str) {
+    const buf  = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+// ════════════════════════════════════════════
+// KURULUM — ilk kez
 // ════════════════════════════════════════════
 document.getElementById('pw-toggle').addEventListener('click', function() {
     const inp = document.getElementById('inp-pat');
@@ -786,23 +841,26 @@ document.getElementById('pw-toggle').addEventListener('click', function() {
     else                         { inp.type = 'password'; ico.className = 'fas fa-eye'; }
 });
 
-document.getElementById('login-btn').addEventListener('click', doLogin);
-['inp-pat','inp-repo'].forEach(id => {
-    document.getElementById(id).addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+document.getElementById('setup-btn').addEventListener('click', doSetup);
+['inp-pw1','inp-pw2','inp-pat','inp-repo'].forEach(id => {
+    document.getElementById(id).addEventListener('keydown', e => { if (e.key === 'Enter') doSetup(); });
 });
 
-async function doLogin() {
+async function doSetup() {
+    const pw1  = document.getElementById('inp-pw1').value;
+    const pw2  = document.getElementById('inp-pw2').value;
     const pat  = document.getElementById('inp-pat').value.trim();
     const repo = document.getElementById('inp-repo').value.trim();
-    const btn  = document.getElementById('login-btn');
-    const err  = document.getElementById('login-error');
+    const btn  = document.getElementById('setup-btn');
 
-    if (!pat)  { showLoginErr('GitHub token boş olamaz.'); return; }
-    if (!repo) { showLoginErr('Repo adı boş olamaz.'); return; }
+    if (!pw1)        { showLoginErr('Şifre boş olamaz.'); return; }
+    if (pw1 !== pw2) { showLoginErr('Şifreler eşleşmiyor.'); return; }
+    if (!pat)        { showLoginErr('GitHub token boş olamaz.'); return; }
+    if (!repo)       { showLoginErr('Repo adı boş olamaz.'); return; }
 
     btn.disabled = true;
     btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Doğrulanıyor…';
-    err.style.display = 'none';
+    hideLoginErr();
 
     try {
         const res = await fetch(`https://api.github.com/repos/${repo}`, {
@@ -812,22 +870,83 @@ async function doLogin() {
         else if (res.status === 404) { showLoginErr('Repo bulunamadı. Adı doğru yazdınız mı?'); return; }
         else if (!res.ok)            { showLoginErr(`GitHub hatası: HTTP ${res.status}`); return; }
 
-        GH_TOKEN = pat;
-        GH_REPO  = repo;
-        localStorage.setItem('yk_admin_v2', JSON.stringify({ token: pat, repo }));
+        const hash = await sha256(pw1);
+        GH_TOKEN   = pat;
+        GH_REPO    = repo;
+        localStorage.setItem('yk_admin_v2', JSON.stringify({ passwordHash: hash, token: pat, repo }));
+        sessionStorage.setItem('yk_session', '1');
         launchApp();
     } catch(e) {
         showLoginErr('Bağlantı hatası. İnternet bağlantınızı kontrol edin.');
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-check-circle"></i> Kurulumu Tamamla';
+    }
+}
+
+// ════════════════════════════════════════════
+// GİRİŞ — şifre ile
+// ════════════════════════════════════════════
+document.getElementById('pw-toggle-login').addEventListener('click', function() {
+    const inp = document.getElementById('inp-pw-login');
+    const ico = document.getElementById('pw-icon-login');
+    if (inp.type === 'password') { inp.type = 'text';     ico.className = 'fas fa-eye-slash'; }
+    else                         { inp.type = 'password'; ico.className = 'fas fa-eye'; }
+});
+
+document.getElementById('login-btn').addEventListener('click', doLoginPassword);
+document.getElementById('inp-pw-login').addEventListener('keydown', e => {
+    if (e.key === 'Enter') doLoginPassword();
+});
+
+async function doLoginPassword() {
+    const pw  = document.getElementById('inp-pw-login').value;
+    const btn = document.getElementById('login-btn');
+
+    if (!pw) { showLoginErr('Şifre boş olamaz.'); return; }
+
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Kontrol ediliyor…';
+    hideLoginErr();
+
+    try {
+        const cfg  = JSON.parse(localStorage.getItem('yk_admin_v2') || '{}');
+        const hash = await sha256(pw);
+
+        if (hash !== cfg.passwordHash) {
+            showLoginErr('Şifre yanlış. Lütfen tekrar deneyin.');
+            return;
+        }
+
+        GH_TOKEN = cfg.token;
+        GH_REPO  = cfg.repo;
+        sessionStorage.setItem('yk_session', '1');
+        launchApp();
+    } catch(e) {
+        showLoginErr('Bir hata oluştu: ' + e.message);
     } finally {
         btn.disabled = false;
         btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Giriş Yap';
     }
 }
 
+// Sıfırla — kurulum ekranına dön
+document.getElementById('reset-setup-btn').addEventListener('click', function() {
+    if (confirm('Kaydedilen şifre ve token silinecek. Kurulum ekranına döneceksiniz. Emin misiniz?')) {
+        localStorage.removeItem('yk_admin_v2');
+        sessionStorage.removeItem('yk_session');
+        location.reload();
+    }
+});
+
 function showLoginErr(msg) {
     const el = document.getElementById('login-error');
     el.textContent = msg;
     el.style.display = 'block';
+}
+
+function hideLoginErr() {
+    document.getElementById('login-error').style.display = 'none';
 }
 
 // ════════════════════════════════════════════
@@ -841,7 +960,6 @@ async function launchApp() {
     document.getElementById('inp-date').value = todayISO();
 
     // Settings page
-    document.getElementById('set-token').value = GH_TOKEN;
     document.getElementById('set-repo').value  = GH_REPO;
 
     // Fetch GitHub user info
@@ -862,13 +980,27 @@ async function launchApp() {
     await loadPosts();
 }
 
+// Oturumu kapat (şifre & token silinmez, sadece session temizlenir)
 function doLogout() {
-    localStorage.removeItem('yk_admin_v2');
+    sessionStorage.removeItem('yk_session');
     location.reload();
 }
 
 document.getElementById('btn-logout').addEventListener('click', doLogout);
 document.getElementById('set-logout').addEventListener('click', doLogout);
+
+// Şifre & token sıfırla (her şeyi sil → kurulum ekranına dön)
+document.getElementById('set-reset').addEventListener('click', function() {
+    showConfirm(
+        'Her Şeyi Sıfırla',
+        'Şifreniz ve GitHub token\'ınız silinecek. Yeniden kurulum yapmanız gerekecek. Emin misiniz?',
+        () => {
+            localStorage.removeItem('yk_admin_v2');
+            sessionStorage.removeItem('yk_session');
+            location.reload();
+        }
+    );
+});
 
 // ════════════════════════════════════════════
 // GITHUB API
