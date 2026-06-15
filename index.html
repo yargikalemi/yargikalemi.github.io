@@ -1529,8 +1529,9 @@
                 '<span><i class="far fa-clock"></i> ' + post.readTime + '</span>' +
                 (post.views ? '<span><i class="fas fa-eye"></i> ' + post.views + ' görüntülenme</span>' : '') +
             '</div>' +
-            '<a href="#" class="read-link" onclick="openPost(\'' + post.id + '\'); return false;">' +
-                'Devamını Oku <i class="fas fa-arrow-right"></i></a>';
+            (post.slug
+                ? '<a href="posts/' + post.slug + '.html" class="read-link">Devamını Oku <i class="fas fa-arrow-right"></i></a>'
+                : '<a href="#" class="read-link" onclick="openPost(\'' + post.id + '\'); return false;">Devamını Oku <i class="fas fa-arrow-right"></i></a>');
     }
 
     function renderCards(posts) {
@@ -1543,6 +1544,7 @@
             art.dataset.cat = post.category;
             art.dataset.id = post.id;
             art.dataset.title = post.title;
+            art.dataset.slug = post.slug || '';
             art.innerHTML =
                 '<div class="card-img" style="background-image:url(' + postImg(post) + ');"></div>' +
                 '<div class="card-body">' +
@@ -1553,9 +1555,9 @@
                 '<div class="card-footer">' +
                     '<div class="card-meta">' + post.date + ' · ' + post.readTime + '</div>' +
                     '<div class="card-shares">' +
-                        '<button class="share-ico" onclick="share(this.closest(\'.post-card\').dataset.title,\'twitter\');event.stopPropagation();" title="Twitter"><i class="fab fa-twitter"></i></button>' +
-                        '<button class="share-ico" onclick="share(this.closest(\'.post-card\').dataset.title,\'whatsapp\');event.stopPropagation();" title="WhatsApp"><i class="fab fa-whatsapp"></i></button>' +
-                        '<button class="share-ico" onclick="copyLink();event.stopPropagation();" title="Kopyala"><i class="fas fa-link"></i></button>' +
+                        '<button class="share-ico" onclick="share(this.closest(\'.post-card\').dataset.title,\'twitter\',this.closest(\'.post-card\').dataset.slug);event.stopPropagation();" title="Twitter"><i class="fab fa-twitter"></i></button>' +
+                        '<button class="share-ico" onclick="share(this.closest(\'.post-card\').dataset.title,\'whatsapp\',this.closest(\'.post-card\').dataset.slug);event.stopPropagation();" title="WhatsApp"><i class="fab fa-whatsapp"></i></button>' +
+                        '<button class="share-ico" onclick="copyLink(this.closest(\'.post-card\').dataset.slug);event.stopPropagation();" title="Kopyala"><i class="fas fa-link"></i></button>' +
                     '</div>' +
                 '</div>';
             art.addEventListener('click', (e) => {
@@ -1598,8 +1600,16 @@
     /* =============================================
        SHARE
     ============================================= */
-    function share(title, platform) {
-        const url = window.location.href;
+    function postPageUrl(slug) {
+        if (slug) {
+            const base = window.location.href.replace(/\/[^\/]*$/, '/');
+            return base + 'posts/' + slug + '.html';
+        }
+        return window.location.href;
+    }
+
+    function share(title, platform, slug) {
+        const url = postPageUrl(slug);
         const text = `"${title}" — Yargı Kalemi platformundan`;
         const urls = {
             twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
@@ -1609,8 +1619,8 @@
         if (urls[platform]) window.open(urls[platform], '_blank');
     }
 
-    function copyLink() {
-        navigator.clipboard.writeText(window.location.href).then(() => {
+    function copyLink(slug) {
+        navigator.clipboard.writeText(postPageUrl(slug)).then(() => {
             const msg = document.createElement('div');
             msg.textContent = 'Bağlantı kopyalandı!';
             Object.assign(msg.style, {
@@ -1631,6 +1641,11 @@
     function openPost(id) {
         const post = allPosts.find(p => p.id === id);
         if (!post) return;
+        if (post.slug) {
+            window.location.href = 'posts/' + post.slug + '.html';
+            return;
+        }
+        // Fallback modal for posts without a slug
         document.getElementById('modal-cat').textContent = post.category;
         document.getElementById('modal-title').textContent = post.title;
         document.getElementById('modal-meta').innerHTML =

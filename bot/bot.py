@@ -151,13 +151,191 @@ def text_to_html(text):
 def make_slug(title):
     tr = str.maketrans('çğıöşüÇĞİÖŞÜ', 'cgiosuCGIOSU')
     slug = title.translate(tr).lower()
-    return re.sub(r'[^a-z0-9]+', '-', slug)[:50].strip('-')
+    return re.sub(r'[^a-z0-9]+', '-', slug)[:80].strip('-')
+
+
+CAT_IMG_MAP = {'Ceza Hukuku': 'cezahukuku.jpg', 'İdare Hukuku': 'idarehukuku.jpeg'}
+DEFAULT_POST_IMG = 'yazifoto.jpg'
+
+_POST_TEMPLATE = """\
+<!DOCTYPE html>
+<html lang="tr" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>%%TITLE%% — Yargı Kalemi</title>
+<meta name="description" content="%%EXCERPT%%">
+<meta property="og:title" content="%%TITLE%%">
+<meta property="og:description" content="%%EXCERPT%%">
+<meta property="og:image" content="https://yargikalemi.github.io/%%IMG_URL%%">
+<meta property="og:url" content="%%PAGE_URL%%">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Yargı Kalemi">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="%%PAGE_URL%%">
+<link rel="icon" type="image/png" href="../logo1.png">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root{--bg:#F7F5F0;--bg-card:#fff;--accent:#0D9488;--accent-h:#0F766E;--text:#1A2B3C;--text2:#4A5568;--text3:#8896A4;--border:#E0DBD3;--nav-bg:#fff}
+[data-theme="dark"]{--bg:#0D1B2A;--bg-card:#112236;--accent:#2DD4BF;--accent-h:#5EEAD4;--text:#E8E4DC;--text2:#9EB0C2;--text3:#5E7287;--border:#1C3148;--nav-bg:#091524}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.65;transition:background .25s,color .25s}
+#prog{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--accent),var(--accent-h));z-index:999;transition:width .1s linear}
+#hdr{position:sticky;top:0;z-index:200;background:var(--nav-bg);border-bottom:1px solid var(--border);transition:background .25s,border-color .25s}
+.hdr-in{max-width:900px;margin:0 auto;display:flex;align-items:center;padding:0 1.5rem;height:58px;gap:1rem}
+.back-lnk{display:flex;align-items:center;gap:.5rem;color:var(--accent);font-size:.86rem;font-weight:600;text-decoration:none;transition:color .2s}
+.back-lnk:hover{color:var(--accent-h)}
+.back-lnk i{font-size:.78rem}
+.hdr-spacer{flex:1}
+.theme-btn{width:34px;height:34px;border-radius:50%;background:none;border:1.5px solid var(--border);color:var(--text3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.82rem;transition:all .2s}
+.theme-btn:hover{border-color:var(--accent);color:var(--accent);background:rgba(13,148,136,.06)}
+.wrap{max-width:760px;margin:0 auto;padding:3rem 1.5rem 5rem}
+.post-cat-badge{display:inline-flex;align-items:center;padding:.28rem .75rem;background:rgba(13,148,136,.1);color:var(--accent);border-radius:99px;font-size:.73rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:1.15rem}
+[data-theme="dark"] .post-cat-badge{background:rgba(45,212,191,.12)}
+h1.post-title{font-family:'Playfair Display',serif;font-size:2.3rem;font-weight:900;line-height:1.2;color:var(--text);margin-bottom:1.1rem;letter-spacing:-.01em}
+.post-meta{display:flex;flex-wrap:wrap;gap:.6rem 1.2rem;align-items:center;font-size:.82rem;color:var(--text3);padding-bottom:1.5rem;border-bottom:1px solid var(--border);margin-bottom:1.75rem}
+.post-meta span{display:flex;align-items:center;gap:.35rem}
+.cover-img{width:100%;max-height:440px;object-fit:cover;border-radius:10px;margin-bottom:2.5rem;display:block;box-shadow:0 8px 32px rgba(0,0,0,.1)}
+.post-body{font-size:1.06rem;line-height:1.9;color:var(--text2)}
+.post-body>*+*{margin-top:1rem}
+.post-body h2{font-family:'Playfair Display',serif;font-size:1.55rem;font-weight:700;color:var(--text);margin-top:2.5rem;margin-bottom:.75rem;padding-bottom:.45rem;border-bottom:2px solid var(--border);line-height:1.3}
+.post-body h3{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;color:var(--text);margin-top:2rem;margin-bottom:.6rem;line-height:1.35}
+.post-body ul,.post-body ol{padding-left:1.65rem}
+.post-body li{margin-bottom:.45rem}
+.post-body blockquote{border-left:4px solid var(--accent);padding:.85rem 1.4rem;background:rgba(13,148,136,.05);margin:1.75rem 0;border-radius:0 8px 8px 0}
+[data-theme="dark"] .post-body blockquote{background:rgba(45,212,191,.06)}
+.post-body blockquote p{font-style:italic;font-size:1.05rem;color:var(--text2);margin:0}
+.post-body a{color:var(--accent);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+.post-body a:hover{color:var(--accent-h)}
+.post-body strong{font-weight:700;color:var(--text)}
+.post-body table{width:100%;border-collapse:collapse;font-size:.93rem;margin:1.5rem 0}
+.post-body th,.post-body td{padding:.6rem .9rem;border:1px solid var(--border);text-align:left}
+.post-body th{background:rgba(13,148,136,.07);font-weight:700;color:var(--text)}
+.post-body img{width:100%;border-radius:6px}
+.post-body hr{border:none;border-top:2px solid var(--border);margin:2.5rem 0}
+.share-wrap{margin-top:3.5rem;padding-top:2rem;border-top:1px solid var(--border)}
+.share-label{font-size:.75rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.9rem}
+.share-row{display:flex;gap:.5rem;flex-wrap:wrap}
+.sbtn{display:inline-flex;align-items:center;gap:.42rem;padding:.5rem .95rem;border-radius:99px;font-size:.81rem;font-weight:600;cursor:pointer;border:none;transition:all .2s;font-family:'Inter',sans-serif}
+.sbtn.tw{background:#1D9BF0;color:#fff}.sbtn.tw:hover{background:#1a8cd8;transform:translateY(-1px)}
+.sbtn.wa{background:#25D366;color:#fff}.sbtn.wa:hover{background:#20b858;transform:translateY(-1px)}
+.sbtn.cp{background:var(--bg-card);color:var(--text2);border:1.5px solid var(--border)}.sbtn.cp:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-1px)}
+.copy-ok{font-size:.79rem;color:var(--accent);font-weight:600;margin-top:.6rem;display:none}
+.copy-ok.show{display:block}
+.back-all{display:inline-flex;align-items:center;gap:.5rem;margin-top:2.5rem;padding:.6rem 1.25rem;background:var(--bg-card);border:1.5px solid var(--border);border-radius:99px;color:var(--text2);font-size:.85rem;font-weight:600;text-decoration:none;transition:all .2s}
+.back-all:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-1px)}
+footer{background:var(--nav-bg);border-top:1px solid var(--border);padding:1.6rem 1.5rem;text-align:center;font-size:.79rem;color:var(--text3);line-height:1.7}
+footer a{color:var(--accent);font-weight:600;text-decoration:none}
+#go-top{position:fixed;bottom:1.6rem;right:1.6rem;width:44px;height:44px;border-radius:50%;background:var(--accent);color:#fff;border:none;cursor:pointer;font-size:.9rem;display:none;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(13,148,136,.35);z-index:100;transition:all .2s}
+#go-top.vis{display:flex}
+#go-top:hover{background:var(--accent-h);transform:translateY(-2px)}
+@media(max-width:640px){.wrap{padding:2rem 1.1rem 3.5rem}h1.post-title{font-size:1.7rem}.post-body{font-size:.98rem}.hdr-in{padding:0 1rem}}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<header id="hdr">
+  <div class="hdr-in">
+    <a href="../index.html" class="back-lnk"><i class="fas fa-arrow-left"></i>&nbsp;Yargı Kalemi</a>
+    <div class="hdr-spacer"></div>
+    <button class="theme-btn" id="theme-btn" aria-label="Tema"><i class="fas fa-moon"></i></button>
+  </div>
+</header>
+<main>
+  <div class="wrap">
+    <div class="post-cat-badge">%%CATEGORY%%</div>
+    <h1 class="post-title">%%TITLE%%</h1>
+    <div class="post-meta">
+      <span><i class="far fa-calendar-alt"></i>&nbsp;%%DATE%%</span>
+      <span><i class="far fa-clock"></i>&nbsp;%%READTIME%% dk okuma</span>
+    </div>
+    <img class="cover-img" src="%%IMG_SRC%%" alt="%%TITLE%%" onerror="this.remove()">
+    <div class="post-body">%%CONTENT%%</div>
+    <div class="share-wrap">
+      <div class="share-label">Bu yazıyı paylaş</div>
+      <div class="share-row">
+        <button class="sbtn tw" onclick="shr('tw')"><i class="fab fa-twitter"></i> Twitter / X</button>
+        <button class="sbtn wa" onclick="shr('wa')"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+        <button class="sbtn cp" onclick="cp()"><i class="fas fa-link"></i> Linki Kopyala</button>
+      </div>
+      <div class="copy-ok" id="copy-ok">&#10003; Bağlantı kopyalandı!</div>
+    </div>
+    <a href="../index.html#posts" class="back-all"><i class="fas fa-arrow-left"></i> Tüm Yazılara Dön</a>
+  </div>
+</main>
+<footer>
+  <a href="../index.html">Yargı Kalemi</a> — Bu site hukuki danışmanlık hizmeti değildir; yalnızca bilgi amaçlıdır.<br>
+  © 2025 Tüm Hakları Saklıdır
+</footer>
+<button id="go-top" onclick="scrollTo({top:0,behavior:'smooth'})" aria-label="Başa dön"><i class="fas fa-arrow-up"></i></button>
+<script>
+var PU=%%PAGE_URL_JS%%,PT=%%PAGE_TITLE_JS%%;
+var html=document.documentElement,tb=document.getElementById('theme-btn');
+if(localStorage.getItem('yk_theme')==='dark'){html.dataset.theme='dark';tb.innerHTML='<i class="fas fa-sun"></i>';}
+tb.addEventListener('click',function(){var d=html.dataset.theme==='dark';html.dataset.theme=d?'light':'dark';tb.innerHTML=d?'<i class="fas fa-moon"></i>':'<i class="fas fa-sun"></i>';localStorage.setItem('yk_theme',d?'light':'dark');});
+var prog=document.getElementById('prog'),gt=document.getElementById('go-top');
+window.addEventListener('scroll',function(){var s=window.scrollY,t=document.documentElement.scrollHeight-window.innerHeight;prog.style.width=(t>0?(s/t*100):0)+'%';gt.classList.toggle('vis',s>380);},{passive:true});
+function shr(p){var u=encodeURIComponent(PU),t=encodeURIComponent(PT);var m={tw:'https://twitter.com/intent/tweet?text='+t+'&url='+u,wa:'https://wa.me/?text='+encodeURIComponent(PT+' '+PU)};window.open(m[p],'_blank');}
+function cp(){navigator.clipboard.writeText(PU).then(function(){var el=document.getElementById('copy-ok');el.classList.add('show');setTimeout(function(){el.classList.remove('show');},2500);});}
+</script>
+</body>
+</html>"""
+
+
+def _he(s):
+    return str(s or '').replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('"', '&quot;')
+
+
+def build_post_html(post):
+    slug = post.get('slug') or make_slug(post.get('title', ''))
+    raw_img = post.get('image') or CAT_IMG_MAP.get(post.get('category', ''), DEFAULT_POST_IMG)
+    img_src = raw_img if raw_img.startswith('http') else '../' + raw_img
+    img_url = raw_img if raw_img.startswith('http') else raw_img
+    page_url = f'https://yargikalemi.github.io/posts/{slug}.html'
+    page_title = post.get('title', '') + ' — Yargı Kalemi'
+    content = post.get('content') or f'<p>{_he(post.get("excerpt", ""))}</p>'
+    return (_POST_TEMPLATE
+        .replace('%%TITLE%%', _he(post.get('title', '')))
+        .replace('%%EXCERPT%%', _he(post.get('excerpt', '')))
+        .replace('%%CATEGORY%%', _he(post.get('category', '')))
+        .replace('%%DATE%%', _he(post.get('date', '')))
+        .replace('%%READTIME%%', _he(str(post.get('readTime', ''))))
+        .replace('%%IMG_SRC%%', img_src)
+        .replace('%%IMG_URL%%', img_url)
+        .replace('%%PAGE_URL%%', _he(page_url))
+        .replace('%%CONTENT%%', content)
+        .replace('%%PAGE_URL_JS%%', json.dumps(page_url))
+        .replace('%%PAGE_TITLE_JS%%', json.dumps(page_title))
+    )
+
+
+def save_post_page(post):
+    slug = post.get('slug') or make_slug(post.get('title', ''))
+    if not slug:
+        return
+    url = f'https://api.github.com/repos/{REPO}/contents/posts/{slug}.html'
+    headers = {'Authorization': f'token {GITHUB_TOKEN}', 'Content-Type': 'application/json'}
+    get_res = requests.get(url, headers=headers, timeout=15)
+    sha = get_res.json().get('sha') if get_res.status_code == 200 else None
+    html_bytes = build_post_html(post).encode('utf-8')
+    payload = {
+        'message': f'Yazı sayfası: {post.get("title", "")}',
+        'content': base64.b64encode(html_bytes).decode()
+    }
+    if sha:
+        payload['sha'] = sha
+    res = requests.put(url, headers=headers, json=payload, timeout=30)
+    if res.status_code not in (200, 201):
+        raise Exception(f'Sayfa oluşturma hatası HTTP {res.status_code}: {res.text[:200]}')
 
 
 def build_post(title, category, excerpt, content_raw):
     now = datetime.now()
     return {
         "id": make_slug(title),
+        "slug": make_slug(title),
         "featured": False,
         "title": title,
         "category": category,
@@ -524,10 +702,18 @@ async def handle_callback(update: Update, context):
         post['featured'] = True
         posts.insert(0, post)
         save_posts(posts, sha, post['title'])
+        page_url = f"https://yargikalemi.github.io/posts/{post.get('slug', make_slug(post['title']))}.html"
+        try:
+            save_post_page(post)
+        except Exception as pe:
+            logging.warning(f"Sayfa oluşturulamadı: {pe}")
+            page_url = None
+        page_note = f"\n🔗 {page_url}" if page_url else ""
         await query.edit_message_text(
             f"✅ *Yayınlandı!*\n\n"
             f"📌 {post['title']}\n"
-            f"🏷️ {post['category']} · {post['date']} · {post['readTime']}\n\n"
+            f"🏷️ {post['category']} · {post['date']} · {post['readTime']}"
+            f"{page_note}\n\n"
             f"Site 1-2 dakika içinde güncellenecek.",
             parse_mode='Markdown'
         )
