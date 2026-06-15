@@ -75,5 +75,16 @@
     "readTime": "1 dk",
     "content": "<p>Gözaltına Alındığınızda İlk 24 Saatte Yapmanız Gereken 5 Şey Gözaltına alınmak, sıradan bir vatandaşın karşılaşabileceği en stresli deneyimlerden biridir. Panikte alınan yanlış kararlar, ilerleyen süreçte telafisi güç sonuçlara yol açabilir.</p>",
     "slug": "gozaltina-alindiginizda-ilk-24-saatte-yapmaniz-gereken-5-sey-gozaltina-alinmak-s"
+  },
+  {
+    "id": "8",
+    "featured": false,
+    "title": "asdasddas",
+    "category": "Ceza Hukuku",
+    "excerpt": "Vasdas\nvbasda",
+    "date": "15 Haziran 2026",
+    "readTime": 1,
+    "content": "sadasdasd<div>asdasdasdasda</div><div>asdasd</div>",
+    "slug": "asdasddas"
   }
 ]
