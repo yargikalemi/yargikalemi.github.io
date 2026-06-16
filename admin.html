@@ -809,8 +809,8 @@ function buildPostHtml(post) {
     const imgSrc   = resolveImgPath(post.image || CAT_IMG[post.category] || DEFAULT_IMG);
     const imgMeta  = (post.image || DEFAULT_IMG).startsWith('http')
                      ? (post.image || DEFAULT_IMG)
-                     : 'https://yargikalemi.github.io/' + (post.image || DEFAULT_IMG);
-    const pageUrl  = 'https://yargikalemi.github.io/posts/' + slug + '.html';
+                     : 'https://yargikalemi.com/' + (post.image || DEFAULT_IMG);
+    const pageUrl  = 'https://yargikalemi.com/posts/' + slug + '.html';
     const pageTitle = (post.title || '') + ' — Yargı Kalemi';
     function e(s) {
         return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');

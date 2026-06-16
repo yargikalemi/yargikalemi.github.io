@@ -320,7 +320,7 @@ def build_post_html(post):
     raw_img = post.get('image') or CAT_IMG_MAP.get(post.get('category', ''), DEFAULT_POST_IMG)
     img_src = raw_img if raw_img.startswith('http') else '../' + raw_img
     img_url = raw_img if raw_img.startswith('http') else raw_img
-    page_url = f'https://yargikalemi.github.io/posts/{slug}.html'
+    page_url = f'https://yargikalemi.com/posts/{slug}.html'
     page_title = post.get('title', '') + ' — Yargı Kalemi'
     content = post.get('content') or f'<p>{_he(post.get("excerpt", ""))}</p>'
     return (_POST_TEMPLATE
@@ -735,13 +735,15 @@ async def handle_callback(update: Update, context):
         post['featured'] = True
         posts.insert(0, post)
         save_posts(posts, sha, post['title'])
-        page_url = f"https://yargikalemi.github.io/posts/{post.get('slug', make_slug(post['title']))}.html"
+        page_url = f"https://yargikalemi.com/posts/{post.get('slug', make_slug(post['title']))}.html"
+        page_err = None
         try:
             save_post_page(post)
         except Exception as pe:
             logging.warning(f"Sayfa oluşturulamadı: {pe}")
             page_url = None
-        page_note = f"\n🔗 {page_url}" if page_url else ""
+            page_err = str(pe)
+        page_note = f"\n🔗 {page_url}" if page_url else f"\n⚠️ Sayfa oluşturulamadı: {page_err}"
         await query.edit_message_text(
             f"✅ *Yayınlandı!*\n\n"
             f"📌 {post['title']}\n"

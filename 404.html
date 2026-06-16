@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sayfa Bulunamadı — Yargı Kalemi</title>
+<link rel="icon" type="image/png" href="/logo1.png">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:#F7F5F0;color:#1A2B3C;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;text-align:center}
+.icon{font-size:4rem;margin-bottom:1.5rem;opacity:.25}
+h1{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;margin-bottom:.75rem}
+p{color:#4A5568;font-size:.96rem;line-height:1.7;max-width:420px;margin:0 auto .4rem}
+.note{font-size:.82rem;color:#8896A4;margin-top:.5rem}
+.btn{display:inline-flex;align-items:center;gap:.5rem;margin-top:2rem;padding:.65rem 1.5rem;background:#0D9488;color:#fff;border-radius:6px;font-size:.9rem;font-weight:600;text-decoration:none;transition:background .2s}
+.btn:hover{background:#0F766E}
+</style>
+</head>
+<body>
+<div class="icon">⚖</div>
+<h1>Sayfa Bulunamadı</h1>
+<p>Aradığınız sayfa mevcut değil ya da taşınmış olabilir.</p>
+<p class="note">Yazıya erişmek için ana sayfadan ulaşabilirsiniz.</p>
+<a href="/" class="btn">← Ana Sayfaya Dön</a>
+<script>
+// Eğer /posts/slug.html bir 404 aldıysa ana sayfaya yönlendir
+// index.html modal fallback ile içeriği gösterebilir
+const slug = location.pathname.replace('/posts/', '').replace('.html', '');
+if (slug && slug !== '/') {
+    sessionStorage.setItem('yk_open_slug', slug);
+}
+</script>
+</body>
+</html>

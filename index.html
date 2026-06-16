@@ -1657,9 +1657,7 @@
                 '<span><i class="far fa-clock"></i> ' + post.readTime + '</span>' +
                 (post.views ? '<span><i class="fas fa-eye"></i> ' + post.views + ' görüntülenme</span>' : '') +
             '</div>' +
-            (post.slug
-                ? '<a href="posts/' + post.slug + '.html" class="read-link">Devamını Oku <i class="fas fa-arrow-right"></i></a>'
-                : '<a href="#" class="read-link" onclick="openPost(\'' + post.id + '\'); return false;">Devamını Oku <i class="fas fa-arrow-right"></i></a>');
+            '<a href="#" class="read-link" onclick="openPost(\'' + post.id + '\'); return false;">Devamını Oku <i class="fas fa-arrow-right"></i></a>';
     }
 
     function renderCards(posts) {
@@ -1766,14 +1764,16 @@
     /* =============================================
        MODAL
     ============================================= */
-    function openPost(id) {
+    async function openPost(id) {
         const post = allPosts.find(p => p.id === id);
         if (!post) return;
         if (post.slug) {
-            window.location.href = 'posts/' + post.slug + '.html';
-            return;
+            try {
+                const r = await fetch('posts/' + post.slug + '.html', { method: 'HEAD' });
+                if (r.ok) { window.location.href = 'posts/' + post.slug + '.html'; return; }
+            } catch(e) {}
         }
-        // Fallback modal for posts without a slug
+        // Fallback modal for posts without a page or when page missing
         document.getElementById('modal-cat').textContent = post.category;
         document.getElementById('modal-title').textContent = post.title;
         document.getElementById('modal-meta').innerHTML =
