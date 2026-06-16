@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Yargı Kalemi — Admin</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=Inter:wght@400;500;600;700&family=Merriweather:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,700;1,400&family=Crimson+Text:ital,wght@0,400;0,700;1,400&family=Open+Sans:wght@400;600;700&family=Roboto:wght@400;500;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link rel="icon" type="image/png" href="logo1.png">
 <style>
@@ -137,15 +137,56 @@ a{text-decoration:none;color:inherit}
 .ed-div{height:1px;background:var(--border);margin:.65rem 0}
 #inp-excerpt{width:100%;border:none;outline:none;font-size:.89rem;color:var(--text-secondary);resize:none;background:transparent;line-height:1.65;overflow:hidden;min-height:48px}
 #inp-excerpt::placeholder{color:#D1CCC4}
-.toolbar{display:flex;flex-wrap:wrap;gap:2px;padding:.42rem .65rem;border-bottom:1px solid var(--border);background:#F9F8F6}
-.tb-btn{width:28px;height:28px;display:flex;align-items:center;justify-content:center;border:none;background:none;border-radius:4px;color:var(--text-secondary);font-size:.76rem;cursor:pointer;transition:all var(--tr)}
-.tb-btn:hover{background:var(--border);color:var(--text-primary)}
-.tb-sep{width:1px;background:var(--border);margin:4px 2px}
-.tb-sel{height:28px;padding:0 .42rem;border:none;background:none;border-radius:4px;font-size:.76rem;color:var(--text-secondary);cursor:pointer}
-.tb-sel:hover{background:var(--border)}
+.toolbar{display:flex;flex-direction:column;border-bottom:1px solid var(--border);background:#F9F8F6}
+.tb-row{display:flex;flex-wrap:wrap;align-items:center;gap:2px;padding:.3rem .55rem}
+.tb-row:first-child{border-bottom:1px solid #ede9e4}
+.tb-btn{min-width:28px;height:28px;display:flex;align-items:center;justify-content:center;border:none;background:none;border-radius:4px;color:var(--text-secondary);font-size:.76rem;cursor:pointer;transition:all var(--tr);padding:0 3px}
+.tb-btn:hover{background:#E5E0D8;color:var(--text-primary)}
+.tb-btn.active{background:var(--accent-light);color:var(--accent)}
+.tb-sep{width:1px;background:#D5D0C8;margin:3px 3px;align-self:stretch}
+.tb-sel{height:28px;padding:0 .35rem;border:1px solid transparent;background:none;border-radius:4px;font-size:.76rem;color:var(--text-secondary);cursor:pointer;max-width:160px}
+.tb-sel:hover,.tb-sel:focus{background:#E5E0D8;border-color:transparent;outline:none}
+.tb-sel-font{max-width:175px}
+.tb-size-inp{width:50px;height:28px;border:1px solid var(--border);border-radius:4px;font-size:.82rem;text-align:center;background:#fff;color:var(--text-primary);padding:0 .2rem}
+.tb-size-inp:focus{border-color:var(--accent);outline:none}
+.tb-color-wrap{position:relative;display:inline-flex}
+.tb-color-btn{width:28px;height:28px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:none;background:none;border-radius:4px;cursor:pointer;padding:2px;gap:1px}
+.tb-color-btn:hover{background:#E5E0D8}
+.tb-color-icon{font-size:.75rem;color:var(--text-secondary);line-height:1}
+.tb-color-bar{width:15px;height:3px;border-radius:2px}
+.tb-color-inp{position:absolute;width:1px;height:1px;opacity:0;left:0;top:0;pointer-events:none}
 .tb-src-btn{font-size:.7rem;background:none;border:1px solid var(--border);border-radius:4px;padding:.17rem .45rem;color:var(--text-muted);cursor:pointer;transition:all var(--tr)}
 .tb-src-btn.on{background:var(--accent);color:#fff;border-color:var(--accent)}
-.tb-btn.active{background:var(--accent-light);color:var(--accent)}
+/* Table grid picker */
+#table-picker{display:none;position:absolute;background:#fff;border:1px solid var(--border);border-radius:8px;padding:.65rem;box-shadow:0 8px 28px rgba(0,0,0,.14);z-index:3000}
+#table-picker.show{display:block}
+.tg-grid{display:grid;grid-template-columns:repeat(8,22px);gap:3px}
+.tg-cell{width:22px;height:22px;border:1.5px solid var(--border);border-radius:3px;cursor:pointer;transition:all .12s;background:#fff}
+.tg-cell.on{background:var(--accent-light);border-color:var(--accent)}
+.tg-label{font-size:.72rem;text-align:center;margin-top:.45rem;color:var(--text-secondary);font-weight:600}
+/* Find & Replace */
+#find-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.38);z-index:9000;align-items:flex-start;justify-content:center;padding-top:120px}
+#find-modal.show{display:flex}
+.find-box{background:#fff;border-radius:10px;padding:1.4rem 1.6rem;max-width:440px;width:92%;box-shadow:0 24px 60px rgba(0,0,0,.2)}
+.find-box h4{font-size:.96rem;font-weight:700;margin-bottom:1.1rem;color:var(--text-primary)}
+.find-field{display:flex;align-items:center;gap:.6rem;margin-bottom:.55rem}
+.find-field label{font-size:.73rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-muted);width:68px;flex-shrink:0}
+.find-field input{flex:1;padding:.44rem .65rem;border:1.5px solid var(--border);border-radius:var(--radius);font-size:.87rem}
+.find-field input:focus{border-color:var(--accent);outline:none}
+.find-btns{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.9rem}
+.find-btn{padding:.38rem .75rem;border-radius:var(--radius);font-size:.8rem;font-weight:600;cursor:pointer;border:1.5px solid var(--border);background:#fff;color:var(--text-primary);transition:all var(--tr)}
+.find-btn:hover{border-color:var(--accent);color:var(--accent)}
+.find-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.find-btn.primary:hover{background:var(--accent-hover)}
+.find-msg{font-size:.78rem;color:var(--text-muted);margin-top:.55rem;min-height:1.1em}
+/* FAQ mini editor */
+.faq-editor-wrap{border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-top:.3rem;transition:border-color var(--tr)}
+.faq-editor-wrap:focus-within{border-color:var(--accent)}
+.faq-mini-tb{display:flex;flex-wrap:wrap;align-items:center;gap:2px;padding:.28rem .45rem;background:#F9F8F6;border-bottom:1px solid var(--border)}
+#faq-inp-a-ed{min-height:130px;max-height:300px;overflow-y:auto;padding:.65rem .8rem;outline:none;font-size:.9rem;line-height:1.78;color:var(--text-primary)}
+#faq-inp-a-ed:empty::before{content:attr(data-placeholder);color:#C8C3BB;pointer-events:none;display:block}
+#faq-inp-a-ed strong{font-weight:700}
+#faq-inp-a-ed em{font-style:italic}
 .inp-rt-wrap{display:flex;align-items:center;gap:.5rem}
 .inp-rt-auto{font-size:.71rem;color:var(--accent);background:var(--accent-light);padding:.15rem .45rem;border-radius:99px;font-weight:600;white-space:nowrap;flex-shrink:0}
 .sched-wrap{margin-top:.55rem;display:none}
@@ -156,8 +197,13 @@ a{text-decoration:none;color:inherit}
 .cat-mgmt-add{display:flex;gap:.5rem;margin-top:.55rem}
 #editor-content{min-height:320px;padding:.95rem;outline:none;font-size:.91rem;line-height:1.72;color:var(--text-primary)}
 #editor-content:empty::before{content:attr(data-placeholder);color:#D1CCC4;pointer-events:none}
+#editor-content h1{font-family:'Playfair Display',serif;font-size:1.55rem;font-weight:700;margin:1.2rem 0 .5rem}
 #editor-content h2{font-family:'Playfair Display',serif;font-size:1.22rem;font-weight:700;margin:1rem 0 .4rem}
 #editor-content h3{font-family:'Playfair Display',serif;font-size:1.02rem;font-weight:700;margin:.85rem 0 .32rem}
+#editor-content pre{background:#F7F5F0;padding:.75rem 1rem;border-radius:4px;font-family:monospace;font-size:.84rem;overflow-x:auto;line-height:1.55}
+#editor-content table{width:100%;border-collapse:collapse;margin:1rem 0}
+#editor-content th,#editor-content td{border:1px solid var(--border);padding:.45rem .7rem;font-size:.9rem}
+#editor-content th{background:#F7F5F0;font-weight:700}
 #editor-content p{margin-bottom:.65rem}
 #editor-content ul,#editor-content ol{padding-left:1.4rem;margin-bottom:.65rem}
 #editor-content li{margin-bottom:.2rem}
@@ -522,43 +568,107 @@ input:checked+.toggle-sl::before{transform:translateX(17px)}
                             <button class="tb-src-btn" id="src-btn"><i class="fas fa-code"></i> HTML</button>
                         </div>
                         <div class="toolbar" id="toolbar">
-                            <select class="tb-sel" id="fmt-sel">
-                                <option value="">Biçim</option>
-                                <option value="h2">Başlık 2</option>
-                                <option value="h3">Başlık 3</option>
-                                <option value="p">Normal</option>
-                            </select>
-                            <div class="tb-sep"></div>
-                            <button class="tb-btn" title="Kalın (Ctrl+B)" data-cmd="bold"><i class="fas fa-bold"></i></button>
-                            <button class="tb-btn" title="İtalik (Ctrl+I)" data-cmd="italic"><i class="fas fa-italic"></i></button>
-                            <button class="tb-btn" title="Altı çizili" data-cmd="underline"><i class="fas fa-underline"></i></button>
-                            <div class="tb-sep"></div>
-                            <button class="tb-btn" title="Madde listesi" data-cmd="insertUnorderedList"><i class="fas fa-list-ul"></i></button>
-                            <button class="tb-btn" title="Numaralı liste" data-cmd="insertOrderedList"><i class="fas fa-list-ol"></i></button>
-                            <div class="tb-sep"></div>
-                            <button class="tb-btn" title="Alıntı" id="btn-quote"><i class="fas fa-quote-left"></i></button>
-                            <button class="tb-btn" title="Link" id="btn-link"><i class="fas fa-link"></i></button>
-                            <button class="tb-btn" title="Yatay çizgi" data-cmd="insertHorizontalRule"><i class="fas fa-minus"></i></button>
-                            <div class="tb-sep"></div>
-                            <button class="tb-btn" title="Geri al" data-cmd="undo"><i class="fas fa-undo"></i></button>
-                            <button class="tb-btn" title="İleri al" data-cmd="redo"><i class="fas fa-redo"></i></button>
-                            <div class="tb-sep"></div>
-                            <button class="tb-btn" title="Üstü çizili" data-cmd="strikeThrough"><i class="fas fa-strikethrough"></i></button>
-                            <button class="tb-btn" title="Üst simge" data-cmd="superscript"><i class="fas fa-superscript"></i></button>
-                            <button class="tb-btn" title="Alt simge" data-cmd="subscript"><i class="fas fa-subscript"></i></button>
-                            <button class="tb-btn" title="Kod" id="btn-code"><i class="fas fa-code"></i></button>
-                            <div class="tb-sep"></div>
-                            <button class="tb-btn" title="Sola hizala" data-cmd="justifyLeft"><i class="fas fa-align-left"></i></button>
-                            <button class="tb-btn" title="Ortala" data-cmd="justifyCenter"><i class="fas fa-align-center"></i></button>
-                            <button class="tb-btn" title="Sağa hizala" data-cmd="justifyRight"><i class="fas fa-align-right"></i></button>
-                            <div class="tb-sep"></div>
-                            <select class="tb-sel" id="font-size-sel" title="Yazı Boyutu">
-                                <option value="">Boyut</option>
-                                <option value="1">Küçük</option>
-                                <option value="3">Normal</option>
-                                <option value="4">Büyük</option>
-                                <option value="5">Çok Büyük</option>
-                            </select>
+                            <!-- Satır 1: Yazı tipi & karakter biçimi -->
+                            <div class="tb-row">
+                                <button class="tb-btn" title="Geri Al (Ctrl+Z)" data-cmd="undo"><i class="fas fa-undo"></i></button>
+                                <button class="tb-btn" title="İleri Al (Ctrl+Y)" data-cmd="redo"><i class="fas fa-redo"></i></button>
+                                <div class="tb-sep"></div>
+                                <select class="tb-sel tb-sel-font" id="font-family-sel" title="Yazı Tipi">
+                                    <option value="">— Yazı Tipi —</option>
+                                    <optgroup label="Sans-Serif">
+                                        <option value="Inter, sans-serif">Inter</option>
+                                        <option value="Arial, sans-serif">Arial</option>
+                                        <option value="'Helvetica Neue', Helvetica, sans-serif">Helvetica</option>
+                                        <option value="Verdana, sans-serif">Verdana</option>
+                                        <option value="Tahoma, sans-serif">Tahoma</option>
+                                        <option value="'Trebuchet MS', sans-serif">Trebuchet MS</option>
+                                        <option value="'Century Gothic', sans-serif">Century Gothic</option>
+                                        <option value="Calibri, sans-serif">Calibri</option>
+                                        <option value="'Open Sans', sans-serif">Open Sans</option>
+                                        <option value="Roboto, sans-serif">Roboto</option>
+                                        <option value="Montserrat, sans-serif">Montserrat</option>
+                                        <option value="'Gill Sans', 'Gill Sans MT', sans-serif">Gill Sans</option>
+                                    </optgroup>
+                                    <optgroup label="Serif">
+                                        <option value="Georgia, serif">Georgia</option>
+                                        <option value="'Times New Roman', Times, serif">Times New Roman</option>
+                                        <option value="Garamond, serif">Garamond</option>
+                                        <option value="'Palatino Linotype', Palatino, serif">Palatino</option>
+                                        <option value="'Book Antiqua', Palatino, serif">Book Antiqua</option>
+                                        <option value="'Bookman Old Style', serif">Bookman Old Style</option>
+                                        <option value="Baskerville, 'Baskerville Old Face', serif">Baskerville</option>
+                                        <option value="Cambria, serif">Cambria</option>
+                                        <option value="Merriweather, serif">Merriweather</option>
+                                        <option value="Lora, serif">Lora</option>
+                                        <option value="'Crimson Text', serif">Crimson Text</option>
+                                        <option value="'Playfair Display', serif">Playfair Display</option>
+                                    </optgroup>
+                                    <optgroup label="Monospace">
+                                        <option value="'Courier New', Courier, monospace">Courier New</option>
+                                        <option value="Consolas, 'Courier New', monospace">Consolas</option>
+                                    </optgroup>
+                                </select>
+                                <input type="number" class="tb-size-inp" id="font-size-inp" min="8" max="96" value="16" title="Yazı Boyutu (pt)">
+                                <div class="tb-sep"></div>
+                                <button class="tb-btn" title="Kalın (Ctrl+B)" data-cmd="bold"><i class="fas fa-bold"></i></button>
+                                <button class="tb-btn" title="İtalik (Ctrl+I)" data-cmd="italic"><i class="fas fa-italic"></i></button>
+                                <button class="tb-btn" title="Altı Çizili (Ctrl+U)" data-cmd="underline"><i class="fas fa-underline"></i></button>
+                                <button class="tb-btn" title="Üstü Çizili" data-cmd="strikeThrough"><i class="fas fa-strikethrough"></i></button>
+                                <button class="tb-btn" title="Üst Simge" data-cmd="superscript"><i class="fas fa-superscript"></i></button>
+                                <button class="tb-btn" title="Alt Simge" data-cmd="subscript"><i class="fas fa-subscript"></i></button>
+                                <div class="tb-sep"></div>
+                                <div class="tb-color-wrap" title="Yazı Rengi">
+                                    <button class="tb-color-btn" id="btn-forecolor" onclick="document.getElementById('inp-forecolor').click()">
+                                        <span class="tb-color-icon"><i class="fas fa-font"></i></span>
+                                        <span class="tb-color-bar" id="forecolor-bar" style="background:#1A2B3C"></span>
+                                    </button>
+                                    <input type="color" id="inp-forecolor" class="tb-color-inp" value="#1A2B3C">
+                                </div>
+                                <div class="tb-color-wrap" title="Vurgu Rengi">
+                                    <button class="tb-color-btn" id="btn-hicolor" onclick="document.getElementById('inp-hicolor').click()">
+                                        <span class="tb-color-icon"><i class="fas fa-highlighter"></i></span>
+                                        <span class="tb-color-bar" id="hicolor-bar" style="background:#FEF08A"></span>
+                                    </button>
+                                    <input type="color" id="inp-hicolor" class="tb-color-inp" value="#FEF08A">
+                                </div>
+                                <div class="tb-sep"></div>
+                                <button class="tb-btn" title="Biçimi Temizle" data-cmd="removeFormat"><i class="fas fa-eraser"></i></button>
+                            </div>
+                            <!-- Satır 2: Paragraf & Ekle -->
+                            <div class="tb-row">
+                                <select class="tb-sel" id="fmt-sel" title="Paragraf Biçimi">
+                                    <option value="">Biçim</option>
+                                    <option value="h1">Başlık 1</option>
+                                    <option value="h2">Başlık 2</option>
+                                    <option value="h3">Başlık 3</option>
+                                    <option value="p">Normal</option>
+                                    <option value="pre">Sabit Genişlik</option>
+                                </select>
+                                <div class="tb-sep"></div>
+                                <button class="tb-btn" title="Sola Hizala" data-cmd="justifyLeft"><i class="fas fa-align-left"></i></button>
+                                <button class="tb-btn" title="Ortala" data-cmd="justifyCenter"><i class="fas fa-align-center"></i></button>
+                                <button class="tb-btn" title="Sağa Hizala" data-cmd="justifyRight"><i class="fas fa-align-right"></i></button>
+                                <button class="tb-btn" title="İki Yana Yasla" data-cmd="justifyFull"><i class="fas fa-align-justify"></i></button>
+                                <div class="tb-sep"></div>
+                                <button class="tb-btn" title="Madde Listesi" data-cmd="insertUnorderedList"><i class="fas fa-list-ul"></i></button>
+                                <button class="tb-btn" title="Numaralı Liste" data-cmd="insertOrderedList"><i class="fas fa-list-ol"></i></button>
+                                <button class="tb-btn" title="Girintiyi Artır" data-cmd="indent"><i class="fas fa-indent"></i></button>
+                                <button class="tb-btn" title="Girintiyi Azalt" data-cmd="outdent"><i class="fas fa-outdent"></i></button>
+                                <div class="tb-sep"></div>
+                                <button class="tb-btn" title="Alıntı" id="btn-quote"><i class="fas fa-quote-left"></i></button>
+                                <button class="tb-btn" title="Yatay Çizgi" data-cmd="insertHorizontalRule"><i class="fas fa-minus"></i></button>
+                                <div class="tb-color-wrap" style="position:relative">
+                                    <button class="tb-btn" title="Tablo Ekle" id="btn-table"><i class="fas fa-table"></i></button>
+                                    <div id="table-picker">
+                                        <div class="tg-grid" id="tg-grid"></div>
+                                        <div class="tg-label" id="tg-label">1 × 1</div>
+                                    </div>
+                                </div>
+                                <button class="tb-btn" title="Link" id="btn-link"><i class="fas fa-link"></i></button>
+                                <button class="tb-btn" title="Satır İçi Kod" id="btn-code"><i class="fas fa-code"></i></button>
+                                <div class="tb-sep"></div>
+                                <button class="tb-btn" title="Bul &amp; Değiştir (Ctrl+H)" id="btn-find" style="width:auto;padding:0 .45rem;font-size:.71rem"><i class="fas fa-search"></i> Bul</button>
+                            </div>
                         </div>
                         <div id="editor-content" contenteditable="true" data-placeholder="Yazınızı buraya yazın…"></div>
                         <textarea id="html-source"></textarea>
@@ -744,6 +854,28 @@ input:checked+.toggle-sl::before{transform:translateX(17px)}
     </main>
 </div>
 
+<!-- FIND & REPLACE MODAL -->
+<div id="find-modal">
+    <div class="find-box">
+        <h4><i class="fas fa-search" style="color:var(--accent);margin-right:.4rem"></i>Bul &amp; Değiştir</h4>
+        <div class="find-field">
+            <label>Aranan</label>
+            <input type="text" id="find-inp" placeholder="Aranacak metin…" autocomplete="off">
+        </div>
+        <div class="find-field">
+            <label>Yeni Metin</label>
+            <input type="text" id="replace-inp" placeholder="Değiştirilecek metin… (boş bırakılırsa sadece bulur)">
+        </div>
+        <div class="find-btns">
+            <button class="find-btn primary" id="find-next-btn"><i class="fas fa-search"></i> Bul</button>
+            <button class="find-btn" id="replace-btn">Değiştir (İlk)</button>
+            <button class="find-btn" id="replace-all-btn">Tümünü Değiştir</button>
+            <button class="find-btn" id="clear-find-btn" style="margin-left:auto"><i class="fas fa-times"></i> Kapat</button>
+        </div>
+        <div class="find-msg" id="find-msg"></div>
+    </div>
+</div>
+
 <!-- FAQ MODAL -->
 <div id="faq-modal">
     <div class="faq-modal-box">
@@ -756,8 +888,29 @@ input:checked+.toggle-sl::before{transform:translateX(17px)}
             <input type="text" class="field-input" id="faq-inp-q" placeholder="Soru metni…">
         </div>
         <div class="field" style="margin-top:.8rem">
-            <label class="field-label">Cevap <span style="font-weight:400;color:var(--text-muted)">(HTML desteklidir: &lt;strong&gt;kalın&lt;/strong&gt;)</span></label>
-            <textarea class="field-input" id="faq-inp-a" rows="6" placeholder="Cevap metni…" style="resize:vertical;min-height:120px"></textarea>
+            <label class="field-label">Cevap</label>
+            <div class="faq-editor-wrap">
+                <div class="faq-mini-tb">
+                    <button class="tb-btn" title="Kalın" data-faq-cmd="bold"><i class="fas fa-bold"></i></button>
+                    <button class="tb-btn" title="İtalik" data-faq-cmd="italic"><i class="fas fa-italic"></i></button>
+                    <button class="tb-btn" title="Altı Çizili" data-faq-cmd="underline"><i class="fas fa-underline"></i></button>
+                    <button class="tb-btn" title="Üstü Çizili" data-faq-cmd="strikeThrough"><i class="fas fa-strikethrough"></i></button>
+                    <div class="tb-sep"></div>
+                    <button class="tb-btn" title="Madde Listesi" data-faq-cmd="insertUnorderedList"><i class="fas fa-list-ul"></i></button>
+                    <button class="tb-btn" title="Numaralı Liste" data-faq-cmd="insertOrderedList"><i class="fas fa-list-ol"></i></button>
+                    <div class="tb-sep"></div>
+                    <button class="tb-btn" title="Link Ekle" id="faq-btn-link"><i class="fas fa-link"></i></button>
+                    <button class="tb-btn" title="Biçimi Temizle" data-faq-cmd="removeFormat"><i class="fas fa-eraser"></i></button>
+                    <div class="tb-color-wrap" title="Yazı Rengi" style="margin-left:2px">
+                        <button class="tb-color-btn" onclick="document.getElementById('faq-inp-fc').click()">
+                            <span class="tb-color-icon"><i class="fas fa-font"></i></span>
+                            <span class="tb-color-bar" id="faq-fc-bar" style="background:#1A2B3C"></span>
+                        </button>
+                        <input type="color" id="faq-inp-fc" class="tb-color-inp" value="#1A2B3C">
+                    </div>
+                </div>
+                <div id="faq-inp-a-ed" contenteditable="true" data-placeholder="Cevap metni…"></div>
+            </div>
         </div>
         <div class="faq-modal-ftr">
             <button class="btn-cf-cancel" onclick="closeFaqModal()">İptal</button>
@@ -2110,20 +2263,27 @@ function previewImg() {
 // ════════════════════════════════════════════
 // EDITOR
 // ════════════════════════════════════════════
+// ── Genel toolbar butonları (data-cmd)
 document.querySelectorAll('.tb-btn[data-cmd]').forEach(btn => {
     btn.addEventListener('click', () => execCmd(btn.dataset.cmd));
 });
+
+// ── Paragraf biçimi
 document.getElementById('fmt-sel').addEventListener('change', function() {
     if (!this.value) return;
     document.getElementById('editor-content').focus();
-    document.execCommand('formatBlock',false,this.value);
-    this.value=''; onEditorChange();
+    document.execCommand('formatBlock', false, this.value);
+    this.value = ''; onEditorChange();
 });
+
+// ── Alıntı
 document.getElementById('btn-quote').addEventListener('click', () => {
     document.getElementById('editor-content').focus();
-    document.execCommand('formatBlock',false,'blockquote');
+    document.execCommand('formatBlock', false, 'blockquote');
     onEditorChange();
 });
+
+// ── Link
 document.getElementById('btn-link').addEventListener('click', () => {
     const sel = window.getSelection();
     const selTxt = sel ? sel.toString() : '';
@@ -2131,29 +2291,271 @@ document.getElementById('btn-link').addEventListener('click', () => {
     if (!url) return;
     document.getElementById('editor-content').focus();
     if (!selTxt) {
-        const txt = prompt('Link metni:',url) || url;
-        document.execCommand('insertHTML',false,`<a href="${url}">${txt}</a>`);
-    } else { document.execCommand('createLink',false,url); }
+        const txt = prompt('Link metni:', url) || url;
+        document.execCommand('insertHTML', false, `<a href="${url}">${txt}</a>`);
+    } else { document.execCommand('createLink', false, url); }
     onEditorChange();
 });
-document.getElementById('editor-content').addEventListener('input', onEditorChange);
-document.getElementById('editor-content').addEventListener('keydown', e => {
-    if (e.key==='Tab') { e.preventDefault(); document.execCommand('insertHTML',false,'    '); }
-});
+
+// ── Satır içi kod
 document.getElementById('btn-code').addEventListener('click', () => {
     const sel = window.getSelection();
     const txt = sel ? sel.toString() : '';
     document.getElementById('editor-content').focus();
-    if (txt) { document.execCommand('insertHTML',false,`<code style="background:rgba(13,148,136,.1);padding:.1em .35em;border-radius:3px;font-family:monospace;font-size:.88em">${txt}</code>`); }
-    else { document.execCommand('insertHTML',false,'<code style="background:rgba(13,148,136,.1);padding:.1em .35em;border-radius:3px;font-family:monospace;font-size:.88em">kod</code>'); }
+    const codeHtml = (t) => `<code style="background:rgba(13,148,136,.1);padding:.1em .35em;border-radius:3px;font-family:monospace;font-size:.88em">${t || 'kod'}</code>`;
+    document.execCommand('insertHTML', false, codeHtml(txt));
     onEditorChange();
 });
-document.getElementById('font-size-sel').addEventListener('change', function() {
+
+// ── Yazı tipi
+document.getElementById('font-family-sel').addEventListener('change', function() {
     if (!this.value) return;
-    document.getElementById('editor-content').focus();
-    document.execCommand('fontSize', false, this.value);
+    const ed = document.getElementById('editor-content');
+    ed.focus();
+    document.execCommand('styleWithCSS', false, true);
+    document.execCommand('fontName', false, this.value);
     this.value = ''; onEditorChange();
 });
+
+// ── Yazı boyutu (pt)
+let savedRange = null;
+function saveEdRange() {
+    const sel = window.getSelection();
+    if (sel && sel.rangeCount) savedRange = sel.getRangeAt(0).cloneRange();
+}
+function restoreEdRange() {
+    if (!savedRange) return;
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(savedRange);
+}
+document.getElementById('editor-content').addEventListener('mouseup', saveEdRange);
+document.getElementById('editor-content').addEventListener('keyup', saveEdRange);
+
+function applyFontSize(pt) {
+    const ptVal = parseInt(pt, 10);
+    if (!ptVal || ptVal < 1) return;
+    const ed = document.getElementById('editor-content');
+    ed.focus();
+    const sel = window.getSelection();
+    if (!sel || !sel.rangeCount) return;
+    const range = sel.getRangeAt(0);
+    if (range.collapsed) return;
+    const frag = range.extractContents();
+    const span = document.createElement('span');
+    span.style.fontSize = ptVal + 'pt';
+    span.appendChild(frag);
+    range.insertNode(span);
+    range.selectNodeContents(span);
+    sel.removeAllRanges();
+    sel.addRange(range);
+    onEditorChange();
+}
+document.getElementById('font-size-inp').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') { e.preventDefault(); applyFontSize(this.value); }
+});
+document.getElementById('font-size-inp').addEventListener('blur', function() {
+    applyFontSize(this.value);
+});
+
+// ── Yazı rengi
+document.getElementById('inp-forecolor').addEventListener('change', function() {
+    restoreEdRange();
+    document.getElementById('editor-content').focus();
+    document.execCommand('foreColor', false, this.value);
+    document.getElementById('forecolor-bar').style.background = this.value;
+    onEditorChange();
+});
+
+// ── Vurgu rengi
+document.getElementById('inp-hicolor').addEventListener('change', function() {
+    restoreEdRange();
+    document.getElementById('editor-content').focus();
+    document.execCommand('hiliteColor', false, this.value) ||
+        document.execCommand('backColor', false, this.value);
+    document.getElementById('hicolor-bar').style.background = this.value;
+    onEditorChange();
+});
+
+// ── Tablo ekle (ızgara seçici)
+(function() {
+    const btn = document.getElementById('btn-table');
+    const picker = document.getElementById('table-picker');
+    const grid = document.getElementById('tg-grid');
+    const lbl = document.getElementById('tg-label');
+    const ROWS = 6, COLS = 8;
+    let hoverR = 0, hoverC = 0;
+
+    for (let r = 1; r <= ROWS; r++) {
+        for (let c = 1; c <= COLS; c++) {
+            const cell = document.createElement('div');
+            cell.className = 'tg-cell';
+            cell.dataset.r = r; cell.dataset.c = c;
+            cell.addEventListener('mouseover', () => {
+                hoverR = r; hoverC = c;
+                grid.querySelectorAll('.tg-cell').forEach(x => {
+                    x.classList.toggle('on', +x.dataset.r <= r && +x.dataset.c <= c);
+                });
+                lbl.textContent = r + ' × ' + c;
+            });
+            cell.addEventListener('click', () => {
+                insertTable(r, c);
+                picker.classList.remove('show');
+            });
+            grid.appendChild(cell);
+        }
+    }
+
+    btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        saveEdRange();
+        picker.classList.toggle('show');
+    });
+    document.addEventListener('click', (e) => {
+        if (!picker.contains(e.target) && e.target !== btn) picker.classList.remove('show');
+    });
+
+    function insertTable(rows, cols) {
+        restoreEdRange();
+        document.getElementById('editor-content').focus();
+        let html = '<table style="width:100%;border-collapse:collapse;margin:1rem 0"><thead><tr>';
+        for (let c = 0; c < cols; c++)
+            html += `<th style="border:1px solid #E0DBD3;padding:.45rem .7rem;background:#F7F5F0;font-weight:700;text-align:left;font-size:.9rem">Başlık ${c+1}</th>`;
+        html += '</tr></thead><tbody>';
+        for (let r = 0; r < rows; r++) {
+            html += '<tr>';
+            for (let c = 0; c < cols; c++)
+                html += '<td style="border:1px solid #E0DBD3;padding:.45rem .7rem;font-size:.9rem"> </td>';
+            html += '</tr>';
+        }
+        html += '</tbody></table><p><br></p>';
+        document.execCommand('insertHTML', false, html);
+        onEditorChange();
+    }
+})();
+
+// ── Bul & Değiştir
+(function() {
+    const modal = document.getElementById('find-modal');
+    const findInp = document.getElementById('find-inp');
+    const replaceInp = document.getElementById('replace-inp');
+    const msg = document.getElementById('find-msg');
+    let lastSearch = '';
+
+    function openFind() { modal.classList.add('show'); findInp.focus(); }
+    function closeFind() {
+        modal.classList.remove('show');
+        clearHighlights();
+        msg.textContent = '';
+    }
+    function clearHighlights() {
+        const ed = document.getElementById('editor-content');
+        ed.querySelectorAll('mark.fnd').forEach(m => {
+            const txt = document.createTextNode(m.textContent);
+            m.replaceWith(txt);
+        });
+        ed.normalize();
+    }
+    function highlightAll(search) {
+        clearHighlights();
+        if (!search) return 0;
+        const ed = document.getElementById('editor-content');
+        const re = new RegExp(search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+        let count = 0;
+        function walk(node) {
+            if (node.nodeType === 3) {
+                const parts = node.textContent.split(re);
+                if (parts.length < 2) return;
+                const matches = node.textContent.match(re);
+                const frag = document.createDocumentFragment();
+                parts.forEach((p, i) => {
+                    frag.appendChild(document.createTextNode(p));
+                    if (i < matches.length) {
+                        const mk = document.createElement('mark');
+                        mk.className = 'fnd';
+                        mk.style.cssText = 'background:#FBBF24;color:#1A2B3C;border-radius:2px';
+                        mk.textContent = matches[i];
+                        frag.appendChild(mk); count++;
+                    }
+                });
+                node.parentNode.replaceChild(frag, node);
+            } else if (node.nodeType === 1 && !['SCRIPT','STYLE','TEXTAREA'].includes(node.tagName)) {
+                [...node.childNodes].forEach(walk);
+            }
+        }
+        walk(ed);
+        return count;
+    }
+    function replaceAll(search, replace) {
+        clearHighlights();
+        const ed = document.getElementById('editor-content');
+        const re = new RegExp(search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+        let count = 0;
+        function walk(node) {
+            if (node.nodeType === 3) {
+                const t = node.textContent;
+                const m = t.match(re);
+                if (m) { node.textContent = t.replace(re, replace); count += m.length; }
+            } else if (node.nodeType === 1 && !['SCRIPT','STYLE','TEXTAREA'].includes(node.tagName)) {
+                [...node.childNodes].forEach(walk);
+            }
+        }
+        walk(ed);
+        onEditorChange();
+        return count;
+    }
+    function replaceFirst(search, replace) {
+        clearHighlights();
+        const ed = document.getElementById('editor-content');
+        const re = new RegExp(search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+        function walk(node) {
+            if (node.nodeType === 3) {
+                if (re.test(node.textContent)) {
+                    node.textContent = node.textContent.replace(re, replace);
+                    return true;
+                }
+            } else if (node.nodeType === 1 && !['SCRIPT','STYLE','TEXTAREA'].includes(node.tagName)) {
+                for (const ch of [...node.childNodes]) { if (walk(ch)) return true; }
+            }
+            return false;
+        }
+        walk(ed);
+        onEditorChange();
+    }
+
+    document.getElementById('btn-find').addEventListener('click', openFind);
+    document.getElementById('clear-find-btn').addEventListener('click', closeFind);
+    document.getElementById('find-next-btn').addEventListener('click', () => {
+        const s = findInp.value.trim();
+        if (!s) return;
+        const n = highlightAll(s);
+        msg.textContent = n ? `${n} eşleşme bulundu.` : 'Eşleşme bulunamadı.';
+        lastSearch = s;
+        if (n) {
+            const first = document.getElementById('editor-content').querySelector('mark.fnd');
+            if (first) first.scrollIntoView({ behavior:'smooth', block:'center' });
+        }
+    });
+    document.getElementById('replace-btn').addEventListener('click', () => {
+        const s = findInp.value.trim(), r = replaceInp.value;
+        if (!s) return;
+        replaceFirst(s, r);
+        msg.textContent = 'İlk eşleşme değiştirildi.';
+    });
+    document.getElementById('replace-all-btn').addEventListener('click', () => {
+        const s = findInp.value.trim(), r = replaceInp.value;
+        if (!s) return;
+        const n = replaceAll(s, r);
+        msg.textContent = n ? `${n} eşleşme değiştirildi.` : 'Eşleşme bulunamadı.';
+    });
+    // Ctrl+H kısayolu
+    document.addEventListener('keydown', e => {
+        if (e.ctrlKey && e.key === 'h') { e.preventDefault(); openFind(); }
+    });
+    // Escape ile kapat
+    findInp.addEventListener('keydown', e => { if (e.key === 'Escape') closeFind(); });
+    replaceInp.addEventListener('keydown', e => { if (e.key === 'Escape') closeFind(); if (e.key === 'Enter') document.getElementById('replace-all-btn').click(); });
+})();
 function execCmd(cmd) {
     document.getElementById('editor-content').focus();
     document.execCommand(cmd,false,null); onEditorChange();
@@ -2258,7 +2660,7 @@ document.addEventListener('keydown',e=>{
         e.preventDefault();
         if(document.getElementById('page-editor').classList.contains('active')) savePost();
     }
-    if(e.key==='Escape'){closeConfirm();closeFaqModal();closeSidebar();document.getElementById('preview-modal').classList.remove('show');document.getElementById('drafts-modal').classList.remove('show');}
+    if(e.key==='Escape'){closeConfirm();closeFaqModal();closeSidebar();document.getElementById('preview-modal').classList.remove('show');document.getElementById('drafts-modal').classList.remove('show');document.getElementById('find-modal').classList.remove('show');}
 });
 
 // ════════════════════════════════════════════
@@ -2322,11 +2724,35 @@ function renderFaqAdmin() {
     ).join('');
 }
 
+// ── FAQ mini editor toolbar
+document.querySelectorAll('.tb-btn[data-faq-cmd]').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.getElementById('faq-inp-a-ed').focus();
+        document.execCommand(btn.dataset.faqCmd, false, null);
+    });
+});
+document.getElementById('faq-btn-link').addEventListener('click', () => {
+    const sel = window.getSelection();
+    const selTxt = sel ? sel.toString() : '';
+    const url = prompt('Link URL girin:');
+    if (!url) return;
+    document.getElementById('faq-inp-a-ed').focus();
+    if (!selTxt) {
+        const txt = prompt('Link metni:', url) || url;
+        document.execCommand('insertHTML', false, `<a href="${url}">${txt}</a>`);
+    } else { document.execCommand('createLink', false, url); }
+});
+document.getElementById('faq-inp-fc').addEventListener('change', function() {
+    document.getElementById('faq-inp-a-ed').focus();
+    document.execCommand('foreColor', false, this.value);
+    document.getElementById('faq-fc-bar').style.background = this.value;
+});
+
 function openNewFaq() {
     editingFaqId = null;
     document.getElementById('faq-modal-title').textContent = 'Yeni Soru';
     document.getElementById('faq-inp-q').value = '';
-    document.getElementById('faq-inp-a').value = '';
+    document.getElementById('faq-inp-a-ed').innerHTML = '';
     document.getElementById('faq-modal').classList.add('show');
     setTimeout(()=>document.getElementById('faq-inp-q').focus(), 50);
 }
@@ -2337,7 +2763,7 @@ function openEditFaq(id) {
     editingFaqId = id;
     document.getElementById('faq-modal-title').textContent = 'Soruyu Düzenle';
     document.getElementById('faq-inp-q').value = f.q;
-    document.getElementById('faq-inp-a').value = f.a;
+    document.getElementById('faq-inp-a-ed').innerHTML = f.a;
     document.getElementById('faq-modal').classList.add('show');
     setTimeout(()=>document.getElementById('faq-inp-q').focus(), 50);
 }
@@ -2348,7 +2774,7 @@ function closeFaqModal() {
 
 async function saveFaqItem() {
     const q = document.getElementById('faq-inp-q').value.trim();
-    const a = document.getElementById('faq-inp-a').value.trim();
+    const a = document.getElementById('faq-inp-a-ed').innerHTML.trim();
     if (!q || !a) { toast('Soru ve cevap boş bırakılamaz', 'error'); return; }
     const btn = document.getElementById('faq-modal-save');
     btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Kaydediliyor…';
