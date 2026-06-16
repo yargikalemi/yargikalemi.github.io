@@ -1617,7 +1617,9 @@
                 fetch('posts.json?_=' + Date.now()),
                 fetch('categories.json?_=' + Date.now())
             ]);
-            allPosts = await postsRes.json();
+            const raw = await postsRes.json();
+            const now = Date.now();
+            allPosts = raw.filter(p => !p.scheduledAt || new Date(p.scheduledAt).getTime() <= now);
             if (catsRes.ok) {
                 const cats = await catsRes.json();
                 renderPills(cats);

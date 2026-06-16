@@ -145,6 +145,15 @@ a{text-decoration:none;color:inherit}
 .tb-sel:hover{background:var(--border)}
 .tb-src-btn{font-size:.7rem;background:none;border:1px solid var(--border);border-radius:4px;padding:.17rem .45rem;color:var(--text-muted);cursor:pointer;transition:all var(--tr)}
 .tb-src-btn.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.tb-btn.active{background:var(--accent-light);color:var(--accent)}
+.inp-rt-wrap{display:flex;align-items:center;gap:.5rem}
+.inp-rt-auto{font-size:.71rem;color:var(--accent);background:var(--accent-light);padding:.15rem .45rem;border-radius:99px;font-weight:600;white-space:nowrap;flex-shrink:0}
+.sched-wrap{margin-top:.55rem;display:none}
+.sched-badge{display:inline-flex;align-items:center;gap:.3rem;padding:.2rem .5rem;background:#FFFBEB;border:1px solid #FCD34D;color:#B45309;border-radius:99px;font-size:.68rem;font-weight:700}
+.cat-tag{display:inline-flex;align-items:center;gap:.3rem;padding:.2rem .55rem;background:var(--accent-light);color:var(--accent);border:1px solid rgba(13,148,136,.2);border-radius:99px;font-size:.76rem;font-weight:600;margin:.2rem .2rem .2rem 0}
+.cat-tag-del{background:none;border:none;color:var(--accent);cursor:pointer;font-size:.85rem;padding:0;line-height:1;display:flex;align-items:center;opacity:.6}
+.cat-tag-del:hover{opacity:1;color:#DC2626}
+.cat-mgmt-add{display:flex;gap:.5rem;margin-top:.55rem}
 #editor-content{min-height:320px;padding:.95rem;outline:none;font-size:.91rem;line-height:1.72;color:var(--text-primary)}
 #editor-content:empty::before{content:attr(data-placeholder);color:#D1CCC4;pointer-events:none}
 #editor-content h2{font-family:'Playfair Display',serif;font-size:1.22rem;font-weight:700;margin:1rem 0 .4rem}
@@ -533,6 +542,23 @@ input:checked+.toggle-sl::before{transform:translateX(17px)}
                             <div class="tb-sep"></div>
                             <button class="tb-btn" title="Geri al" data-cmd="undo"><i class="fas fa-undo"></i></button>
                             <button class="tb-btn" title="İleri al" data-cmd="redo"><i class="fas fa-redo"></i></button>
+                            <div class="tb-sep"></div>
+                            <button class="tb-btn" title="Üstü çizili" data-cmd="strikeThrough"><i class="fas fa-strikethrough"></i></button>
+                            <button class="tb-btn" title="Üst simge" data-cmd="superscript"><i class="fas fa-superscript"></i></button>
+                            <button class="tb-btn" title="Alt simge" data-cmd="subscript"><i class="fas fa-subscript"></i></button>
+                            <button class="tb-btn" title="Kod" id="btn-code"><i class="fas fa-code"></i></button>
+                            <div class="tb-sep"></div>
+                            <button class="tb-btn" title="Sola hizala" data-cmd="justifyLeft"><i class="fas fa-align-left"></i></button>
+                            <button class="tb-btn" title="Ortala" data-cmd="justifyCenter"><i class="fas fa-align-center"></i></button>
+                            <button class="tb-btn" title="Sağa hizala" data-cmd="justifyRight"><i class="fas fa-align-right"></i></button>
+                            <div class="tb-sep"></div>
+                            <select class="tb-sel" id="font-size-sel" title="Yazı Boyutu">
+                                <option value="">Boyut</option>
+                                <option value="1">Küçük</option>
+                                <option value="3">Normal</option>
+                                <option value="4">Büyük</option>
+                                <option value="5">Çok Büyük</option>
+                            </select>
                         </div>
                         <div id="editor-content" contenteditable="true" data-placeholder="Yazınızı buraya yazın…"></div>
                         <textarea id="html-source"></textarea>
@@ -553,6 +579,17 @@ input:checked+.toggle-sl::before{transform:translateX(17px)}
                             <button class="btn-save" id="btn-publish"><i class="fas fa-cloud-upload-alt"></i> Yayınla</button>
                             <button class="btn-preview-post" id="btn-preview"><i class="fas fa-eye"></i> Önizle</button>
                             <button class="btn-cancel" id="btn-cancel-ed">Vazgeç</button>
+                            <div class="toggle-row" style="margin-top:.9rem">
+                                <div>
+                                    <div class="toggle-lbl" style="font-size:.82rem">📅 Zamanla</div>
+                                    <div class="toggle-sub" style="font-size:.73rem">Belirli tarihte yayınla</div>
+                                </div>
+                                <label class="toggle"><input type="checkbox" id="inp-schedule"><span class="toggle-sl"></span></label>
+                            </div>
+                            <div class="sched-wrap" id="sched-wrap">
+                                <label class="field-label" style="margin-bottom:.3rem;display:block">Yayın Tarihi & Saati</label>
+                                <input type="datetime-local" id="inp-scheduled-at" class="field-input">
+                            </div>
                         </div>
                     </div>
                     <div class="card">
@@ -562,19 +599,6 @@ input:checked+.toggle-sl::before{transform:translateX(17px)}
                                 <label class="field-label" for="inp-cat">Kategori</label>
                                 <select id="inp-cat" class="field-sel">
                                     <option value="">Seçin…</option>
-                                    <option>Ceza Hukuku</option>
-                                    <option>Ticaret Hukuku</option>
-                                    <option>Tüketici Hukuku</option>
-                                    <option>Medeni Hukuk</option>
-                                    <option>Aile Hukuku</option>
-                                    <option>Ceza Muhakemeleri Hukuku</option>
-                                    <option>İdare Hukuku</option>
-                                    <option>Borçlar Hukuku</option>
-                                    <option>KVKK</option>
-                                    <option>Gayrimenkul / Kira</option>
-                                    <option>İcra ve İflas</option>
-                                    <option>Anayasa Mahkemesi</option>
-                                    <option>AİHM</option>
                                 </select>
                             </div>
                             <div class="field">
@@ -583,7 +607,10 @@ input:checked+.toggle-sl::before{transform:translateX(17px)}
                             </div>
                             <div class="field">
                                 <label class="field-label" for="inp-rt">Okuma Süresi (dk)</label>
-                                <input type="number" id="inp-rt" class="field-input" min="1" max="99" value="3">
+                                <div class="inp-rt-wrap">
+                                    <input type="number" id="inp-rt" class="field-input" min="1" max="99" value="3" readonly style="flex:1;background:var(--bg-base);cursor:default">
+                                    <span class="inp-rt-auto">otomatik</span>
+                                </div>
                             </div>
                             <div class="toggle-row">
                                 <div>
@@ -693,6 +720,17 @@ input:checked+.toggle-sl::before{transform:translateX(17px)}
                     </div>
                 </div>
                 <div class="card">
+                    <div class="card-hdr">Kategoriler</div>
+                    <div class="card-body">
+                        <div id="cat-manage-list" style="margin-bottom:.5rem"></div>
+                        <div class="cat-mgmt-add">
+                            <input type="text" id="cat-new-inp" class="field-input" placeholder="Yeni kategori adı…" style="flex:1">
+                            <button class="btn-save" id="cat-add-btn" style="width:auto;padding:.45rem .85rem;flex-shrink:0"><i class="fas fa-plus"></i> Ekle</button>
+                        </div>
+                        <div id="cat-mgmt-msg" style="display:none;margin-top:.45rem;font-size:.8rem"></div>
+                    </div>
+                </div>
+                <div class="card">
                     <div class="card-hdr">Kısayollar</div>
                     <div class="card-body" style="font-size:.84rem;color:var(--text-secondary);line-height:2">
                         <div><kbd style="background:#F3F4F6;border:1px solid #D1D5DB;border-radius:3px;padding:1px 5px;font-size:.76rem">Ctrl+S</kbd> Yazıyı kaydet</div>
@@ -736,9 +774,10 @@ const ADMIN_HASH = '108aecd8932defb306974e840aacdf3e56c755dd29b5780935a7f9f7a89f
 const GH_REPO    = 'yargikalemi/yargikalemi.github.io';
 const MONTHS     = ['','Ocak','Şubat','Mart','Nisan','Mayıs','Haziran',
                     'Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
-const CATS       = ['Ceza Hukuku','Ticaret Hukuku','Tüketici Hukuku','Medeni Hukuk',
+let currentCats  = ['Ceza Hukuku','Ticaret Hukuku','Tüketici Hukuku','Medeni Hukuk',
                     'Aile Hukuku','Ceza Muhakemeleri Hukuku','İdare Hukuku','Borçlar Hukuku',
                     'KVKK','Gayrimenkul / Kira','İcra ve İflas','Anayasa Mahkemesi','AİHM'];
+let catsSHA      = '';
 const DEFAULT_IMG = 'yazifoto.jpg';
 const CAT_IMG     = { 'Ceza Hukuku':'cezahukuku.jpg', 'İdare Hukuku':'idarehukuku.jpeg' };
 
@@ -1100,6 +1139,21 @@ async function launchApp() {
     document.getElementById('inp-date').value = todayISO();
     document.getElementById('set-repo').value = GH_REPO;
     buildCatFilters();
+    loadCatsFromGH();
+    document.getElementById('cat-add-btn').addEventListener('click', addCat);
+    document.getElementById('cat-new-inp').addEventListener('keydown', e => { if(e.key==='Enter') addCat(); });
+    document.getElementById('inp-schedule').addEventListener('change', function() {
+        const wrap = document.getElementById('sched-wrap');
+        wrap.style.display = this.checked ? 'block' : 'none';
+        if (this.checked && !document.getElementById('inp-scheduled-at').value) {
+            const dt = new Date(); dt.setDate(dt.getDate()+1); dt.setHours(9,0,0,0);
+            document.getElementById('inp-scheduled-at').value = dt.toISOString().slice(0,16);
+        }
+        const btn = document.getElementById('btn-publish');
+        btn.innerHTML = this.checked
+            ? '<i class="fas fa-calendar-alt"></i> Zamanla'
+            : (editingId ? '<i class="fas fa-save"></i> Kaydet' : '<i class="fas fa-cloud-upload-alt"></i> Yayınla');
+    });
     migrateOldDraft();
     updateDraftCount();
     updateTrashBadge();
@@ -1271,7 +1325,9 @@ function postImg(post) { return post.image || CAT_IMG[post.category] || DEFAULT_
 // ════════════════════════════════════════════
 function buildCatFilters() {
     const wrap = document.getElementById('cat-filters');
-    CATS.forEach(cat => {
+    // clear old pills except "Tümü"
+    wrap.querySelectorAll('.cf-pill:not([data-cat=""])').forEach(b => b.remove());
+    currentCats.forEach(cat => {
         const btn = document.createElement('button');
         btn.className = 'cf-pill';
         btn.dataset.cat = cat;
@@ -1290,6 +1346,95 @@ function buildCatFilters() {
         wrap.querySelector('[data-cat=""]').classList.add('active');
         renderList();
     });
+}
+
+// ════════════════════════════════════════════
+// KATEGORİ YÖNETİMİ
+// ════════════════════════════════════════════
+async function loadCatsFromGH() {
+    try {
+        const r = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/categories.json`, { headers: ghH() });
+        if (r.ok) {
+            const d = await r.json();
+            currentCats = JSON.parse(b64Dec(d.content.replace(/\n/g,'')));
+            catsSHA = d.sha;
+        }
+    } catch(e) {}
+    populateCatSelect();
+    buildCatFilters();
+    renderCatManage();
+}
+
+function populateCatSelect() {
+    const sel = document.getElementById('inp-cat');
+    const cur = sel.value;
+    sel.innerHTML = '<option value="">Seçin…</option>' +
+        currentCats.map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join('');
+    if (cur && currentCats.includes(cur)) sel.value = cur;
+}
+
+function renderCatManage() {
+    const list = document.getElementById('cat-manage-list');
+    if (!list) return;
+    if (!currentCats.length) { list.innerHTML = '<p style="font-size:.82rem;color:var(--text-muted)">Henüz kategori yok.</p>'; return; }
+    list.innerHTML = currentCats.map(c =>
+        `<span class="cat-tag">${esc(c)} <button class="cat-tag-del" onclick="removeCat('${esc(c).replace(/'/g,"\\'")}')">×</button></span>`
+    ).join('');
+}
+
+async function saveCatsToGH() {
+    const body = { message: 'Kategoriler güncellendi', content: b64Enc(JSON.stringify(currentCats, null, 2)) };
+    if (catsSHA) body.sha = catsSHA;
+    const r = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/categories.json`, {
+        method: 'PUT', headers: ghH(), body: JSON.stringify(body)
+    });
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const d = await r.json();
+    catsSHA = d.content.sha;
+}
+
+function removeCat(cat) {
+    showConfirm('Kategori Sil', `"${cat}" kategorisi silinecek. Bu kategorideki yazılar etkilenmez.`, async () => {
+        const prev = [...currentCats];
+        currentCats = currentCats.filter(c => c !== cat);
+        try {
+            await saveCatsToGH();
+            populateCatSelect();
+            buildCatFilters();
+            renderCatManage();
+            toast('Kategori silindi', 'success');
+        } catch(e) {
+            currentCats = prev;
+            renderCatManage();
+            toast('Hata: ' + e.message, 'error');
+        }
+    });
+}
+
+async function addCat() {
+    const inp = document.getElementById('cat-new-inp');
+    const name = inp.value.trim();
+    const msg  = document.getElementById('cat-mgmt-msg');
+    if (!name) return;
+    if (currentCats.map(c=>c.toLowerCase()).includes(name.toLowerCase())) {
+        msg.style.display='block'; msg.style.color='#DC2626'; msg.textContent='Bu kategori zaten mevcut.'; return;
+    }
+    const btn = document.getElementById('cat-add-btn');
+    btn.disabled = true;
+    currentCats.push(name);
+    try {
+        await saveCatsToGH();
+        populateCatSelect();
+        buildCatFilters();
+        renderCatManage();
+        inp.value = '';
+        msg.style.display='block'; msg.style.color='#059669'; msg.textContent='Kategori eklendi.';
+        setTimeout(()=>{ msg.style.display='none'; }, 2500);
+    } catch(e) {
+        currentCats.pop();
+        renderCatManage();
+        msg.style.display='block'; msg.style.color='#DC2626'; msg.textContent='Hata: '+e.message;
+    } finally { btn.disabled = false; }
 }
 
 document.getElementById('search-inp').addEventListener('input', function() {
@@ -1328,7 +1473,7 @@ function renderList() {
                 ${p.featured ? '<span class="pr-star"><i class="fas fa-star"></i></span>' : ''}
                 <div>
                     <strong title="${esc(p.title)}">${esc(p.title)}</strong>
-                    <div class="pr-id">#${esc(p.id)}</div>
+                    <div class="pr-id">#${esc(p.id)} ${p.scheduledAt ? `<span class="sched-badge">📅 ${p.scheduledAt.replace('T',' ').slice(0,16)}</span>` : ''}</div>
                 </div>
             </div>
             <div><span class="cat-pill">${esc(p.category||'—')}</span></div>
@@ -1643,6 +1788,15 @@ function openEdit(id) {
     document.getElementById('inp-feat').checked  = !!post.featured;
     document.getElementById('inp-img').value     = post.image || '';
     document.getElementById('inp-date').value    = trToISO(post.date) || todayISO();
+    const schedCb = document.getElementById('inp-schedule');
+    const schedWrap = document.getElementById('sched-wrap');
+    if (post.scheduledAt) {
+        schedCb.checked = true; schedWrap.style.display = 'block';
+        document.getElementById('inp-scheduled-at').value = post.scheduledAt;
+    } else {
+        schedCb.checked = false; schedWrap.style.display = 'none';
+        document.getElementById('inp-scheduled-at').value = '';
+    }
     if (sourceMode) toggleSourceMode();
     updateCounts(); previewImg(); updateExcerptCount();
     setEdTitle('Yazıyı Düzenle');
@@ -1659,6 +1813,9 @@ function clearEditor() {
     document.getElementById('inp-feat').checked  = false;
     document.getElementById('inp-img').value     = '';
     document.getElementById('inp-date').value    = todayISO();
+    document.getElementById('inp-schedule').checked = false;
+    document.getElementById('sched-wrap').style.display = 'none';
+    document.getElementById('inp-scheduled-at').value = '';
     if (sourceMode) toggleSourceMode();
     resizeEditorFields();
     updateCounts(); previewImg(); updateExcerptCount();
@@ -1680,11 +1837,13 @@ async function savePost() {
     const excerpt  = document.getElementById('inp-excerpt').value.trim();
     const content  = sourceMode ? document.getElementById('html-source').value
                                 : document.getElementById('editor-content').innerHTML;
-    const category = document.getElementById('inp-cat').value;
-    const readTime = parseInt(document.getElementById('inp-rt').value,10) || 3;
-    const featured = document.getElementById('inp-feat').checked;
-    const image    = document.getElementById('inp-img').value.trim();
-    const date     = isoToTR(document.getElementById('inp-date').value);
+    const category    = document.getElementById('inp-cat').value;
+    const readTime    = parseInt(document.getElementById('inp-rt').value,10) || 3;
+    const featured    = document.getElementById('inp-feat').checked;
+    const image       = document.getElementById('inp-img').value.trim();
+    const date        = isoToTR(document.getElementById('inp-date').value);
+    const isScheduled = document.getElementById('inp-schedule').checked;
+    const scheduledAt = isScheduled ? document.getElementById('inp-scheduled-at').value : null;
     const rawText  = document.getElementById('editor-content').innerText || '';
 
     if (!title)              { toast('Başlık zorunlu!','error');   document.getElementById('inp-title').focus(); return; }
@@ -1704,6 +1863,7 @@ async function savePost() {
             if (idx === -1) throw new Error('Yazı bulunamadı.');
             const updated = { ...allPosts[idx], title, excerpt, content, category, readTime, featured, date };
             if (image) updated.image = image; else delete updated.image;
+            if (scheduledAt) updated.scheduledAt = scheduledAt; else delete updated.scheduledAt;
             if (!updated.slug) updated.slug = generateSlug(title, editingId);
             allPosts[idx] = updated;
             if (featured) { allPosts.splice(idx,1); allPosts.unshift(updated); }
@@ -1711,6 +1871,7 @@ async function savePost() {
         } else {
             const post = { id:'', featured, title, category, excerpt, date, readTime, content };
             if (image) post.image = image;
+            if (scheduledAt) post.scheduledAt = scheduledAt;
             post.slug = generateSlug(title, null);
             if (featured) allPosts.unshift(post); else allPosts.push(post);
             target = post; msg = `Yeni yazı: ${title}`;
@@ -1724,7 +1885,7 @@ async function savePost() {
         // Yayınlanan taslağı temizle
         if (loadedDraftId) { removeDraft(loadedDraftId); loadedDraftId = null; }
 
-        toast(editingId ? '✅ Yazı güncellendi' : '✅ Yazı yayınlandı','success');
+        toast(editingId ? '✅ Yazı güncellendi' : (scheduledAt ? '📅 Yazı zamanlandı' : '✅ Yazı yayınlandı'),'success');
         renderList();                       // bellekteki güncel veriyle çiz (tekrar indirme yok)
         showPage('posts', true);            // skipReload = true → gereksiz ikinci fetch yok
     } catch(e) {
@@ -1732,7 +1893,8 @@ async function savePost() {
         await loadPosts();                  // hata → sunucuyla yeniden eşitle
     } finally {
         btn.disabled = false;
-        btn.innerHTML = editingId ? '<i class="fas fa-save"></i> Kaydet' : '<i class="fas fa-cloud-upload-alt"></i> Yayınla';
+        const isSchedNow = document.getElementById('inp-schedule').checked;
+        btn.innerHTML = isSchedNow ? '<i class="fas fa-calendar-alt"></i> Zamanla' : (editingId ? '<i class="fas fa-save"></i> Kaydet' : '<i class="fas fa-cloud-upload-alt"></i> Yayınla');
     }
 }
 
@@ -1977,6 +2139,20 @@ document.getElementById('btn-link').addEventListener('click', () => {
 document.getElementById('editor-content').addEventListener('input', onEditorChange);
 document.getElementById('editor-content').addEventListener('keydown', e => {
     if (e.key==='Tab') { e.preventDefault(); document.execCommand('insertHTML',false,'    '); }
+});
+document.getElementById('btn-code').addEventListener('click', () => {
+    const sel = window.getSelection();
+    const txt = sel ? sel.toString() : '';
+    document.getElementById('editor-content').focus();
+    if (txt) { document.execCommand('insertHTML',false,`<code style="background:rgba(13,148,136,.1);padding:.1em .35em;border-radius:3px;font-family:monospace;font-size:.88em">${txt}</code>`); }
+    else { document.execCommand('insertHTML',false,'<code style="background:rgba(13,148,136,.1);padding:.1em .35em;border-radius:3px;font-family:monospace;font-size:.88em">kod</code>'); }
+    onEditorChange();
+});
+document.getElementById('font-size-sel').addEventListener('change', function() {
+    if (!this.value) return;
+    document.getElementById('editor-content').focus();
+    document.execCommand('fontSize', false, this.value);
+    this.value = ''; onEditorChange();
 });
 function execCmd(cmd) {
     document.getElementById('editor-content').focus();
