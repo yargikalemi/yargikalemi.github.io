@@ -2,17 +2,6 @@
   {
     "id": "1",
     "featured": true,
-    "title": "İdareye Karşı Nasıl Dava Açılır?",
-    "category": "İdare Hukuku",
-    "excerpt": "Bir devlet kurumunun hatalı işlemi size zarar verdi mi? İdare mahkemelerinde dava açma hakkınız, süresi ve adımları hakkında kapsamlı bir rehber.",
-    "date": "10 Nisan 2025",
-    "readTime": "7 dk",
-    "content": "<p>Devlet kurumları vatandaşlara karşı hatalı işlem tesis edebilir, haksız para cezası uygulayabilir ya da hukuka aykırı disiplin kararı verebilir. Tüm bu durumlarda başvurulacak yargı yolu idari yargıdır.</p><h3>Hangi Mahkemeler?</h3><p>İdare mahkemesi, Danıştay ve Vergi Mahkemeleri idari yargının üç temel ayağını oluşturur. Genel kural olarak idare mahkemeleri ilk derece yargı merciidir; davalar burada açılır. Danıştay ise bazı davalarda ilk derece, diğerlerinde temyiz mercii olarak görev yapar.</p><h3>Süre Çok Kritik</h3><p>İdari işlemlere karşı dava açma süresi kural olarak 60 gündür. Bu süre işlemin tebliğinden itibaren işlemeye başlar. 60 günlük süreyi geçiren başvurular, hakkın ne kadar güçlü olduğundan bağımsız olarak usul yönünden reddedilir.</p><h3>İptal ve Tam Yargı Davaları</h3><p>İdari davaların iki ana türü vardır: iptal davaları (hukuka aykırı işlemin ortadan kaldırılması) ve tam yargı davaları (uğranılan zararın tazmini). Bu ikisi aynı anda ya da ayrı ayrı açılabilir; tam yargı davası için iptal kararının beklenmesi zorunlu değildir.</p>",
-    "slug": "idareye-karsi-nasil-dava-acilir"
-  },
-  {
-    "id": "2",
-    "featured": false,
     "title": "Başlık: Pratik Rehberler\n             Tüketici Hakem Heyetine Nasıl Başvurulur?",
     "category": "Tüketici Hukuku",
     "excerpt": "",
@@ -20,6 +9,17 @@
     "readTime": 3,
     "content": "<p>Kategori: Tüketici Hukuku</p><p>Özet : Örnek olayla Tüketici Hakem Heyetlerine nasıl başvurulabileceğine dair pratik bilgi verilmiştir.</p><p>Örnek olay:</p><p>“Online aldığım ürün ayıplı çıktı, satıcı oyalıyor, iade de yapmıyor…”</p><p>İlgili mevzuat:</p><p>1) 6502 sayılı Tüketicinin Korunması Hakkında Kanunun 68. maddesi</p><p>2) Tüketici Hakem Heyetleri Yönetmeliğinin 11. maddesi.</p><p>2026 yılı için 186.000.TL ve altındaki tutarlar için Tüketici Hakem Heyetine başvuru yapılması gerekir.</p><p>186.000 TL üzeri için doğrudan Tüketici Mahkemelerine başvurulur. Hakem heyeti mahkeme öncesi bir ön çözüm yoludur.</p><p>Pratik Başvuru Haritası:</p><p>1. e-Devlet → Tüketici Hakem Heyeti Başvurusu (Tüketici Bilgi Sistemi üzerinden)</p><p>2. Fatura, sözleşme, ekran görüntüsü gibi delilleri yüklenmeli</p><p>3. Talebini net olarak yaz (iade / değişim / bedel indirimi)</p><p>4. Başvurunu tamamlarsın</p><p>5. Süreci sistemden takip edersin</p><p>Şu Hataları Yapmamalısın:</p><p>• Belgelerini yüklemeyi unutmak</p><p>• Talebini açıkça yazılmaması (“mağdurum” demek yetmez)</p><p>• Adresinin bağlı olduğu heyete başvurmamak</p><p>• Süreleri kaçırmak</p><p>Ne Zaman Avukat Gerekir?</p><p>• Yüksek bedelli uyuşmazlıklarda</p><p>• Teknik/ayıp tartışmalı dosyalarda</p><p>• Banka/finans işlemlerinde</p>",
     "slug": "baslik-pratik-rehberler-tuketici-hakem-heyetine-nasil-basvurulur"
+  },
+  {
+    "id": "2",
+    "featured": false,
+    "title": "İdareye Karşı Nasıl Dava Açılır?",
+    "category": "İdare Hukuku",
+    "excerpt": "Bir devlet kurumunun hatalı işlemi size zarar verdi mi? İdare mahkemelerinde dava açma hakkınız, süresi ve adımları hakkında kapsamlı bir rehber.",
+    "date": "10 Nisan 2025",
+    "readTime": "7 dk",
+    "content": "<p>Devlet kurumları vatandaşlara karşı hatalı işlem tesis edebilir, haksız para cezası uygulayabilir ya da hukuka aykırı disiplin kararı verebilir. Tüm bu durumlarda başvurulacak yargı yolu idari yargıdır.</p><h3>Hangi Mahkemeler?</h3><p>İdare mahkemesi, Danıştay ve Vergi Mahkemeleri idari yargının üç temel ayağını oluşturur. Genel kural olarak idare mahkemeleri ilk derece yargı merciidir; davalar burada açılır. Danıştay ise bazı davalarda ilk derece, diğerlerinde temyiz mercii olarak görev yapar.</p><h3>Süre Çok Kritik</h3><p>İdari işlemlere karşı dava açma süresi kural olarak 60 gündür. Bu süre işlemin tebliğinden itibaren işlemeye başlar. 60 günlük süreyi geçiren başvurular, hakkın ne kadar güçlü olduğundan bağımsız olarak usul yönünden reddedilir.</p><h3>İptal ve Tam Yargı Davaları</h3><p>İdari davaların iki ana türü vardır: iptal davaları (hukuka aykırı işlemin ortadan kaldırılması) ve tam yargı davaları (uğranılan zararın tazmini). Bu ikisi aynı anda ya da ayrı ayrı açılabilir; tam yargı davası için iptal kararının beklenmesi zorunlu değildir.</p>",
+    "slug": "idareye-karsi-nasil-dava-acilir"
   },
   {
     "id": "3",
