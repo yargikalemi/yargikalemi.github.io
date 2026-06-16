@@ -13,17 +13,6 @@
   {
     "id": "2",
     "featured": false,
-    "title": "Ceza Davalarında Zamanaşımı: Bilmeniz Gerekenler",
-    "category": "Ceza Hukuku",
-    "excerpt": "Bir suç işlenmişse, ne kadar zaman sonra takibat başlatılamaz? Zamanaşımı hangi suçlar için kaç yıl? Bu hukuki koruma mekanizmasını somut örneklerle açıklıyorum.",
-    "date": "25 Nisan 2025",
-    "readTime": "9 dk",
-    "content": "<p>Zamanaşımı, devletin belirli bir süre geçtikten sonra suçlama hakkını yitirdiği anlamına gelir. Bu ilke, hem hukuki güvenlik hem de delillerin zamanla anlamsızlaşması nedeniyle tüm modern hukuk sistemlerinde mevcuttur.</p><h3>Dava Zamanaşımı Süreleri</h3><p>Türk Ceza Kanunu'na göre zamanaşımı süreleri suçun öngördüğü azami cezaya bağlıdır. Ağırlaştırılmış müebbet hapis cezasını gerektiren suçlarda süre yoktur. Ağır ceza suçlarında 30 yıl, 5-10 yıl arası hapis gerektiren suçlarda 15 yıl, daha hafif suçlarda 8 veya 4 yıl uygulanır.</p><h3>Zamanaşımı Ne Zaman Başlar?</h3><p>Kural olarak suçun işlendiği gün zamanaşımı başlar. Ancak kesintisiz suçlarda son hareket tarihinde, sonradan ortaya çıkan suçlarda ise sonucun gerçekleştiği anda başlangıç sayılır.</p><h3>Durma ve Kesilme</h3><p>Soruşturma başladığında, dava açıldığında veya sanık yurt dışına kaçtığında zamanaşımı durabilir ya da kesilebilir. Kesilmesi halinde süre sıfırlanarak yeniden işlemeye başlar. Bu nedenle zamanaşımının hesabı her somut olayda ayrı teknik analiz gerektirir.</p>",
-    "slug": "ceza-davalarinda-zamanasimi-bilmeniz-gerekenler"
-  },
-  {
-    "id": "3",
-    "featured": false,
     "title": "İdareye Karşı Nasıl Dava Açılır?",
     "category": "İdare Hukuku",
     "excerpt": "Bir devlet kurumunun hatalı işlemi size zarar verdi mi? İdare mahkemelerinde dava açma hakkınız, süresi ve adımları hakkında kapsamlı bir rehber.",
@@ -33,7 +22,7 @@
     "slug": "idareye-karsi-nasil-dava-acilir"
   },
   {
-    "id": "4",
+    "id": "3",
     "featured": false,
     "title": "*TÜKETİCİNİN GÜVENCESİ:TÜKETİCİ HAKEM HEYETLERİ*",
     "category": "Tüketici Hukuku",
@@ -44,7 +33,7 @@
     "slug": "tuketicinin-guvencesi-tuketici-hakem-heyetleri"
   },
   {
-    "id": "5",
+    "id": "4",
     "featured": false,
     "title": "*TÜKETİCİNİN GÜVENCESİ:TÜKETİCİ HAKEM HEYETLERİ*",
     "category": "Tüketici Hukuku",
@@ -55,7 +44,7 @@
     "slug": "tuketicinin-guvencesi-tuketici-hakem-heyetleri-2"
   },
   {
-    "id": "6",
+    "id": "5",
     "featured": false,
     "title": "Mahkemede Kendinizi İfade Etme Hakkı",
     "category": "Ceza Hukuku",
@@ -64,6 +53,17 @@
     "readTime": "7 dk",
     "content": "<p>Ceza yargılamasında sanık sıfatı, beraberinde hem haklar hem de riskler getirir. Mahkemede yanlış zamanda yanlış söylenen bir sözcük, lehte delilleri anlamsız kılabilir.</p><h3>Susma Hakkı</h3><p>Anayasa ve CMK kapsamında her sanık, kendisini suçlayacak beyan vermekten kaçınma hakkına sahiptir. Bu hakkı kullanmak suçluluk karinesi oluşturmaz. Mahkeme, susma hakkının aleyhte delil olarak kullanılmasına izin veremez. Avukatınız olmadan yapılan tüm beyanlar potansiyel risk taşır.</p><h3>İfade Vermeyi Seçerseniz</h3><p>Eğer ifade vermeyi tercih ediyorsanız, yalnızca doğrudan bilgi sahibi olduğunuz konularda konuşun. \"Hatırlamıyorum\" veya \"bilmiyorum\" demek, yanlış ya da tutarsız bir beyan vermekten her zaman daha güvenlidir. Verilen her beyan kayıt altına alınır ve ilerleyen aşamalarda sizi bağlar.</p><h3>Avukatsız Duruşma</h3><p>Zorunlu müdafilik kapsamına girmeyen davalarda sanık avukatsız yargılanabilir. Bu durumda mahkemeden yeterli süre talep edin, belgeleri önceden inceleyin ve gereksiz konuşmaktan kaçının. Mahkemenin görevi tarafları temsil etmek değil, hukuku uygulamaktır.</p>",
     "slug": "mahkemede-kendinizi-ifade-etme-hakki"
+  },
+  {
+    "id": "6",
+    "featured": false,
+    "title": "Ceza Davalarında Zamanaşımı: Bilmeniz Gerekenler",
+    "category": "Ceza Hukuku",
+    "excerpt": "Bir suç işlenmişse, ne kadar zaman sonra takibat başlatılamaz? Zamanaşımı hangi suçlar için kaç yıl? Bu hukuki koruma mekanizmasını somut örneklerle açıklıyorum.",
+    "date": "25 Nisan 2025",
+    "readTime": "9 dk",
+    "content": "<p>Zamanaşımı, devletin belirli bir süre geçtikten sonra suçlama hakkını yitirdiği anlamına gelir. Bu ilke, hem hukuki güvenlik hem de delillerin zamanla anlamsızlaşması nedeniyle tüm modern hukuk sistemlerinde mevcuttur.</p><h3>Dava Zamanaşımı Süreleri</h3><p>Türk Ceza Kanunu'na göre zamanaşımı süreleri suçun öngördüğü azami cezaya bağlıdır. Ağırlaştırılmış müebbet hapis cezasını gerektiren suçlarda süre yoktur. Ağır ceza suçlarında 30 yıl, 5-10 yıl arası hapis gerektiren suçlarda 15 yıl, daha hafif suçlarda 8 veya 4 yıl uygulanır.</p><h3>Zamanaşımı Ne Zaman Başlar?</h3><p>Kural olarak suçun işlendiği gün zamanaşımı başlar. Ancak kesintisiz suçlarda son hareket tarihinde, sonradan ortaya çıkan suçlarda ise sonucun gerçekleştiği anda başlangıç sayılır.</p><h3>Durma ve Kesilme</h3><p>Soruşturma başladığında, dava açıldığında veya sanık yurt dışına kaçtığında zamanaşımı durabilir ya da kesilebilir. Kesilmesi halinde süre sıfırlanarak yeniden işlemeye başlar. Bu nedenle zamanaşımının hesabı her somut olayda ayrı teknik analiz gerektirir.</p>",
+    "slug": "ceza-davalarinda-zamanasimi-bilmeniz-gerekenler"
   },
   {
     "id": "7",
