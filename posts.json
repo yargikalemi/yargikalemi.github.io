@@ -13,17 +13,6 @@
   {
     "id": "2",
     "featured": false,
-    "title": "*TÜKETİCİNİN GÜVENCESİ:TÜKETİCİ HAKEM HEYETLERİ*",
-    "category": "Tüketici Hukuku",
-    "excerpt": "Tuketici HUKUKU",
-    "date": "15 Haziran 2026",
-    "readTime": 3,
-    "content": "<p>*Tüketici Hukuku*</p><p>Hakem Heyeti Kararlarının Hukuki Niteliği Nedir?</p><p>Tüketici Hakem Heyeti kararları mahkeme ilamı niteliğinde bağlayıcı kararlardır. Tüketici bu kararla satıcıya gitmesi durumunda, satıcı bu kararı yerine getirmekten kaçınamaz ve karar doğrultusunda tüketicinin mağduriyetini gidermesi gerekir. Eğer satıcı süresinde bu kararın gereğini yerine getirmezse bu kez tüketici ilamlı icra takibi yoluna başvurabilir. Takibe yapılacak itiraz mahkemeden ihtiyaten durdurma kararı alınmadıkça takip durmaz.   Eğer başvuruya konu malın değeri 180.000 TL tutarına çok yakınsa, ortada teknik bilirkişi incelemesini gerektiren  zor bir dosya varsa ve tüketicinin karşısında banka ve finans kuruluşları gibi güçlü kurumlar duruyorsa, karara karşı itirazla ihtilafın tüketici mahkemesine götürülmesi kuvvetle muhtemel ise bu gibi hallerde tüketicinin hukuki yardım ve destek alması önerilebilir.</p><p>Tüketici Hakem Heyetlerine başvurular harç ve masraftan muaftır. Bu durum tüketicilerin korunması ve haklarının güvence altına alınmasının bir teminatıdır. Başvurunun ücretsiz oluşu, e-Devlet üzerinden yürütülebilmesi ve kararların bağlayıcı niteliği bu sistemi cazip kılan önemli etmenlerdendir.</p><p>Tüketiciler böyle kolay ve etkili bir hak arama yöntemlerinin olduğu bilinciyle uğradıkları mağduriyetlerinin giderilmesi adına hiç tereddüt etmeden bu yolu denemelidirler.</p>",
-    "slug": "tuketicinin-guvencesi-tuketici-hakem-heyetleri"
-  },
-  {
-    "id": "3",
-    "featured": false,
     "title": "Başlık: Pratik Rehberler\n             Tüketici Hakem Heyetine Nasıl Başvurulur?",
     "category": "Tüketici Hukuku",
     "excerpt": "",
@@ -33,7 +22,7 @@
     "slug": "baslik-pratik-rehberler-tuketici-hakem-heyetine-nasil-basvurulur"
   },
   {
-    "id": "4",
+    "id": "3",
     "featured": false,
     "title": "İdareye Karşı Nasıl Dava Açılır?",
     "category": "İdare Hukuku",
@@ -44,7 +33,7 @@
     "slug": "idareye-karsi-nasil-dava-acilir"
   },
   {
-    "id": "5",
+    "id": "4",
     "featured": false,
     "title": "Mahkemede Kendinizi İfade Etme Hakkı",
     "category": "Ceza Hukuku",
@@ -55,7 +44,7 @@
     "slug": "mahkemede-kendinizi-ifade-etme-hakki"
   },
   {
-    "id": "6",
+    "id": "5",
     "featured": false,
     "title": "Ceza Davalarında Zamanaşımı: Bilmeniz Gerekenler",
     "category": "Ceza Hukuku",
@@ -66,7 +55,7 @@
     "slug": "ceza-davalarinda-zamanasimi-bilmeniz-gerekenler"
   },
   {
-    "id": "7",
+    "id": "6",
     "featured": false,
     "title": "Gözaltına Alındığınızda İlk 24 Saatte Yapmanız Gereken 5 Şey\nGözaltına alınmak, sıradan bir vatandaş",
     "category": "Ceza Hukuku",
@@ -77,7 +66,7 @@
     "slug": "gozaltina-alindiginizda-ilk-24-saatte-yapmaniz-gereken-5-sey-gozaltina-alinmak-s"
   },
   {
-    "id": "8",
+    "id": "7",
     "featured": false,
     "title": "Yazı Başlığı",
     "category": "Ceza Hukuku",
@@ -88,7 +77,7 @@
     "slug": "yazi-basligi"
   },
   {
-    "id": "9",
+    "id": "8",
     "featured": false,
     "title": "Yazı Başlığı",
     "category": "Ceza Hukuku",
