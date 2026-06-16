@@ -7,6 +7,46 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" type="image/png" href="logo1.png">
+
+    <!-- SEO -->
+    <meta name="description" content="Hukuki haklarınızı anlatan bağımsız bir platform. Ceza, aile, tüketici ve idare hukuku alanlarında uzman yazılar, pratik rehberler ve kişisel hukuki danışmanlık.">
+    <meta name="keywords" content="yargı kalemi, hukuk blogu, hukuki danışmanlık, ceza hukuku, aile hukuku, tüketici hakları, işçi hakları, tahliye davası, boşanma, icra takibi">
+    <meta name="author" content="Yargı Kalemi">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="Turkish">
+    <meta property="og:title" content="Yargı Kalemi — Hukuk Blog & Danışmanlık Platformu">
+    <meta property="og:description" content="Hukuki haklarınızı anlatan bağımsız bir platform. Uzman yazılar, pratik rehberler ve kişisel danışmanlık.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yargikalemi.github.io">
+    <meta property="og:image" content="https://yargikalemi.github.io/logo1.png">
+    <meta property="og:locale" content="tr_TR">
+    <meta property="og:site_name" content="Yargı Kalemi">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Yargı Kalemi — Hukuk Blog & Danışmanlık">
+    <meta name="twitter:description" content="Hukuki haklarınızı anlatan bağımsız bir platform. Uzman yazılar ve pratik rehberler.">
+    <meta name="twitter:image" content="https://yargikalemi.github.io/logo1.png">
+    <link rel="canonical" href="https://yargikalemi.github.io">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Yargı Kalemi",
+      "description": "Hukuki haklarınızı anlatan bağımsız bir platform.",
+      "url": "https://yargikalemi.github.io",
+      "inLanguage": "tr-TR",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Yargı Kalemi",
+        "logo": { "@type": "ImageObject", "url": "https://yargikalemi.github.io/logo1.png" }
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://yargikalemi.github.io/?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+
     <style>
         /* =============================================
            THEME VARIABLES — tüm renkler buradan
@@ -71,6 +111,9 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-base);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Ctext x='60' y='60' text-anchor='middle' dominant-baseline='central' font-size='52' fill='%230D9488' fill-opacity='0.04' font-family='Georgia%2Cserif'%3E%E2%9A%96%3C/text%3E%3C/svg%3E");
+            background-repeat: repeat;
+            background-size: 120px 120px;
             color: var(--text-primary);
             line-height: 1.65;
             transition: background-color var(--transition), color var(--transition);
@@ -99,22 +142,9 @@
             position: sticky;
             top: 0;
             z-index: 1000;
-            background-color: var(--nav-bg);
-            box-shadow: 0 1px 0 var(--border), 0 4px 16px rgba(0,0,0,0.06);
-            transition: background-color var(--transition), box-shadow var(--transition);
-        }
-        /* Header + mobile menu her zaman beyaz — dark modda da değişmez */
-        [data-theme="dark"] #header {
-            background-color: #FFFFFF;
-            box-shadow: 0 1px 0 #E0DBD3, 0 4px 16px rgba(0,0,0,0.06);
-            --text-primary:   #1A2B3C;
-            --text-secondary: #4A5568;
-            --border:         #E0DBD3;
-        }
-        [data-theme="dark"] #mobile-menu {
-            background-color: #FFFFFF;
-            --text-primary:   #1A2B3C;
-            --border:         #E0DBD3;
+            background: linear-gradient(135deg, #0A1628 0%, #132840 50%, #0D1F35 100%);
+            box-shadow: 0 1px 0 rgba(13,148,136,0.3), 0 4px 24px rgba(0,0,0,0.3);
+            transition: box-shadow var(--transition);
         }
 
         .header-inner {
@@ -134,12 +164,12 @@
             font-size: 1.45rem;
             font-weight: 700;
             letter-spacing: 0.5px;
-            color: var(--text-primary);
+            color: #F4F1EB;
             line-height: 1;
         }
         .brand-tagline {
             font-size: 0.72rem;
-            color: var(--text-secondary);
+            color: rgba(244,241,235,0.62);
             font-style: italic;
             margin-top: 3px;
             letter-spacing: 0.3px;
@@ -151,14 +181,14 @@
             align-items: center;
         }
         .header-nav a {
-            color: var(--text-primary);
+            color: rgba(244,241,235,0.82);
             font-size: 0.9rem;
             font-weight: 500;
             padding: 0.5rem 0.85rem;
             border-radius: var(--radius);
             transition: background var(--transition), color var(--transition);
         }
-        .header-nav a:hover { background: rgba(13,148,136,0.10); color: var(--accent); }
+        .header-nav a:hover { background: rgba(13,148,136,0.22); color: #2DD4BF; }
 
         .header-actions {
             display: flex;
@@ -170,14 +200,14 @@
         .btn-icon {
             background: none;
             border: none;
-            color: var(--text-primary);
+            color: rgba(244,241,235,0.82);
             font-size: 1.15rem;
             padding: 0.5rem;
             border-radius: var(--radius);
             transition: color var(--transition), background var(--transition);
             line-height: 1;
         }
-        .btn-icon:hover { color: var(--accent); background: rgba(13,148,136,0.12); }
+        .btn-icon:hover { color: #2DD4BF; background: rgba(13,148,136,0.22); }
 
         .btn-cta {
             background: var(--accent);
@@ -205,24 +235,23 @@
         #mobile-menu {
             display: none;
             flex-direction: column;
-            background-color: var(--nav-bg);
-            border-top: 1px solid var(--border);
+            background: linear-gradient(135deg, #0A1628 0%, #132840 100%);
+            border-top: 1px solid rgba(13,148,136,0.28);
             padding: 0.5rem 5% 1.5rem;
             gap: 0.25rem;
-            transition: background-color var(--transition);
         }
         #mobile-menu.open { display: flex; }
         #mobile-menu a {
-            color: var(--text-primary);
+            color: rgba(244,241,235,0.82);
             font-size: 1rem;
             font-weight: 500;
             padding: 0.85rem 1rem;
             border-radius: var(--radius);
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
             transition: background var(--transition), color var(--transition);
         }
         #mobile-menu a:last-of-type { border-bottom: none; }
-        #mobile-menu a:hover { background: rgba(13,148,136,0.10); color: var(--accent); }
+        #mobile-menu a:hover { background: rgba(13,148,136,0.22); color: #2DD4BF; }
         #mobile-menu .btn-cta {
             margin-top: 0.5rem;
             text-align: center;
@@ -1069,6 +1098,71 @@
             .form-card { padding: 1.4rem; }
         }
 
+        /* =============================================
+           FAQ / PRATIK BILGILER
+        ============================================= */
+        #faq {
+            padding: 4.5rem 5%;
+            background: var(--bg-base);
+            transition: background var(--transition);
+        }
+        .faq-inner { max-width: 780px; margin: 0 auto; }
+        .faq-list { display: flex; flex-direction: column; gap: 0.6rem; }
+        .faq-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+        }
+        .faq-item.open {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 1px rgba(13,148,136,0.12), var(--shadow-sm);
+        }
+        .faq-q {
+            width: 100%;
+            background: none;
+            border: none;
+            padding: 1.15rem 1.5rem;
+            text-align: left;
+            font-family: inherit;
+            font-size: 0.96rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            line-height: 1.4;
+            transition: color var(--transition);
+        }
+        .faq-q:hover, .faq-item.open .faq-q { color: var(--accent); }
+        .faq-q i {
+            flex-shrink: 0;
+            font-size: 0.8rem;
+            color: var(--accent);
+            transition: transform 0.35s ease;
+        }
+        .faq-item.open .faq-q i { transform: rotate(180deg); }
+        .faq-a {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+        .faq-item.open .faq-a { max-height: 500px; }
+        .faq-a-inner {
+            padding: 0 1.5rem 1.4rem;
+            border-top: 1px solid var(--border);
+        }
+        .faq-a-inner p {
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            padding-top: 1rem;
+        }
+        .faq-a-inner strong { color: var(--text-primary); font-weight: 700; }
+
         /* Touch targets */
         @media (hover: none) and (pointer: coarse) {
             .pill, .btn-icon, .btn-cta, .btn-filled, .btn-outline,
@@ -1096,6 +1190,7 @@
 
         <nav class="header-nav">
             <a href="#posts">Yazılar</a>
+            <a href="#faq">Pratik Bilgiler</a>
             <a href="#features">Platform</a>
             <a href="#about">Hakkında</a>
             <a href="#consultation">Danışmanlık</a>
@@ -1110,6 +1205,7 @@
 
     <div id="mobile-menu">
         <a href="#posts" onclick="closeMobileMenu()">Yazılar</a>
+        <a href="#faq" onclick="closeMobileMenu()">Pratik Bilgiler</a>
         <a href="#features" onclick="closeMobileMenu()">Platform</a>
         <a href="#about" onclick="closeMobileMenu()">Hakkında</a>
         <a href="#consultation" onclick="closeMobileMenu()">Danışmanlık</a>
@@ -1328,6 +1424,51 @@
     </div>
 </section>
 
+<!-- FAQ -->
+<section id="faq">
+    <div class="faq-inner">
+        <div class="section-header fade-in" style="text-align:center;">
+            <div class="section-label">Pratik Bilgiler</div>
+            <h2 class="section-title">Sık Sorulan Sorular</h2>
+            <p class="section-sub">Günlük hayatta karşılaşılan hukuki durumlar ve kısa, pratik yanıtlar.</p>
+        </div>
+        <div class="faq-list fade-in">
+            <div class="faq-item">
+                <button class="faq-q">Ayıplı ürün aldım. Ne yapmalıyım? <i class="fas fa-chevron-down"></i></button>
+                <div class="faq-a"><div class="faq-a-inner"><p>Satın alma tarihinden itibaren <strong>30 gün içinde</strong> satıcıya yazılı olarak başvurun; ücretsiz onarım, yenisiyle değişim, bedel iadesi veya bedel indirimi haklarından birini talep edebilirsiniz. Satıcı kabul etmezse ikamet ettiğiniz yerdeki <strong>Tüketici Hakem Heyeti</strong>'ne başvurun — ücretsizdir ve avukata gerek yoktur.</p></div></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q">İşten çıkarıldım. Tazminat hakkım var mı? <i class="fas fa-chevron-down"></i></button>
+                <div class="faq-a"><div class="faq-a-inner"><p>En az <strong>1 yıl</strong> çalışmış iseniz ve işveren haklı bir neden göstermeksizin sözleşmenizi feshettiyse <strong>kıdem tazminatı</strong> ve <strong>ihbar tazminatı</strong> hakkınız doğar. Fesih bildirimini aldığınız tarihten itibaren <strong>1 ay içinde</strong> arabulucuya başvurmanız, sonradan dava açmanızın ön koşuludur.</p></div></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q">Kiracım kira ödemedi. Nasıl tahliye ederim? <i class="fas fa-chevron-down"></i></button>
+                <div class="faq-a"><div class="faq-a-inner"><p>Kiracıya noter aracılığıyla <strong>ihtarname</strong> gönderin ve 30 gün süre verin. Bu ihtar aynı kira döneminde ikinci kez tekrarlanırsa kira sözleşmesi bitiminde <strong>tahliye davası</strong> açabilirsiniz. Alternatif olarak borç için <strong>icra takibi</strong> başlatıp ödeme emri gönderilmesini de sağlayabilirsiniz.</p></div></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q">Gözaltına alındığımda haklarım nelerdir? <i class="fas fa-chevron-down"></i></button>
+                <div class="faq-a"><div class="faq-a-inner"><p>Gözaltında <strong>susma hakkınız</strong> vardır; hiçbir soruya cevap verme zorunluluğunuz yoktur. İlk andan itibaren <strong>avukat talep etme hakkınız</strong> doğar ve bu hak size esirgenilemez. Yakınlarınızın bilgilendirilmesini isteyebilirsiniz. Normal suçlarda gözaltı süresi en fazla <strong>24 saattir</strong>.</p></div></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q">Boşanma davası ne kadar sürer? <i class="fas fa-chevron-down"></i></button>
+                <div class="faq-a"><div class="faq-a-inner"><p><strong>Anlaşmalı boşanma:</strong> Eşlerin tüm konularda uzlaşması hâlinde genellikle <strong>1–3 ay</strong> içinde sonuçlanır. <strong>Çekişmeli boşanma:</strong> Velayet, nafaka ve mal paylaşımı gibi anlaşmazlıklar süreci uzatır; ortalama <strong>1–3 yıl</strong> sürebilir. Her iki durumda da uzman bir avukattan destek almanız süreci hızlandırır.</p></div></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q">Sosyal medyada bana hakaret edildi. Ne yapabilirim? <i class="fas fa-chevron-down"></i></button>
+                <div class="faq-a"><div class="faq-a-inner"><p>İçeriğin <strong>ekran görüntüsünü ve URL'sini</strong> alarak belgelendirin, ardından Cumhuriyet Savcılığı'na şikayette bulunun (TCK m. 125 — hakaret suçu). Aynı zamanda <strong>manevi tazminat</strong> için hukuk davası açabilirsiniz. İçeriğin kaldırılması için platformun şikayet mekanizmasını da kullanın.</p></div></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q">Trafik kazasında karşı taraf kusurlu. Ne yapmalıyım? <i class="fas fa-chevron-down"></i></button>
+                <div class="faq-a"><div class="faq-a-inner"><p>Kaza yerini terk etmeden <strong>polis tutanağı</strong> tutturun ve kusur oranının tutanağa geçmesini sağlayın. Fotoğraf ve tanık bilgilerini alın. Ardından karşı tarafın <strong>zorunlu trafik sigortasına</strong> hasar ihbarında bulunun. Maddi zararlar için <strong>2 yıl</strong>, bedensel zarar için <strong>10 yıl</strong> içinde dava açma hakkınız vardır.</p></div></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q">İcra takibine uğradım. Ne yapmalıyım? <i class="fas fa-chevron-down"></i></button>
+                <div class="faq-a"><div class="faq-a-inner"><p>Ödeme emrini aldığınız tarihten itibaren <strong>7 gün</strong> içinde icra müdürlüğüne itiraz edebilirsiniz; itiraz icraı geçici olarak durdurur. Borç size ait değilse veya miktarda hata varsa derhal itiraz edin ve hukuki destek alın. <strong>Süreyi kaçırmak hakkınızı ortadan kaldırır.</strong></p></div></div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- FOOTER -->
 <footer>
     <div class="footer-inner">
@@ -1337,7 +1478,6 @@
                     <img src="logo1.png" alt="Yargı Kalemi" style="height:68px;width:auto;flex-shrink:0;">
                     <div class="brand-logo" style="font-size:1.3rem;">Yargı Kalemi</div>
                 </div>
-                <p>Türkiye'nin hukuk sistemini, haklarınızı ve kendinizi nasıl koruyacağınızı anlatan bağımsız bir platform.</p>
             </div>
             <div class="footer-col">
                 <h4>İçerik</h4>
@@ -1670,6 +1810,18 @@
     });
 
     loadPosts();
+
+    /* =============================================
+       FAQ ACCORDION
+    ============================================= */
+    document.querySelectorAll('.faq-q').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const item = btn.closest('.faq-item');
+            const isOpen = item.classList.contains('open');
+            document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+            if (!isOpen) item.classList.add('open');
+        });
+    });
 
     /* =============================================
        FORMS — Formspree entegrasyonu
