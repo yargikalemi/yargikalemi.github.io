@@ -86,5 +86,16 @@
     "readTime": 1,
     "content": "<p><ol><li></li></ol></p><hr id=\"null\">yazım tamam oldu.",
     "slug": "yazi-basligi"
+  },
+  {
+    "id": "9",
+    "featured": false,
+    "title": "Yazı Başlığı",
+    "category": "Ceza Hukuku",
+    "excerpt": "cümle özet",
+    "date": "16 Haziran 2026",
+    "readTime": 1,
+    "content": "<p><ol><li></li></ol></p><hr id=\"null\">yazım tamam oldu.",
+    "slug": "yazi-basligi-2"
   }
 ]
