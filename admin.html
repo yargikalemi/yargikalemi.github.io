@@ -2323,6 +2323,10 @@ function restoreEdRange() {
     sel.addRange(savedRange);
     return !sel.isCollapsed;
 }
+document.getElementById('editor-content').addEventListener('input', onEditorChange);
+document.getElementById('editor-content').addEventListener('keydown', e => {
+    if (e.key === 'Tab') { e.preventDefault(); document.execCommand('insertHTML', false, '    '); }
+});
 document.getElementById('editor-content').addEventListener('mouseup', saveEdRange);
 document.getElementById('editor-content').addEventListener('keyup', saveEdRange);
 document.getElementById('editor-content').addEventListener('selectionchange', saveEdRange);
