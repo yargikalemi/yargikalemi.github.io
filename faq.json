@@ -2,7 +2,7 @@
   {
     "id": "faq-1",
     "q": "Ayıplı ürün aldım. Ne yapmalıyım?",
-    "a": "Satın alma tarihinden itibaren <strong>30 gün içinde</strong> satıcıya yazılı olarak başvurun; ücretsiz onarım, yenisiyle değişim, bedel iadesi veya bedel indirimi haklarından birini talep edebilirsiniz. Satıcı kabul etmezse ikamet ettiğiniz yerdeki <strong>Tüketici Hakem Heyeti</strong>'ne başvurun — ücretsizdir ve avukata gerek yoktur."
+    "a": "Satın alma tarihinden itibaren <strong>30 gün içinde</strong> satıcıya yazılı olarak başvurun; ücretsiz onarım, yenisiyle değişim, bedel iadesi veya bedel indirimi haklarından birini talep edebilirsiniz. Satıcı kabul etmezse ikamet ettiğiniz yerdeki <strong><a href=\"yargikalemi.com/tuketici-hakem-heyeti\">Tüketici Hakem Heyeti</a></strong>'ne başvurun — ücretsizdir ve avukata gerek yoktur."
   },
   {
     "id": "faq-2",
