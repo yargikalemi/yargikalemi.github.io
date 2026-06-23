@@ -1840,17 +1840,31 @@
     ============================================= */
     const FORMSPREE_DANISMANLIK = 'https://formspree.io/f/xwvjaebn';
     const FORMSPREE_BULTEN      = 'https://formspree.io/f/xdavynzj';
+    // GitHub fine-grained PAT: sadece yargikalemi/yargikalemi.github.io, Contents: Read+Write
+    // github.com/settings/tokens?type=beta adresinden oluştur, buraya yapıştır
+    const CONSULT_WRITE_TOKEN = '';
 
     async function handleConsult(e) {
         e.preventDefault();
-        const btn = e.target.querySelector('.form-submit');
+        const form = e.target;
+        const btn = form.querySelector('.form-submit');
         const original = btn.textContent;
+        // Form verilerini erken topla (form temizlenmeden önce)
+        const entry = {
+            id: String(Date.now()),
+            date: new Date().toISOString(),
+            name: (form.querySelector('[name="ad"]') || {}).value || '',
+            email: (form.querySelector('[name="email"]') || {}).value || '',
+            topic: (form.querySelector('[name="konu"]') || {}).value || '',
+            message: (form.querySelector('[name="mesaj"]') || {}).value || '',
+            read: false
+        };
         btn.textContent = 'Gönderiliyor...';
         btn.disabled = true;
         try {
             const res = await fetch(FORMSPREE_DANISMANLIK, {
                 method: 'POST',
-                body: new FormData(e.target),
+                body: new FormData(form),
                 headers: { 'Accept': 'application/json' }
             });
             if (res.ok) {
@@ -1858,6 +1872,9 @@
                     '<p style="text-align:center;padding:2.5rem 0;color:var(--accent);font-weight:700;font-size:1.1rem;">' +
                     '✓ Talebiniz alındı!<br>' +
                     '<span style="font-weight:400;font-size:0.93rem;color:var(--text-secondary);">24-48 saat içinde e-posta adresinize yanıt verilecektir.</span></p>';
+                if (CONSULT_WRITE_TOKEN) {
+                    try { await saveConsultToGH(entry); } catch {}
+                }
             } else {
                 throw new Error();
             }
@@ -1866,6 +1883,24 @@
             btn.disabled = false;
             alert('Bir hata oluştu. Lütfen tekrar deneyin.');
         }
+    }
+
+    async function saveConsultToGH(entry) {
+        const apiUrl = 'https://api.github.com/repos/yargikalemi/yargikalemi.github.io/contents/consultations.json';
+        const headers = { 'Authorization': 'token ' + CONSULT_WRITE_TOKEN, 'Content-Type': 'application/json' };
+        let sha = '', list = [];
+        const getRes = await fetch(apiUrl, { headers });
+        if (getRes.ok) {
+            const d = await getRes.json();
+            sha = d.sha;
+            try { list = JSON.parse(atob(d.content.replace(/\s/g, ''))); } catch {}
+        }
+        list.push(entry);
+        const body = JSON.stringify(list, null, 2);
+        const encoded = btoa(unescape(encodeURIComponent(body)));
+        const payload = { message: 'Yeni danışmanlık talebi', content: encoded };
+        if (sha) payload.sha = sha;
+        await fetch(apiUrl, { method: 'PUT', headers, body: JSON.stringify(payload) });
     }
 
     async function handleNewsletter(e) {

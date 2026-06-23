@@ -335,6 +335,17 @@ input:checked+.toggle-sl::before{transform:translateX(17px)}
 
 /* ── TRASH / ÇÖP KUTUSU ── */
 .nav-badge{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 5px;background:#DC2626;color:#fff;border-radius:99px;font-size:.66rem;font-weight:700;margin-left:auto}
+
+/* ── CONSULT PAGE ── */
+.consult-card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.2rem;margin-bottom:.75rem}
+.consult-card.unread{border-left:3px solid var(--accent)}
+.consult-card-hdr{display:flex;align-items:center;gap:.7rem;margin-bottom:.55rem;flex-wrap:wrap}
+.consult-tag{display:inline-flex;align-items:center;padding:.2rem .65rem;background:#CCFBF1;color:var(--accent);border-radius:99px;font-size:.73rem;font-weight:600}
+.consult-unread-dot{width:8px;height:8px;background:var(--accent);border-radius:50%;flex-shrink:0}
+.consult-meta{font-size:.78rem;color:var(--text-secondary);display:flex;gap:.9rem;flex-wrap:wrap;margin-bottom:.5rem}
+.consult-msg{font-size:.87rem;color:var(--text1);line-height:1.65;white-space:pre-wrap;overflow-wrap:break-word;word-break:break-word}
+.consult-actions{display:flex;gap:.5rem;margin-top:.8rem;flex-wrap:wrap}
+.consult-empty{text-align:center;padding:3rem 1rem;color:var(--text-secondary);font-size:.9rem}
 .trash-row{display:flex;align-items:center;gap:.8rem;padding:.8rem 1rem;background:#fff;border:1px solid var(--border);border-radius:8px;margin-bottom:.6rem}
 .trash-row:last-child{margin-bottom:0}
 .tr-info{flex:1;min-width:0}
@@ -513,6 +524,7 @@ input:checked+.toggle-sl::before{transform:translateX(17px)}
             <button class="sb-item" id="nav-new"><i class="fas fa-plus-circle"></i> Yeni Yazı</button>
             <button class="sb-item" data-page="trash"><i class="fas fa-trash-can"></i> Çöp Kutusu <span id="trash-badge" class="nav-badge" style="display:none">0</span></button>
             <button class="sb-item" data-page="faq"><i class="fas fa-circle-question"></i> Sık Sorulan Sorular</button>
+            <button class="sb-item" data-page="consult"><i class="fas fa-comments"></i> Danışmanlık Talepleri <span id="consult-badge" class="nav-badge" style="display:none">0</span></button>
             <div class="sb-label" style="margin-top:.6rem">Sistem</div>
             <button class="sb-item" data-page="settings"><i class="fas fa-cog"></i> Ayarlar</button>
             <a class="sb-item" href="/" target="_blank"><i class="fas fa-external-link-alt"></i> Siteyi Gör</a>
@@ -793,6 +805,18 @@ input:checked+.toggle-sl::before{transform:translateX(17px)}
                 Sitede görünen pratik bilgi kartlarını buradan düzenleyebilirsiniz.
             </p>
             <div id="faq-admin-list"><div class="loading"><div class="spinner"></div> Yükleniyor…</div></div>
+        </div>
+
+        <!-- ══ CONSULT ══ -->
+        <div class="page" id="page-consult">
+            <div class="page-hdr">
+                <h1 class="page-title">Danışmanlık Talepleri</h1>
+                <button class="btn-warn" id="btn-mark-all-read"><i class="fas fa-check-double"></i> Tümünü Okundu İşaretle</button>
+            </div>
+            <p style="font-size:.84rem;color:var(--text-secondary);margin-bottom:1rem;line-height:1.6">
+                Sitedeki danışmanlık formundan gelen talepler. Okunmamış talepler mavi çizgiyle gösterilir.
+            </p>
+            <div id="consult-list"><div class="loading"><div class="spinner"></div> Yükleniyor…</div></div>
         </div>
 
         <!-- ══ SETTINGS ══ -->
@@ -1192,6 +1216,8 @@ let customHash = '';
 let dragSrcIdx = null;
 let loadedDraftId = null;
 let selectedIds = new Set();
+let allConsults  = [];
+let consultsSHA  = '';
 
 // ════════════════════════════════════════════
 // SHA-256
@@ -1353,6 +1379,7 @@ async function launchApp() {
     migrateOldDraft();
     updateDraftCount();
     updateTrashBadge();
+    loadConsultBadge();
     try {
         const res = await fetch('https://api.github.com/user', { headers: ghH() });
         if (res.ok) {
@@ -2749,7 +2776,7 @@ function updateExcerptCount(){
 // ════════════════════════════════════════════
 // NAVİGASYON
 // ════════════════════════════════════════════
-const PAGE_TITLES={posts:'Yazılar',editor:'Yeni Yazı',settings:'Ayarlar',trash:'Çöp Kutusu',faq:'Sık Sorulan Sorular'};
+const PAGE_TITLES={posts:'Yazılar',editor:'Yeni Yazı',settings:'Ayarlar',trash:'Çöp Kutusu',faq:'Sık Sorulan Sorular',consult:'Danışmanlık Talepleri'};
 function showPage(name, skipReload){
     document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
     document.getElementById('page-'+name).classList.add('active');
@@ -2761,12 +2788,14 @@ function showPage(name, skipReload){
     if(name==='posts'){ if(skipReload) renderList(); else loadPosts(); }
     if(name==='trash') loadTrashPage();
     if(name==='faq') loadFaqPage();
+    if(name==='consult') loadConsultPage();
 }
 document.querySelectorAll('.sb-item[data-page]').forEach(btn=>{
     btn.addEventListener('click',()=>showPage(btn.dataset.page));
 });
 document.getElementById('nav-new').addEventListener('click',openNewPost);
 document.getElementById('topbar-new-btn').addEventListener('click',openNewPost);
+document.getElementById('btn-mark-all-read').addEventListener('click',markAllConsultsRead);
 document.getElementById('ham-btn').addEventListener('click',()=>{
     document.getElementById('sidebar').classList.toggle('open');
     document.getElementById('sb-overlay').classList.toggle('show');
@@ -2958,6 +2987,112 @@ function deleteFaq(id) {
 }
 
 document.getElementById('btn-new-faq').addEventListener('click', openNewFaq);
+
+// ════════════════════════════════════════════
+// DANIŞMANLIK TALEPLERİ
+// ════════════════════════════════════════════
+async function loadConsultBadge() {
+    try {
+        const r = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/consultations.json`, { headers: ghH() });
+        if (!r.ok) return;
+        const d = await r.json();
+        consultsSHA = d.sha;
+        allConsults = JSON.parse(atob(d.content.replace(/\s/g,'')));
+        updateConsultBadge();
+    } catch {}
+}
+
+async function loadConsultPage() {
+    const el = document.getElementById('consult-list');
+    el.innerHTML = '<div class="loading"><div class="spinner"></div> Yükleniyor…</div>';
+    try {
+        const r = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/consultations.json`, { headers: ghH() });
+        if (!r.ok) { allConsults = []; consultsSHA = ''; }
+        else {
+            const d = await r.json();
+            consultsSHA = d.sha;
+            allConsults = JSON.parse(atob(d.content.replace(/\s/g,'')));
+        }
+    } catch { allConsults = []; consultsSHA = ''; }
+    renderConsultList();
+}
+
+function renderConsultList() {
+    const el = document.getElementById('consult-list');
+    if (!allConsults.length) {
+        el.innerHTML = '<div class="consult-empty">Henüz danışmanlık talebi yok.</div>';
+        updateConsultBadge();
+        return;
+    }
+    const sorted = [...allConsults].sort((a,b) => new Date(b.date) - new Date(a.date));
+    el.innerHTML = sorted.map(c => `
+        <div class="consult-card${c.read ? '' : ' unread'}">
+            <div class="consult-card-hdr">
+                ${!c.read ? '<span class="consult-unread-dot"></span>' : ''}
+                <span class="consult-tag">${esc(c.topic)}</span>
+                <span style="font-weight:600;font-size:.9rem">${c.name ? esc(c.name) : '<em style="color:var(--text-secondary)">İsimsiz</em>'}</span>
+                <span style="font-size:.78rem;color:var(--text-secondary);margin-left:auto">${new Date(c.date).toLocaleString('tr-TR')}</span>
+            </div>
+            <div class="consult-meta">
+                <span><i class="fas fa-envelope" style="margin-right:.3rem"></i>${esc(c.email)}</span>
+            </div>
+            <div class="consult-msg">${esc(c.message)}</div>
+            <div class="consult-actions">
+                ${!c.read
+                    ? `<button class="btn-primary" style="font-size:.8rem;padding:.35rem .85rem" onclick="markConsultRead('${esc(c.id)}')"><i class="fas fa-check"></i> Okundu</button>`
+                    : '<span style="font-size:.78rem;color:var(--text-secondary)"><i class="fas fa-check-circle"></i> Okundu</span>'
+                }
+                <button class="btn-danger" style="font-size:.8rem;padding:.35rem .85rem" onclick="deleteConsult('${esc(c.id)}')"><i class="fas fa-trash"></i> Sil</button>
+            </div>
+        </div>
+    `).join('');
+    updateConsultBadge();
+}
+
+async function markConsultRead(id) {
+    const c = allConsults.find(x => x.id === id);
+    if (!c || c.read) return;
+    c.read = true;
+    try { await saveConsults('Talep okundu: ' + id); renderConsultList(); }
+    catch(e) { toast('Kaydetme hatası: ' + e.message, 'error'); }
+}
+
+async function markAllConsultsRead() {
+    if (!allConsults.length) return;
+    const unread = allConsults.filter(c => !c.read);
+    if (!unread.length) { toast('Tüm talepler zaten okundu', 'info'); return; }
+    unread.forEach(c => c.read = true);
+    try { await saveConsults('Tümü okundu işaretlendi'); renderConsultList(); toast('Tümü okundu işaretlendi', 'success'); }
+    catch(e) { toast('Kaydetme hatası: ' + e.message, 'error'); }
+}
+
+async function deleteConsult(id) {
+    showConfirm('Talebi Sil', 'Bu danışmanlık talebini kalıcı olarak silmek istiyor musunuz?', async () => {
+        allConsults = allConsults.filter(c => c.id !== id);
+        try { await saveConsults('Talep silindi: ' + id); renderConsultList(); toast('Talep silindi', 'success'); }
+        catch(e) { toast('Silme hatası: ' + e.message, 'error'); }
+    });
+}
+
+async function saveConsults(msg) {
+    const body = JSON.stringify(allConsults, null, 2);
+    const payload = { message: msg || 'Danışmanlık güncellendi', content: b64Enc(body) };
+    if (consultsSHA) payload.sha = consultsSHA;
+    const r = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/consultations.json`, {
+        method: 'PUT', headers: ghH(), body: JSON.stringify(payload)
+    });
+    if (!r.ok) { const d = await r.json().catch(()=>({})); throw new Error(d.message || `HTTP ${r.status}`); }
+    const d = await r.json();
+    consultsSHA = d.content.sha;
+}
+
+function updateConsultBadge() {
+    const unread = allConsults.filter(c => !c.read).length;
+    const badge = document.getElementById('consult-badge');
+    if (!badge) return;
+    badge.textContent = unread;
+    badge.style.display = unread ? 'inline-flex' : 'none';
+}
 </script>
 </body>
 </html>
