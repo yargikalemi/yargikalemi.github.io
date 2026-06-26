@@ -1616,7 +1616,7 @@
                     '<p class="card-excerpt">' + post.excerpt + '</p>' +
                 '</div>' +
                 '<div class="card-footer">' +
-                    '<div class="card-meta">' + post.date + ' · ' + post.readTime + '</div>' +
+                    '<div class="card-meta">' + post.date + ' · ' + post.readTime + '<span class="card-reads" data-slug="' + (post.slug || '') + '"></span></div>' +
                     '<div class="card-shares">' +
                         '<button class="share-ico" onclick="share(this.closest(\'.post-card\').dataset.title,\'twitter\',this.closest(\'.post-card\').dataset.slug);event.stopPropagation();" title="Twitter"><i class="fab fa-twitter"></i></button>' +
                         '<button class="share-ico" onclick="share(this.closest(\'.post-card\').dataset.title,\'whatsapp\',this.closest(\'.post-card\').dataset.slug);event.stopPropagation();" title="WhatsApp"><i class="fab fa-whatsapp"></i></button>' +
@@ -1628,6 +1628,29 @@
             });
             grid.insertBefore(art, noResult);
             io.observe(art);
+        });
+        loadReadCounts();
+    }
+
+    // GoatCounter okunma sayıları (yazı kartlarında "X okunma" rozeti)
+    const GC_HOST = 'https://yargikalemi.goatcounter.com';
+    const _readCache = {};
+    function loadReadCounts() {
+        document.querySelectorAll('.card-reads[data-slug]').forEach(el => {
+            const slug = el.dataset.slug;
+            if (!slug) return;
+            if (_readCache[slug] !== undefined) {
+                if (_readCache[slug]) el.innerHTML = ' · <i class="far fa-eye"></i> ' + _readCache[slug];
+                return;
+            }
+            fetch(GC_HOST + '/counter//posts/' + slug + '.html.json')
+                .then(r => r.ok ? r.json() : null)
+                .then(d => {
+                    const c = d && d.count ? d.count : '';
+                    _readCache[slug] = c;
+                    if (c) el.innerHTML = ' · <i class="far fa-eye"></i> ' + c;
+                })
+                .catch(() => {});
         });
     }
 
@@ -1804,5 +1827,7 @@
         }
     }
 </script>
+<!-- GoatCounter ziyaret istatistikleri (çerezsiz, KVKK dostu) -->
+<script data-goatcounter="https://yargikalemi.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
