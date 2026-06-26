@@ -608,9 +608,12 @@
             flex-grow: 1;
             margin-bottom: 1rem;
             display: -webkit-box;
-            -webkit-line-clamp: 4;
+            -webkit-line-clamp: 6;
             -webkit-box-orient: vertical;
             overflow: hidden;
+        }
+        .card-excerpt.long {
+            -webkit-line-clamp: 4;
         }
         .card-cta {
             color: var(--accent);
@@ -1622,7 +1625,7 @@
                 '<div class="card-body">' +
                     '<div class="card-cat">' + post.category + '</div>' +
                     '<h3>' + post.title + '</h3>' +
-                    '<p class="card-excerpt">' + post.excerpt + ' <span class="card-cta">Devamını Oku...</span></p>' +
+                    (function() { var isLong = post.excerpt.length > 350; return '<p class="card-excerpt' + (isLong ? ' long' : '') + '">' + post.excerpt + (isLong ? ' <span class="card-cta">Devamını Oku...</span>' : '') + '</p>'; })() +
                 '</div>' +
                 '<div class="card-footer">' +
                     '<div class="card-meta">' + post.date + ' · ' + (typeof post.readTime === 'string' ? post.readTime : post.readTime + ' dk') + '<span class="card-reads" data-slug="' + (post.slug || '') + '"></span></div>' +
