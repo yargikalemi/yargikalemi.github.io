@@ -359,14 +359,16 @@ input:checked+.toggle-sl::before{transform:translateX(17px)}
 .btn-edit-faq:hover{background:var(--accent-light);border-color:var(--accent)}
 .btn-del-faq{color:var(--text-muted)}
 .btn-del-faq:hover{background:#FEF2F2;color:#DC2626;border-color:#FECACA}
-#faq-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.42);z-index:8000;align-items:center;justify-content:center}
-#faq-modal.show{display:flex}
+#faq-modal,#qa-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.42);z-index:8000;align-items:center;justify-content:center}
+#faq-modal.show,#qa-modal.show{display:flex}
 .faq-modal-box{background:#fff;border-radius:10px;padding:1.6rem;max-width:560px;width:90%;box-shadow:0 24px 64px rgba(0,0,0,.25)}
 .faq-modal-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem}
 .faq-modal-hdr h3{font-size:.96rem;font-weight:700}
 .faq-modal-close-btn{background:none;border:none;color:var(--text-muted);font-size:1rem;cursor:pointer;width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius)}
 .faq-modal-close-btn:hover{color:var(--text-primary);background:var(--bg-base)}
 .faq-modal-ftr{display:flex;gap:.5rem;justify-content:flex-end;margin-top:1.2rem}
+.qa-post-tag{display:inline-block;font-size:.68rem;font-weight:600;color:var(--accent);background:var(--accent-light);padding:.1rem .5rem;border-radius:99px;margin-bottom:.25rem}
+.qa-pending-note{background:#FFFBEB;border:1px solid #FDE68A;color:#92400E;font-size:.8rem;padding:.7rem .9rem;border-radius:8px;margin-bottom:1rem;line-height:1.55}
 
 /* ── TOAST ── */
 #toast-wrap{position:fixed;bottom:1.3rem;right:1.3rem;z-index:9999;display:flex;flex-direction:column;gap:.38rem}
@@ -514,6 +516,7 @@ input:checked+.toggle-sl::before{transform:translateX(17px)}
             <button class="sb-item" id="nav-new"><i class="fas fa-plus-circle"></i> Yeni Yazı</button>
             <button class="sb-item" data-page="trash"><i class="fas fa-trash-can"></i> Çöp Kutusu <span id="trash-badge" class="nav-badge" style="display:none">0</span></button>
             <button class="sb-item" data-page="faq"><i class="fas fa-circle-question"></i> Sık Sorulan Sorular</button>
+            <button class="sb-item" data-page="qa"><i class="fas fa-comments"></i> Soru-Cevap</button>
             <div class="sb-label" style="margin-top:.6rem">Sistem</div>
             <button class="sb-item" data-page="settings"><i class="fas fa-cog"></i> Ayarlar</button>
             <a class="sb-item" href="/" target="_blank"><i class="fas fa-external-link-alt"></i> Siteyi Gör</a>
@@ -796,6 +799,18 @@ input:checked+.toggle-sl::before{transform:translateX(17px)}
             <div id="faq-admin-list"><div class="loading"><div class="spinner"></div> Yükleniyor…</div></div>
         </div>
 
+        <!-- ══ SORU-CEVAP ══ -->
+        <div class="page" id="page-qa">
+            <div class="page-hdr">
+                <h1 class="page-title">Soru-Cevap</h1>
+                <button class="btn-new" id="btn-new-qa"><i class="fas fa-plus"></i> Yeni Soru-Cevap</button>
+            </div>
+            <div class="qa-pending-note">
+                <i class="fas fa-envelope"></i> Okuyucu soruları e-posta adresine ulaşır. Yayımlamak istediğin soruyu, ait olduğu yazıyı seçip cevabınla birlikte buraya ekle — yazının altında görünür.
+            </div>
+            <div id="qa-admin-list"><div class="loading"><div class="spinner"></div> Yükleniyor…</div></div>
+        </div>
+
         <!-- ══ SETTINGS ══ -->
         <div class="page" id="page-settings">
             <div class="page-hdr"><h1 class="page-title">Ayarlar</h1></div>
@@ -963,6 +978,36 @@ input:checked+.toggle-sl::before{transform:translateX(17px)}
     </div>
 </div>
 
+<!-- SORU-CEVAP MODAL -->
+<div id="qa-modal">
+    <div class="faq-modal-box">
+        <div class="faq-modal-hdr">
+            <h3 id="qa-modal-title">Yeni Soru-Cevap</h3>
+            <button class="faq-modal-close-btn" onclick="closeQAModal()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="field">
+            <label class="field-label">Hangi yazı</label>
+            <select class="field-input" id="qa-inp-post"></select>
+        </div>
+        <div class="field" style="margin-top:.8rem">
+            <label class="field-label">Soran (opsiyonel)</label>
+            <input type="text" class="field-input" id="qa-inp-asker" placeholder="örn. Ahmet Y. — boş bırakılırsa gösterilmez">
+        </div>
+        <div class="field" style="margin-top:.8rem">
+            <label class="field-label">Soru</label>
+            <textarea class="field-input" id="qa-inp-q" rows="3" placeholder="Okuyucunun sorusu…" style="resize:vertical"></textarea>
+        </div>
+        <div class="field" style="margin-top:.8rem">
+            <label class="field-label">Cevap</label>
+            <textarea class="field-input" id="qa-inp-a" rows="5" placeholder="Yanıtınız…" style="resize:vertical"></textarea>
+        </div>
+        <div class="faq-modal-ftr">
+            <button class="btn-cf-cancel" onclick="closeQAModal()">İptal</button>
+            <button class="btn-primary" id="qa-modal-save" onclick="saveQAItem()"><i class="fas fa-save"></i> Yayımla</button>
+        </div>
+    </div>
+</div>
+
 <script>
 // ════════════════════════════════════════════
 // SABITLER
@@ -1085,6 +1130,23 @@ footer a{color:var(--accent);font-weight:600;text-decoration:none}
 #go-top{position:fixed;bottom:1.6rem;right:1.6rem;width:44px;height:44px;border-radius:50%;background:var(--accent);color:#fff;border:none;cursor:pointer;font-size:.9rem;display:none;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(13,148,136,.35);z-index:100;transition:all .2s}
 #go-top.vis{display:flex}
 #go-top:hover{background:var(--accent-h);transform:translateY(-2px)}
+.qa-sec{margin-top:3.5rem;padding-top:2rem;border-top:1px solid var(--border)}
+.qa-h{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:1.25rem}
+.qa-item{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:1.05rem 1.25rem;margin-bottom:.9rem}
+.qa-q{display:flex;gap:.55rem;font-weight:600;color:var(--text);margin-bottom:.6rem;line-height:1.6}
+.qa-a{display:flex;gap:.55rem;color:var(--text2);line-height:1.75;white-space:pre-wrap}
+.qa-ico{color:var(--accent);font-weight:800;flex-shrink:0}
+.qa-asker{font-size:.78rem;color:var(--text3);margin-top:.55rem;padding-left:1.3rem}
+.qa-form{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:1.3rem;margin-top:1.6rem}
+.qa-form h3{font-family:'Playfair Display',serif;font-size:1.12rem;margin-bottom:.95rem;color:var(--text)}
+.qa-form label{display:block;font-size:.83rem;font-weight:600;color:var(--text2);margin-bottom:.35rem}
+.qa-form input,.qa-form textarea{width:100%;padding:.7rem .9rem;background:var(--bg);border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:.92rem;color:var(--text);outline:none;margin-bottom:.9rem;transition:border-color .2s}
+.qa-form input:focus,.qa-form textarea:focus{border-color:var(--accent)}
+.qa-form textarea{resize:vertical;min-height:90px}
+.qa-btn{background:var(--accent);color:#fff;border:none;padding:.7rem 1.5rem;border-radius:8px;font-size:.9rem;font-weight:700;cursor:pointer;transition:background .2s}
+.qa-btn:hover{background:var(--accent-h)}
+.qa-btn:disabled{opacity:.6;cursor:default}
+.qa-note{font-size:.78rem;color:var(--text3);margin-top:.7rem;display:flex;align-items:center;gap:.4rem}
 @media(max-width:640px){.wrap{padding:2rem 1.1rem 3.5rem}h1.post-title{font-size:1.7rem}.post-body{font-size:.98rem}.hdr-in{padding:0 1rem}}
 </style>
 </head>
@@ -1116,6 +1178,21 @@ footer a{color:var(--accent);font-weight:600;text-decoration:none}
       </div>
       <div class="copy-ok" id="copy-ok">✓ Bağlantı kopyalandı!</div>
     </div>
+    <section class="qa-sec">
+      <h2 class="qa-h" id="qa-h" style="display:none">Soru &amp; Cevap</h2>
+      <div id="qa-list"></div>
+      <div class="qa-form">
+        <h3>Bir sorunuz mu var?</h3>
+        <form id="qa-form">
+          <label>Adınız (opsiyonel)</label>
+          <input type="text" name="ad" placeholder="Adınız" maxlength="60">
+          <label>Sorunuz *</label>
+          <textarea name="soru" placeholder="Bu yazıyla ilgili merak ettiğinizi yazın…" required maxlength="1500"></textarea>
+          <button type="submit" class="qa-btn">Gönder</button>
+          <div class="qa-note"><i class="fas fa-shield-alt"></i> Sorular incelenir; uygun görülenler yanıtıyla birlikte bu sayfada yayımlanır.</div>
+        </form>
+      </div>
+    </section>
     <a href="../index.html#posts" class="back-all"><i class="fas fa-arrow-left"></i> Tüm Yazılara Dön</a>
   </div>
 </main>
@@ -1133,6 +1210,34 @@ var prog=document.getElementById('prog'),gt=document.getElementById('go-top');
 window.addEventListener('scroll',function(){var s=window.scrollY,t=document.documentElement.scrollHeight-window.innerHeight;prog.style.width=(t>0?(s/t*100):0)+'%';gt.classList.toggle('vis',s>380);},{passive:true});
 function shr(p){var u=encodeURIComponent(PU),t=encodeURIComponent(PT);var m={tw:'https://twitter.com/intent/tweet?text='+t+'&url='+u,wa:'https://wa.me/?text='+encodeURIComponent(PT+' '+PU)};window.open(m[p],'_blank');}
 function cp(){navigator.clipboard.writeText(PU).then(function(){var el=document.getElementById('copy-ok');el.classList.add('show');setTimeout(function(){el.classList.remove('show');},2500);});}
+var POST_SLUG=${JSON.stringify(slug)};
+var QA_ENDPOINT='https://formspree.io/f/xwvjaebn';
+function qaEsc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+(function(){
+  fetch('../comments.json?_='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():[];}).then(function(all){
+    var items=(all||[]).filter(function(c){return c.postSlug===POST_SLUG;});
+    if(!items.length)return;
+    document.getElementById('qa-h').style.display='block';
+    document.getElementById('qa-list').innerHTML=items.map(function(c){
+      return '<div class="qa-item">'+
+        '<div class="qa-q"><span class="qa-ico">S:</span><span>'+qaEsc(c.question)+'</span></div>'+
+        '<div class="qa-a"><span class="qa-ico">C:</span><span>'+qaEsc(c.answer)+'</span></div>'+
+        (c.askerName?'<div class="qa-asker">— '+qaEsc(c.askerName)+'</div>':'')+
+      '</div>';
+    }).join('');
+  }).catch(function(){});
+})();
+document.getElementById('qa-form').addEventListener('submit',function(ev){
+  ev.preventDefault();
+  var f=ev.target,btn=f.querySelector('.qa-btn'),orig=btn.textContent;
+  btn.textContent='Gönderiliyor…';btn.disabled=true;
+  var fd=new FormData(f);
+  fd.append('yazi',PT);fd.append('slug',POST_SLUG);fd.append('_subject','Yeni Soru — '+PT);
+  fetch(QA_ENDPOINT,{method:'POST',body:fd,headers:{'Accept':'application/json'}}).then(function(r){
+    if(r.ok){f.innerHTML='<p style="color:var(--accent);font-weight:700;padding:.6rem 0">✓ Sorunuz alındı. Uygun görülürse yanıtıyla birlikte bu sayfada yayımlanacaktır.</p>';}
+    else{throw new Error();}
+  }).catch(function(){btn.textContent=orig;btn.disabled=false;alert('Bir hata oluştu, lütfen tekrar deneyin.');});
+});
 <\/script>
 </body>
 </html>`;
@@ -2757,7 +2862,7 @@ function updateExcerptCount(){
 // ════════════════════════════════════════════
 // NAVİGASYON
 // ════════════════════════════════════════════
-const PAGE_TITLES={posts:'Yazılar',editor:'Yeni Yazı',settings:'Ayarlar',trash:'Çöp Kutusu',faq:'Sık Sorulan Sorular'};
+const PAGE_TITLES={posts:'Yazılar',editor:'Yeni Yazı',settings:'Ayarlar',trash:'Çöp Kutusu',faq:'Sık Sorulan Sorular',qa:'Soru-Cevap'};
 function showPage(name, skipReload){
     document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
     document.getElementById('page-'+name).classList.add('active');
@@ -2769,6 +2874,7 @@ function showPage(name, skipReload){
     if(name==='posts'){ if(skipReload) renderList(); else loadPosts(); }
     if(name==='trash') loadTrashPage();
     if(name==='faq') loadFaqPage();
+    if(name==='qa') loadQAPage();
 }
 document.querySelectorAll('.sb-item[data-page]').forEach(btn=>{
     btn.addEventListener('click',()=>showPage(btn.dataset.page));
@@ -2820,7 +2926,7 @@ document.addEventListener('keydown',e=>{
         e.preventDefault();
         if(document.getElementById('page-editor').classList.contains('active')) savePost();
     }
-    if(e.key==='Escape'){closeConfirm();closeFaqModal();closeSidebar();document.getElementById('preview-modal').classList.remove('show');document.getElementById('drafts-modal').classList.remove('show');document.getElementById('find-modal').classList.remove('show');document.getElementById('link-modal').classList.remove('show');}
+    if(e.key==='Escape'){closeConfirm();closeFaqModal();closeQAModal();closeSidebar();document.getElementById('preview-modal').classList.remove('show');document.getElementById('drafts-modal').classList.remove('show');document.getElementById('find-modal').classList.remove('show');document.getElementById('link-modal').classList.remove('show');}
 });
 
 // ════════════════════════════════════════════
@@ -2966,6 +3072,153 @@ function deleteFaq(id) {
 }
 
 document.getElementById('btn-new-faq').addEventListener('click', openNewFaq);
+
+// ════════════════════════════════════════════
+// SORU-CEVAP (comments.json)
+// ════════════════════════════════════════════
+let allComments  = [];
+let commentsSHA  = '';
+let editingQAId  = null;
+
+async function readComments() {
+    const r = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/comments.json`, { headers: ghH() });
+    if (r.status === 404) return { items: [], sha: '' };
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const d = await r.json();
+    let items = [];
+    try { items = JSON.parse(b64Dec(d.content.replace(/\n/g,''))); } catch { items = []; }
+    return { items, sha: d.sha };
+}
+
+async function writeComments(items, sha, msg) {
+    const body = { message: msg, content: b64Enc(JSON.stringify(items, null, 2)) };
+    if (sha) body.sha = sha;
+    const r = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/comments.json`, {
+        method: 'PUT', headers: ghH(), body: JSON.stringify(body)
+    });
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const d = await r.json();
+    commentsSHA = d.content.sha;
+}
+
+async function loadQAPage() {
+    const list = document.getElementById('qa-admin-list');
+    list.innerHTML = '<div class="loading"><div class="spinner"></div> Yükleniyor…</div>';
+    try {
+        const { items, sha } = await readComments();
+        allComments = items; commentsSHA = sha;
+        renderQAAdmin();
+    } catch(e) {
+        list.innerHTML = `<div style="color:#DC2626;font-size:.84rem;padding:1rem">Yüklenemedi: ${esc(e.message)}</div>`;
+    }
+}
+
+function renderQAAdmin() {
+    const list = document.getElementById('qa-admin-list');
+    if (!allComments.length) {
+        list.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--text-muted);font-size:.88rem">Henüz yayımlanmış soru-cevap yok. Yeni Soru-Cevap düğmesiyle ekleyebilirsin.</div>';
+        return;
+    }
+    const sorted = [...allComments].sort((a,b) => new Date(b.date||0) - new Date(a.date||0));
+    list.innerHTML = sorted.map((c, i) =>
+        `<div class="faq-admin-item" data-id="${esc(c.id)}">
+            <div class="faq-admin-num">${i+1}</div>
+            <div class="faq-admin-info">
+                <span class="qa-post-tag">${esc(c.postTitle || c.postSlug || 'Yazı')}</span>
+                <div class="faq-admin-q">${esc(c.question)}</div>
+                <div class="faq-admin-a">${esc((c.answer||'').slice(0,110))}</div>
+            </div>
+            <div class="faq-admin-acts">
+                <button class="btn-edit-faq" onclick="openEditQA('${esc(c.id)}')" title="Düzenle"><i class="fas fa-pencil"></i></button>
+                <button class="btn-del-faq" onclick="deleteQAItem('${esc(c.id)}')" title="Sil"><i class="fas fa-trash"></i></button>
+            </div>
+        </div>`
+    ).join('');
+}
+
+function populateQAPostSelect(selectedSlug) {
+    const sel = document.getElementById('qa-inp-post');
+    const opts = allPosts.map(p => {
+        const slug = p.slug || slugify(p.title);
+        return `<option value="${esc(slug)}"${slug===selectedSlug?' selected':''}>${esc(p.title)}</option>`;
+    }).join('');
+    sel.innerHTML = opts || '<option value="">Önce yazı ekleyin</option>';
+}
+
+function openNewQA() {
+    editingQAId = null;
+    document.getElementById('qa-modal-title').textContent = 'Yeni Soru-Cevap';
+    populateQAPostSelect('');
+    document.getElementById('qa-inp-asker').value = '';
+    document.getElementById('qa-inp-q').value = '';
+    document.getElementById('qa-inp-a').value = '';
+    document.getElementById('qa-modal').classList.add('show');
+}
+
+function openEditQA(id) {
+    const c = allComments.find(x => x.id === id);
+    if (!c) return;
+    editingQAId = id;
+    document.getElementById('qa-modal-title').textContent = 'Soru-Cevabı Düzenle';
+    populateQAPostSelect(c.postSlug);
+    document.getElementById('qa-inp-asker').value = c.askerName || '';
+    document.getElementById('qa-inp-q').value = c.question || '';
+    document.getElementById('qa-inp-a').value = c.answer || '';
+    document.getElementById('qa-modal').classList.add('show');
+}
+
+function closeQAModal() {
+    document.getElementById('qa-modal').classList.remove('show');
+}
+
+async function saveQAItem() {
+    const slug   = document.getElementById('qa-inp-post').value;
+    const asker  = document.getElementById('qa-inp-asker').value.trim();
+    const q      = document.getElementById('qa-inp-q').value.trim();
+    const a      = document.getElementById('qa-inp-a').value.trim();
+    if (!slug) { toast('Bir yazı seçin', 'error'); return; }
+    if (!q || !a) { toast('Soru ve cevap boş olamaz', 'error'); return; }
+    const post   = allPosts.find(p => (p.slug || slugify(p.title)) === slug);
+    const title  = post ? post.title : slug;
+    const btn = document.getElementById('qa-modal-save');
+    btn.disabled = true;
+    try {
+        if (editingQAId) {
+            const idx = allComments.findIndex(x => x.id === editingQAId);
+            if (idx >= 0) allComments[idx] = { ...allComments[idx], postSlug: slug, postTitle: title, askerName: asker, question: q, answer: a };
+        } else {
+            allComments.push({ id: String(Date.now()), postSlug: slug, postTitle: title, askerName: asker, question: q, answer: a, date: new Date().toISOString() });
+        }
+        await writeComments(allComments, commentsSHA, (editingQAId ? 'Soru-cevap güncellendi: ' : 'Soru-cevap eklendi: ') + q.slice(0,40));
+        closeQAModal();
+        renderQAAdmin();
+        toast(editingQAId ? 'Güncellendi' : 'Yayımlandı', 'success');
+    } catch(e) {
+        toast('Hata: ' + e.message, 'error');
+        const res = await readComments(); allComments = res.items; commentsSHA = res.sha;
+    } finally {
+        btn.disabled = false;
+    }
+}
+
+function deleteQAItem(id) {
+    const c = allComments.find(x => x.id === id);
+    if (!c) return;
+    showConfirm('Soru-Cevabı Sil', `"${(c.question||'').slice(0,60)}" sorusu yayından kaldırılacak.`, async () => {
+        allComments = allComments.filter(x => x.id !== id);
+        try {
+            await writeComments(allComments, commentsSHA, 'Soru-cevap silindi: ' + (c.question||'').slice(0,40));
+            renderQAAdmin();
+            toast('Silindi', 'success');
+        } catch(e) {
+            toast('Hata: ' + e.message, 'error');
+            const res = await readComments(); allComments = res.items; commentsSHA = res.sha; renderQAAdmin();
+        }
+    });
+}
+
+document.getElementById('btn-new-qa').addEventListener('click', openNewQA);
+document.getElementById('qa-modal').addEventListener('click', function(e){ if(e.target===this) closeQAModal(); });
 
 </script>
 </body>
