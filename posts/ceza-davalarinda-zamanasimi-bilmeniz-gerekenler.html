@@ -72,6 +72,16 @@ footer a{color:var(--accent);font-weight:600;text-decoration:none}
 #go-top.vis{display:flex}
 #go-top:hover{background:var(--accent-h);transform:translateY(-2px)}
 @media(max-width:640px){.wrap{padding:2rem 1.1rem 3.5rem}h1.post-title{font-size:1.7rem}.post-body{font-size:.98rem}.hdr-in{padding:0 1rem}}
+.qa-sec{margin-top:3.5rem;padding-top:2rem;border-top:1px solid var(--border)}
+.qa-h{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:1.25rem}
+.qa-item{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:1.05rem 1.25rem;margin-bottom:.9rem}
+.qa-q{display:flex;gap:.55rem;font-weight:600;color:var(--text);margin-bottom:.6rem;line-height:1.6}
+.qa-a{display:flex;gap:.55rem;color:var(--text2);line-height:1.75;white-space:pre-wrap}
+.qa-ico{color:var(--accent);font-weight:800;flex-shrink:0}
+.qa-asker{font-size:.78rem;color:var(--text3);margin-top:.55rem;padding-left:1.3rem}
+.qa-btn{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:.65rem 1.4rem;font-size:.92rem;font-weight:600;cursor:pointer;font-family:inherit;transition:background .2s;margin-top:.2rem}
+.qa-btn:hover{background:#0a6b62}
+.qa-note{font-size:.77rem;color:var(--text3);margin-top:.75rem;display:flex;gap:.4rem;align-items:flex-start;line-height:1.6}
 </style>
 </head>
 <body>
@@ -102,6 +112,21 @@ footer a{color:var(--accent);font-weight:600;text-decoration:none}
       </div>
       <div class="copy-ok" id="copy-ok">✓ Bağlantı kopyalandı!</div>
     </div>
+    <section class="qa-sec">
+      <h2 class="qa-h" id="qa-h" style="display:none">Soru &amp; Cevap</h2>
+      <div id="qa-list"></div>
+      <div class="qa-form">
+        <h3>Bir sorunuz mu var?</h3>
+        <form id="qa-form">
+          <label>Ad&#305;n&#305;z (opsiyonel)</label>
+          <input type="text" name="ad" placeholder="Ad&#305;n&#305;z" maxlength="60">
+          <label>Sorunuz *</label>
+          <textarea name="soru" placeholder="Bu yaz&#305;yla ilgili merak etti&#287;inizni yaz&#305;n&#8230;" required maxlength="1500"></textarea>
+          <button type="submit" class="qa-btn">G&#246;nder</button>
+          <div class="qa-note"><i class="fas fa-shield-alt"></i> Sorular incelenir; uygun g&#246;r&#252;lenler yan&#305;t&#305;yla birlikte bu sayfada yay&#305;mlan&#305;r.</div>
+        </form>
+      </div>
+    </section>
     <a href="../index.html#posts" class="back-all"><i class="fas fa-arrow-left"></i> Tüm Yazılara Dön</a>
   </div>
 </main>
@@ -119,6 +144,34 @@ var prog=document.getElementById('prog'),gt=document.getElementById('go-top');
 window.addEventListener('scroll',function(){var s=window.scrollY,t=document.documentElement.scrollHeight-window.innerHeight;prog.style.width=(t>0?(s/t*100):0)+'%';gt.classList.toggle('vis',s>380);},{passive:true});
 function shr(p){var u=encodeURIComponent(PU),t=encodeURIComponent(PT);var m={tw:'https://twitter.com/intent/tweet?text='+t+'&url='+u,wa:'https://wa.me/?text='+encodeURIComponent(PT+' '+PU)};window.open(m[p],'_blank');}
 function cp(){navigator.clipboard.writeText(PU).then(function(){var el=document.getElementById('copy-ok');el.classList.add('show');setTimeout(function(){el.classList.remove('show');},2500);});}
+var POST_SLUG="ceza-davalarinda-zamanasimi-bilmeniz-gerekenler";
+var QA_ENDPOINT='https://formspree.io/f/xwvjaebn';
+function qaEsc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+(function(){
+  fetch('../comments.json?_='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():[];}).then(function(all){
+    var items=(all||[]).filter(function(c){return c.postSlug===POST_SLUG;});
+    if(!items.length)return;
+    document.getElementById('qa-h').style.display='block';
+    document.getElementById('qa-list').innerHTML=items.map(function(c){
+      return '<div class="qa-item">'+
+        '<div class="qa-q"><span class="qa-ico">S:</span><span>'+qaEsc(c.question)+'</span></div>'+
+        '<div class="qa-a"><span class="qa-ico">C:</span><span>'+qaEsc(c.answer)+'</span></div>'+
+        (c.askerName?'<div class="qa-asker">— '+qaEsc(c.askerName)+'</div>':'')+
+      '</div>';
+    }).join('');
+  }).catch(function(){});
+})();
+document.getElementById('qa-form').addEventListener('submit',function(ev){
+  ev.preventDefault();
+  var f=ev.target,btn=f.querySelector('.qa-btn'),orig=btn.textContent;
+  btn.textContent='Gönderiliyor…';btn.disabled=true;
+  var fd=new FormData(f);
+  fd.append('yazi',PT);fd.append('slug',POST_SLUG);fd.append('_subject','Yeni Soru — '+PT);
+  fetch(QA_ENDPOINT,{method:'POST',body:fd,headers:{'Accept':'application/json'}}).then(function(r){
+    if(r.ok){f.innerHTML='<p style="color:var(--accent);font-weight:700;padding:.6rem 0">✓ Sorunuz alındı. Uygun görülürse yanıtıyla birlikte bu sayfada yayımlanacaktır.</p>';}
+    else{throw new Error();}
+  }).catch(function(){btn.textContent=orig;btn.disabled=false;alert('Bir hata oluştu, lütfen tekrar deneyin.');});
+});
 </script>
 </body>
 </html>
