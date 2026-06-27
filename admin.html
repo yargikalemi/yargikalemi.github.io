@@ -1072,6 +1072,20 @@ function buildPostHtml(post) {
 <meta property="og:site_name" content="Yargı Kalemi">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="canonical" href="${e(pageUrl)}">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": ${JSON.stringify(post.title || '')},
+  "description": ${JSON.stringify(post.excerpt || '')},
+  "image": ${JSON.stringify(imgMeta)},
+  "articleSection": ${JSON.stringify(post.category || '')},
+  "inLanguage": "tr-TR",
+  "mainEntityOfPage": { "@type": "WebPage", "@id": ${JSON.stringify(pageUrl)} },
+  "author": { "@type": "Organization", "name": "Yargı Kalemi", "url": "https://yargikalemi.com" },
+  "publisher": { "@type": "Organization", "name": "Yargı Kalemi", "logo": { "@type": "ImageObject", "url": "https://yargikalemi.com/logo1.png" } }
+}
+</script>
 <link rel="icon" type="image/png" href="../logo1.png">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -1147,7 +1161,7 @@ footer a{color:var(--accent);font-weight:600;text-decoration:none}
 .qa-btn:hover{background:var(--accent-h)}
 .qa-btn:disabled{opacity:.6;cursor:default}
 .qa-note{font-size:.78rem;color:var(--text3);margin-top:.7rem;display:flex;align-items:center;gap:.4rem}
-@media(max-width:640px){.wrap{padding:2rem 1.1rem 3.5rem}h1.post-title{font-size:1.7rem}.post-body{font-size:.98rem}.hdr-in{padding:0 1rem}}
+@media(max-width:640px){.wrap{padding:2rem 1.1rem 3.5rem}h1.post-title{font-size:1.7rem}.post-body{font-size:.98rem}.hdr-in{padding:0 1rem}.qa-form{padding:1.1rem}.qa-h{font-size:1.25rem}.qa-item{padding:.95rem 1.05rem}.qa-form input,.qa-form textarea{font-size:16px}.share-row{gap:.45rem}.sbtn{flex:1;justify-content:center}}
 </style>
 </head>
 <body>
@@ -1247,16 +1261,42 @@ document.getElementById('qa-form').addEventListener('submit',function(ev){
 async function savePostPage(post) {
     if (!post.slug) return;
     const url = `https://api.github.com/repos/${GH_REPO}/contents/posts/${post.slug}.html`;
-    const getRes = await fetch(url, { headers: ghH() });
-    const sha = getRes.ok ? (await getRes.json()).sha : undefined;
     const htmlStr = buildPostHtml(post);
-    const body = { message: `Yazı sayfası: ${post.title}`, content: b64Enc(htmlStr) };
-    if (sha) body.sha = sha;
-    const res = await fetch(url, { method: 'PUT', headers: ghH(), body: JSON.stringify(body) });
-    if (!res.ok) {
+    // Eşzamanlı commit'ler GitHub'da 409 (conflict) döndürebildiği için taze sha ile 3 kez dene
+    for (let attempt = 0; attempt < 3; attempt++) {
+        const getRes = await fetch(url, { headers: ghH() });
+        const sha = getRes.ok ? (await getRes.json()).sha : undefined;
+        const body = { message: `Yazı sayfası: ${post.title}`, content: b64Enc(htmlStr) };
+        if (sha) body.sha = sha;
+        const res = await fetch(url, { method: 'PUT', headers: ghH(), body: JSON.stringify(body) });
+        if (res.ok) return;
         const d = await res.json().catch(()=>({}));
+        if ((res.status === 409 || res.status === 422) && attempt < 2) {
+            await new Promise(r => setTimeout(r, 500));
+            continue;
+        }
         throw new Error(d.message || `HTTP ${res.status}`);
     }
+}
+
+// Sitemap.xml'i tüm yayınlanmış yazılarla güncelle (SEO)
+async function saveSitemap() {
+    const base  = 'https://yargikalemi.com';
+    const today = new Date().toISOString().slice(0, 10);
+    const now   = new Date();
+    const urls  = [`  <url><loc>${base}/</loc><changefreq>daily</changefreq><priority>1.0</priority></url>`];
+    for (const p of allPosts) {
+        if (!p.slug) continue;
+        if (p.scheduledAt && new Date(p.scheduledAt) > now) continue;  // henüz yayımlanmamış
+        urls.push(`  <url><loc>${base}/posts/${p.slug}.html</loc><lastmod>${today}</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>`);
+    }
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join('\n')}\n</urlset>\n`;
+    const url = `https://api.github.com/repos/${GH_REPO}/contents/sitemap.xml`;
+    const getRes = await fetch(url, { headers: ghH() });
+    const sha = getRes.ok ? (await getRes.json()).sha : undefined;
+    const body = { message: 'Sitemap güncellendi', content: b64Enc(xml) };
+    if (sha) body.sha = sha;
+    await fetch(url, { method: 'PUT', headers: ghH(), body: JSON.stringify(body) });
 }
 
 async function deletePostPage(slug) {
@@ -1282,6 +1322,7 @@ async function rebuildAllPages() {
         await savePostPage(post);
     }
     if (slugUpdated) await savePosts('Slug\'lar güncellendi');
+    await saveSitemap();
 }
 
 // ════════════════════════════════════════════
@@ -1858,6 +1899,7 @@ document.getElementById('bulk-del').addEventListener('click', () => {
                 await savePosts(`Toplu silindi: ${ids.length} yazı`);
                 renderList();
                 for (const s of slugs) { try { await deletePostPage(s); } catch(_){} }
+                saveSitemap().catch(()=>{});
                 toast(`🗑️ ${ids.length} yazı çöp kutusuna taşındı`,'success');
                 updateTrashBadge();
             } catch(e) { toast('Hata: '+e.message,'error'); await loadPosts(); }
@@ -2064,6 +2106,7 @@ function deletePost(id) {
                 await savePosts(`Silindi: ${post.title}`);
                 renderList();
                 if (deletedSlug) { try { await deletePostPage(deletedSlug); } catch(_){} }
+                saveSitemap().catch(()=>{});
                 toast('🗑️ Çöp kutusuna taşındı','success');
                 updateTrashBadge();
             } catch(e) { toast('Hata: '+e.message,'error'); await loadPosts(); }
@@ -2186,11 +2229,11 @@ async function savePost() {
             if (featured) allPosts.unshift(post); else allPosts.push(post);
             target = post; msg = `Yeni yazı: ${title}`;
         }
-        // posts.json (kritik) ile yazı sayfasını aynı anda yaz → daha hızlı
-        const pagePromise = savePostPage(target).catch(pe =>
-            toast('⚠️ Yazı kaydedildi ama sayfa oluşturulamadı: '+pe.message,'error'));
-        await savePosts(msg);    // kritik: başarısız olursa catch'e düşer
-        await pagePromise;       // sayfa zaten paralel yazılıyordu
+        // Önce yazı sayfasını yaz, sonra posts.json — eşzamanlı commit'ler aynı branch'te
+        // 409 çakışmasına yol açıp sayfanın oluşmamasına neden oluyordu. Sıralı = güvenli.
+        await savePostPage(target);
+        await savePosts(msg);
+        saveSitemap().catch(()=>{});   // sitemap'i arka planda güncelle; yayını engellemesin
 
         // Yayınlanan taslağı temizle
         if (loadedDraftId) { removeDraft(loadedDraftId); loadedDraftId = null; }

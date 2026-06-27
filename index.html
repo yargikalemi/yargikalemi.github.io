@@ -17,33 +17,46 @@
     <meta property="og:title" content="Yargı Kalemi — Hukuk Blogu">
     <meta property="og:description" content="Hukuki haklarınızı anlatan profesyonel bir hukuk blogu. Uzman yazılar ve pratik rehberler.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://yargikalemi.github.io">
-    <meta property="og:image" content="https://yargikalemi.github.io/logo1.png">
+    <meta property="og:url" content="https://yargikalemi.com">
+    <meta property="og:image" content="https://yargikalemi.com/logo1.png">
     <meta property="og:locale" content="tr_TR">
     <meta property="og:site_name" content="Yargı Kalemi">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Yargı Kalemi — Hukuk Blogu">
     <meta name="twitter:description" content="Hukuki haklarınızı anlatan profesyonel bir platform. Uzman yazılar ve pratik rehberler.">
-    <meta name="twitter:image" content="https://yargikalemi.github.io/logo1.png">
-    <link rel="canonical" href="https://yargikalemi.github.io">
+    <meta name="twitter:image" content="https://yargikalemi.com/logo1.png">
+    <link rel="canonical" href="https://yargikalemi.com">
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
       "name": "Yargı Kalemi",
-      "description": "Hukuki haklarınızı anlatan profesyonel bir platform.",
-      "url": "https://yargikalemi.github.io",
+      "alternateName": "Yargı Kalemi Hukuk Blogu",
+      "description": "Hukuki haklarınızı anlatan profesyonel bir hukuk blogu.",
+      "url": "https://yargikalemi.com",
       "inLanguage": "tr-TR",
       "publisher": {
         "@type": "Organization",
         "name": "Yargı Kalemi",
-        "logo": { "@type": "ImageObject", "url": "https://yargikalemi.github.io/logo1.png" }
+        "url": "https://yargikalemi.com",
+        "logo": { "@type": "ImageObject", "url": "https://yargikalemi.com/logo1.png" }
       },
       "potentialAction": {
         "@type": "SearchAction",
-        "target": "https://yargikalemi.github.io/?q={search_term_string}",
+        "target": "https://yargikalemi.com/?q={search_term_string}",
         "query-input": "required name=search_term_string"
       }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Yargı Kalemi",
+      "alternateName": "Yargı Kalemi Hukuk Blogu",
+      "url": "https://yargikalemi.com",
+      "logo": "https://yargikalemi.com/logo1.png",
+      "description": "Ceza, tüketici, aile ve idare hukuku alanlarında uzman yazılar ve pratik rehberler sunan hukuk blogu."
     }
     </script>
 
@@ -605,21 +618,28 @@
             font-size: 0.88rem;
             color: var(--text-secondary);
             line-height: 1.65;
-            flex-grow: 1;
-            margin-bottom: 1rem;
+            margin-bottom: 0.55rem;
             display: -webkit-box;
-            -webkit-line-clamp: 6;
+            -webkit-line-clamp: 5;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
-        .card-excerpt.long {
-            -webkit-line-clamp: 4;
-        }
-        .card-cta {
+        .card-more {
+            display: none;
+            align-items: center;
+            gap: 0.3rem;
+            align-self: flex-start;
+            margin-top: auto;
+            padding-top: 0.2rem;
+            margin-bottom: 1rem;
             color: var(--accent);
             font-weight: 600;
-            white-space: nowrap;
+            font-size: 0.84rem;
+            cursor: pointer;
         }
+        .card-more.show { display: inline-flex; }
+        .card-more i { font-size: 0.72rem; transition: transform var(--transition); }
+        .post-card:hover .card-more i { transform: translateX(3px); }
         .card-footer {
             padding: 0.9rem 1.4rem;
             border-top: 1px solid var(--border);
@@ -1625,7 +1645,8 @@
                 '<div class="card-body">' +
                     '<div class="card-cat">' + post.category + '</div>' +
                     '<h3>' + post.title + '</h3>' +
-                    (function() { var isLong = post.excerpt.length > 350; return '<p class="card-excerpt' + (isLong ? ' long' : '') + '">' + post.excerpt + (isLong ? ' <span class="card-cta">Devamını Oku...</span>' : '') + '</p>'; })() +
+                    '<p class="card-excerpt">' + post.excerpt + '</p>' +
+                    '<span class="card-more">Devamını Oku <i class="fas fa-arrow-right"></i></span>' +
                 '</div>' +
                 '<div class="card-footer">' +
                     '<div class="card-meta">' + post.date + ' · ' + (typeof post.readTime === 'string' ? post.readTime : post.readTime + ' dk') + '<span class="card-reads" data-slug="' + (post.slug || '') + '"></span></div>' +
@@ -1641,8 +1662,29 @@
             grid.insertBefore(art, noResult);
             io.observe(art);
         });
+        markOverflowingCards();
         loadReadCounts();
     }
+
+    // Sadece kutusuna sığmayan (taşan) kartlara "Devamını Oku" göster — yeni yazılarda da otomatik çalışır
+    function markOverflowingCards() {
+        const run = () => {
+            document.querySelectorAll('#posts-grid .post-card').forEach(card => {
+                const ex = card.querySelector('.card-excerpt');
+                const more = card.querySelector('.card-more');
+                if (!ex || !more) return;
+                const overflowing = ex.scrollHeight - ex.clientHeight > 2;
+                more.classList.toggle('show', overflowing);
+            });
+        };
+        requestAnimationFrame(run);
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(run);
+    }
+    let _overflowTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(_overflowTimer);
+        _overflowTimer = setTimeout(markOverflowingCards, 200);
+    });
 
     // GoatCounter okunma sayıları (yazı kartlarında "X okunma" rozeti)
     const GC_HOST = 'https://yargikalemi.goatcounter.com';
