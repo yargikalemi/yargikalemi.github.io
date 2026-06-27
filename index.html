@@ -4,9 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Yargı Kalemi — Hukuk Blogu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" type="image/png" href="logo1.png">
+    <link rel="apple-touch-icon" href="logo1.png">
+    <meta name="theme-color" content="#0D9488">
 
     <!-- SEO -->
     <meta name="description" content="Hukuki haklarınızı anlatan profesyonel bir hukuk blogu. Ceza, aile, tüketici ve idare hukuku alanlarında uzman yazılar ve pratik rehberler.">
@@ -79,13 +84,16 @@
             --accent-hover:     #0F766E;
             --text-primary:     #1A2B3C;
             --text-secondary:   #4A5568;
-            --text-muted:       #8896A4;
+            --text-muted:       #6E7C8B;
             --border:           #E0DBD3;
             --shadow-sm:        0 2px 8px rgba(0,0,0,0.06);
             --shadow-md:        0 8px 24px rgba(0,0,0,0.09);
             --shadow-lg:        0 16px 48px rgba(0,0,0,0.12);
             --radius:           6px;
             --transition:       0.25s ease;
+            /* dikey ritim — tüm bölümler tek ölçekten */
+            --section-py:       clamp(3.5rem, 6vw, 5.5rem);
+            --section-gap:      clamp(2rem, 4vw, 2.75rem);
             /* hero/about renk çifti */
             --bright-text:      #1A2B3C;
             --bright-text-sub:  rgba(26,43,60,0.68);
@@ -106,7 +114,7 @@
             --accent-hover:     #5EEAD4;
             --text-primary:     #E8E4DC;
             --text-secondary:   #9EB0C2;
-            --text-muted:       #5E7287;
+            --text-muted:       #7C8FA3;
             --border:           #1C3148;
             --shadow-sm:        0 2px 8px rgba(0,0,0,0.35);
             --shadow-md:        0 8px 24px rgba(0,0,0,0.45);
@@ -129,11 +137,19 @@
             background-size: 120px 120px;
             color: var(--text-primary);
             line-height: 1.65;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
             transition: background-color var(--transition), color var(--transition);
         }
         img { max-width:100%; display:block; }
         a { text-decoration: none; color: inherit; }
         button { font-family: inherit; cursor: pointer; }
+        /* Klavye ile gezinende net odak halkası (erişilebilirlik) */
+        a:focus-visible, button:focus-visible, input:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
 
         /* =============================================
            SCROLL PROGRESS
@@ -291,7 +307,7 @@
         #hero {
             background: var(--bg-bright);
             color: var(--bright-text);
-            padding: 7rem 5% 5.5rem;
+            padding: clamp(5.5rem, 9vw, 8rem) 5% clamp(4rem, 6vw, 5.5rem);
             text-align: center;
             position: relative;
             overflow: hidden;
@@ -338,8 +354,9 @@
         .hero-inner h1 {
             font-family: 'Playfair Display', serif;
             font-size: clamp(2rem, 5vw, 3.6rem);
-            font-weight: 700;
-            line-height: 1.18;
+            font-weight: 900;
+            line-height: 1.16;
+            letter-spacing: -0.02em;
             margin-bottom: 1.4rem;
             color: var(--bright-text);
         }
@@ -407,6 +424,7 @@
             font-weight: 700;
             color: var(--text-primary);
             line-height: 1.25;
+            letter-spacing: -0.01em;
             margin-bottom: 0.8rem;
         }
         .section-sub {
@@ -414,13 +432,13 @@
             color: var(--text-secondary);
             line-height: 1.6;
         }
-        .section-header { margin-bottom: 2.5rem; }
+        .section-header { margin-bottom: var(--section-gap); }
 
         /* =============================================
            FEATURED POST
         ============================================= */
         #featured {
-            padding: 4.5rem 5%;
+            padding: var(--section-py) 5%;
             background: var(--bg-base);
             transition: background var(--transition);
         }
@@ -432,8 +450,9 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             overflow: hidden;
-            transition: background var(--transition), box-shadow var(--transition);
+            transition: background var(--transition), box-shadow var(--transition), transform var(--transition);
         }
+        .featured-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
         .featured-img {
             background: linear-gradient(135deg, var(--bg-dark) 0%, #1a3a5c 100%);
             min-height: 320px;
@@ -513,7 +532,7 @@
            YAZILAR GRID
         ============================================= */
         #posts {
-            padding: 4.5rem 5%;
+            padding: var(--section-py) 5%;
             background: var(--bg-card);
             transition: background var(--transition);
         }
@@ -673,7 +692,7 @@
         ============================================= */
         #newsletter {
             background: var(--bg-dark);
-            padding: 3.5rem 5%;
+            padding: clamp(3rem, 5vw, 4.25rem) 5%;
             transition: background var(--transition);
         }
         .newsletter-inner {
@@ -727,7 +746,7 @@
         ============================================= */
         #features {
             background: var(--bg-base);
-            padding: 4.5rem 5%;
+            padding: var(--section-py) 5%;
             transition: background var(--transition);
         }
         .features-inner { max-width: 1280px; margin: 0 auto; }
@@ -832,7 +851,7 @@
            ABOUT
         ============================================= */
         #about {
-            padding: 4.5rem 5%;
+            padding: var(--section-py) 5%;
             background: var(--bg-base);
             transition: background var(--transition);
         }
@@ -918,7 +937,7 @@
             gap: 0.8rem;
         }
         .footer-legal { font-size: 0.78rem; color: #8896A4; line-height: 1.5; max-width: 600px; }
-        .footer-copy { font-size: 0.78rem; color: #8896A4; white-space: nowrap; }
+        .footer-copy { font-size: 0.78rem; color: #6E7C8B; white-space: nowrap; }
 
         /* =============================================
            BLOG POST MODAL
@@ -1080,7 +1099,7 @@
            FAQ / PRATIK BILGILER
         ============================================= */
         #faq {
-            padding: 4.5rem 5%;
+            padding: var(--section-py) 5%;
             background: var(--bg-base);
             transition: background var(--transition);
         }
@@ -1166,7 +1185,7 @@
             </div>
         </a>
 
-        <nav class="header-nav">
+        <nav class="header-nav" aria-label="Ana menü">
             <a href="#posts">Yazılar</a>
             <a href="#faq">Pratik Bilgiler</a>
             <a href="#features">Platform</a>
@@ -1174,8 +1193,8 @@
         </nav>
 
         <div class="header-actions">
-            <button class="btn-icon" id="theme-btn" title="Tema değiştir"><i class="fas fa-moon"></i></button>
-            <button class="btn-icon" id="hamburger" title="Menü"><i class="fas fa-bars"></i></button>
+            <button class="btn-icon" id="theme-btn" title="Tema değiştir" aria-label="Açık/koyu tema değiştir"><i class="fas fa-moon"></i></button>
+            <button class="btn-icon" id="hamburger" title="Menü" aria-label="Menüyü aç/kapat" aria-expanded="false"><i class="fas fa-bars"></i></button>
             <button class="btn-cta" onclick="scrollToSection('#posts')">Yazıları Oku</button>
         </div>
     </div>
@@ -1192,11 +1211,12 @@
 <!-- HERO -->
 <section id="hero">
     <div class="hero-inner fade-in">
+        <span class="hero-eyebrow">Yargı Kalemi · Hukuk Blogu</span>
         <h1>Hukuku anlamak,<br>hakkını korumanın<br>ilk adımıdır.</h1>
         <p>Kürsü deneyimi ve hukuki birikimle hazırlanmış açık, yalın ve erişilebilir içerikler.</p>
         <div class="hero-btns">
-            <button class="btn-outline" onclick="scrollToSection('#posts')">Yazıları Oku</button>
-            <button class="btn-filled" onclick="scrollToSection('#faq')">Pratik Bilgiler</button>
+            <button class="btn-filled" onclick="scrollToSection('#posts')">Yazıları Oku</button>
+            <button class="btn-outline" onclick="scrollToSection('#faq')">Pratik Bilgiler</button>
         </div>
     </div>
 </section>
@@ -1236,8 +1256,8 @@
                 <button class="pill" data-cat="İdare Hukuku">İdare Hukuku</button>
             </div>
             <div class="search-box">
-                <i class="fas fa-search"></i>
-                <input type="text" id="search-input" placeholder="Yazılarda ara...">
+                <i class="fas fa-search" aria-hidden="true"></i>
+                <input type="text" id="search-input" placeholder="Yazılarda ara..." aria-label="Yazılarda ara">
             </div>
         </div>
 
@@ -1369,8 +1389,8 @@
 </footer>
 
 <!-- SCROLL TO TOP -->
-<button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Başa dön">
-    <i class="fas fa-arrow-up"></i>
+<button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Başa dön" aria-label="Sayfanın başına dön">
+    <i class="fas fa-arrow-up" aria-hidden="true"></i>
 </button>
 
 <!-- BLOG POST MODAL -->
@@ -1412,15 +1432,17 @@
 
     hamburger.addEventListener('click', (e) => {
         e.stopPropagation();
-        mobileMenu.classList.toggle('open');
-        hamburger.innerHTML = mobileMenu.classList.contains('open')
+        const open = mobileMenu.classList.toggle('open');
+        hamburger.innerHTML = open
             ? '<i class="fas fa-times"></i>'
             : '<i class="fas fa-bars"></i>';
+        hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
     });
 
     function closeMobileMenu() {
         mobileMenu.classList.remove('open');
         hamburger.innerHTML = '<i class="fas fa-bars"></i>';
+        hamburger.setAttribute('aria-expanded', 'false');
     }
 
     document.addEventListener('click', (e) => {
