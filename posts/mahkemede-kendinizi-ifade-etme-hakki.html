@@ -107,9 +107,20 @@ footer a{color:var(--accent);font-weight:600;text-decoration:none}
 .qa-a{display:flex;gap:.55rem;color:var(--text2);line-height:1.75;white-space:pre-wrap}
 .qa-ico{color:var(--accent);font-weight:800;flex-shrink:0}
 .qa-asker{font-size:.78rem;color:var(--text3);margin-top:.55rem;padding-left:1.3rem}
-.qa-btn{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:.65rem 1.4rem;font-size:.92rem;font-weight:600;cursor:pointer;font-family:inherit;transition:background .2s;margin-top:.2rem}
-.qa-btn:hover{background:#0a6b62}
-.qa-note{font-size:.77rem;color:var(--text3);margin-top:.75rem;display:flex;gap:.4rem;align-items:flex-start;line-height:1.6}
+.qa-form{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-top:1.6rem}
+.qa-form-head{background:linear-gradient(135deg,var(--accent) 0%,#0a8279 100%);padding:1.4rem 1.6rem;display:flex;align-items:center;gap:1rem}
+.qa-form-ico{width:50px;height:50px;background:rgba(255,255,255,.18);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.45rem;color:#fff;flex-shrink:0}
+.qa-form-title{color:#fff;font-family:'Playfair Display',serif;font-size:1.18rem;font-weight:700;margin:0;line-height:1.3}
+.qa-form-sub{color:rgba(255,255,255,.78);font-size:.81rem;margin-top:.25rem}
+.qa-form-body{padding:1.4rem 1.6rem}
+.qa-form label{display:block;font-size:.83rem;font-weight:600;color:var(--text2);margin-bottom:.35rem}
+.qa-form input,.qa-form textarea{width:100%;padding:.7rem .9rem;background:var(--bg);border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:.92rem;color:var(--text);outline:none;margin-bottom:.9rem;transition:border-color .2s}
+.qa-form input:focus,.qa-form textarea:focus{border-color:var(--accent)}
+.qa-form textarea{resize:vertical;min-height:90px}
+.qa-btn{background:var(--accent);color:#fff;border:none;padding:.7rem 1.5rem;border-radius:8px;font-size:.9rem;font-weight:700;cursor:pointer;transition:background .2s;margin-top:.25rem}
+.qa-btn:hover{background:var(--accent-h)}
+.qa-btn:disabled{opacity:.6;cursor:default}
+.qa-note{font-size:.78rem;color:var(--text3);margin-top:.85rem;display:flex;align-items:center;gap:.4rem}
 </style>
 </head>
 <body>
