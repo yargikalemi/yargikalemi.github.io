@@ -426,15 +426,23 @@ akılda tutmak gerekir.</font></font></p>
       <h2 class="qa-h" id="qa-h" style="display:none">Soru &amp; Cevap</h2>
       <div id="qa-list"></div>
       <div class="qa-form">
-        <h3>Bir sorunuz mu var?</h3>
-        <form id="qa-form">
-          <label>Ad&#305;n&#305;z (opsiyonel)</label>
-          <input type="text" name="ad" placeholder="Ad&#305;n&#305;z" maxlength="60">
-          <label>Sorunuz *</label>
-          <textarea name="soru" placeholder="Bu yaz&#305;yla ilgili merak etti&#287;inizni yaz&#305;n&#8230;" required maxlength="1500"></textarea>
-          <button type="submit" class="qa-btn">G&#246;nder</button>
-          <div class="qa-note"><i class="fas fa-shield-alt"></i> Sorular incelenir; uygun g&#246;r&#252;lenler yan&#305;t&#305;yla birlikte bu sayfada yay&#305;mlan&#305;r.</div>
-        </form>
+        <div class="qa-form-head">
+          <div class="qa-form-ico"><i class="fas fa-comments"></i></div>
+          <div>
+            <h3 class="qa-form-title">Bir sorunuz mu var?</h3>
+            <div class="qa-form-sub">Merak ettiklerinizi sorun, yan&#305;tlayal&#305;m.</div>
+          </div>
+        </div>
+        <div class="qa-form-body">
+          <form id="qa-form">
+            <label>Ad&#305;n&#305;z (opsiyonel)</label>
+            <input type="text" name="ad" placeholder="Ad&#305;n&#305;z" maxlength="60">
+            <label>Sorunuz *</label>
+            <textarea name="soru" placeholder="Bu yaz&#305;yla ilgili merak etti&#287;inizni yaz&#305;n&#8230;" required maxlength="1500"></textarea>
+            <button type="submit" class="qa-btn">G&#246;nder</button>
+            <div class="qa-note"><i class="fas fa-shield-alt"></i> Sorular incelenir; uygun g&#246;r&#252;lenler yan&#305;t&#305;yla birlikte bu sayfada yay&#305;mlan&#305;r.</div>
+          </form>
+        </div>
       </div>
     </section>
     <a href="../index.html#posts" class="back-all"><i class="fas fa-arrow-left"></i> Tüm Yazılara Dön</a>
