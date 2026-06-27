@@ -763,60 +763,6 @@
         .feature-box p { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.65; }
 
         /* =============================================
-           TESTIMONIALS
-        ============================================= */
-        #testimonials {
-            padding: 4.5rem 5%;
-            background: var(--bg-card);
-            transition: background var(--transition);
-        }
-        .testimonials-inner { max-width: 1280px; margin: 0 auto; }
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
-        }
-        .testi-card {
-            background: var(--bg-base);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 1.8rem;
-            position: relative;
-            transition: background var(--transition), border-color var(--transition);
-        }
-        .testi-card::before {
-            content: '"';
-            font-family: 'Playfair Display', serif;
-            font-size: 5rem;
-            color: var(--accent);
-            opacity: 0.18;
-            position: absolute;
-            top: -0.5rem; left: 1rem;
-            line-height: 1;
-        }
-        .testi-text {
-            font-size: 0.93rem;
-            color: var(--text-secondary);
-            line-height: 1.7;
-            margin-bottom: 1.3rem;
-            position: relative;
-            z-index: 1;
-        }
-        .testi-author { display: flex; align-items: center; gap: 0.9rem; }
-        .testi-avatar {
-            width: 40px; height: 40px;
-            border-radius: 50%;
-            background: var(--bg-dark);
-            display: flex; align-items: center; justify-content: center;
-            color: var(--accent);
-            font-weight: 700;
-            font-size: 0.95rem;
-            flex-shrink: 0;
-        }
-        .testi-name { font-weight: 700; font-size: 0.88rem; color: var(--text-primary); }
-        .testi-role { font-size: 0.78rem; color: var(--text-muted); }
-
-        /* =============================================
            FORM (Soru-Cevap & bülten ortak stilleri)
         ============================================= */
         .form-card {
@@ -1106,8 +1052,6 @@
 
             .features-grid { grid-template-columns: 1fr; }
 
-            .testimonials-grid { grid-template-columns: 1fr; }
-
             .form-row { grid-template-columns: 1fr; }
 
             .footer-grid { grid-template-columns: 1fr; }
@@ -1212,7 +1156,7 @@
 <!-- HEADER -->
 <div id="header">
     <div class="header-inner">
-        <a href="#" class="brand">
+        <a href="#hero" class="brand" aria-label="Yargı Kalemi ana sayfa">
             <div style="display:flex;align-items:center;gap:0.55rem;">
                 <img src="logo1.png" alt="Yargı Kalemi" style="height:64px;width:auto;flex-shrink:0;">
                 <div>
@@ -1349,48 +1293,6 @@
     </div>
 </section>
 
-<!-- TESTIMONIALS -->
-<section id="testimonials">
-    <div class="testimonials-inner">
-        <div class="section-header fade-in" style="text-align:center;">
-            <div class="section-label">Okuyuculardan</div>
-            <h2 class="section-title">Ne Dediler?</h2>
-        </div>
-        <div class="testimonials-grid">
-            <div class="testi-card fade-in">
-                <p class="testi-text">Gözaltı yazısını okumamış olsaydım, bana söylenenleri sorgusuz sualsiz kabul edecektim. O yazı yüzünden avukat talep ettim. Fark yarattı.</p>
-                <div class="testi-author">
-                    <div class="testi-avatar">MK</div>
-                    <div>
-                        <div class="testi-name">M. Kaya</div>
-                        <div class="testi-role">İstanbul</div>
-                    </div>
-                </div>
-            </div>
-            <div class="testi-card fade-in">
-                <p class="testi-text">Adli yardım sisteminden haberim yoktu. Yazıyı okuduktan sonra başvurdum ve ücretsiz avukat talep edebildim. Bu platform gerçek anlamda eşitlik sağlıyor.</p>
-                <div class="testi-author">
-                    <div class="testi-avatar">FD</div>
-                    <div>
-                        <div class="testi-name">F. Doğan</div>
-                        <div class="testi-role">Ankara</div>
-                    </div>
-                </div>
-            </div>
-            <div class="testi-card fade-in">
-                <p class="testi-text">İşten çıkarıldığımda haklarımı bilmiyordum. Buradaki işçi hakları yazısı, iş mahkemesinde nasıl hareket edeceğimi anlamama yardımcı oldu.</p>
-                <div class="testi-author">
-                    <div class="testi-avatar">AY</div>
-                    <div>
-                        <div class="testi-name">A. Yıldız</div>
-                        <div class="testi-role">İzmir</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
 <!-- ABOUT -->
 <section id="about">
     <div class="about-inner">
@@ -1446,22 +1348,22 @@
                 <ul>
                     <li><a href="#about">Hakkında</a></li>
                     <li><a href="#features">Nasıl Çalışır?</a></li>
-                    <li><a href="#testimonials">Yorumlar</a></li>
+                    <li><a href="#featured">Öne Çıkan Yazı</a></li>
                     <li><a href="#faq">Pratik Bilgiler</a></li>
                 </ul>
             </div>
             <div class="footer-col">
                 <h4>Hukuki</h4>
                 <ul>
-                    <li><a href="#">Gizlilik Politikası</a></li>
-                    <li><a href="#">Kullanım Şartları</a></li>
-                    <li><a href="#">KVKK Bildirimi</a></li>
+                    <li><a href="yasal.html#gizlilik">Gizlilik Politikası</a></li>
+                    <li><a href="yasal.html#kullanim">Kullanım Şartları</a></li>
+                    <li><a href="yasal.html#kvkk">KVKK Bildirimi</a></li>
                 </ul>
             </div>
         </div>
         <div class="footer-bottom">
             <p class="footer-legal">Bu site hukuki danışmanlık hizmeti vermez; yalnızca genel bilgilendirme amaçlıdır. Somut durumunuz için bir avukata danışınız.</p>
-            <span class="footer-copy">© 2025 Yargı Kalemi — Tüm Hakları Saklıdır</span>
+            <span class="footer-copy">© <span id="footer-year">2025</span> Yargı Kalemi — Tüm Hakları Saklıdır</span>
         </div>
     </div>
 </footer>
@@ -1524,6 +1426,10 @@
     document.addEventListener('click', (e) => {
         if (!e.target.closest('#header')) closeMobileMenu();
     });
+
+    /* Footer telif yılı (otomatik) */
+    const footerYear = document.getElementById('footer-year');
+    if (footerYear) footerYear.textContent = new Date().getFullYear();
 
     /* =============================================
        SCROLL PROGRESS + SCROLL-TOP
