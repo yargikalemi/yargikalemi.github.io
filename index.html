@@ -1865,7 +1865,7 @@
     ============================================= */
     const FORMSPREE_BULTEN      = 'https://formspree.io/f/xdavynzj';
     const FORMSPREE_SORU        = 'https://formspree.io/f/xwvjaebn';
-    const INBOX_ENDPOINT        = ''; // Cloudflare Worker adresi (kurulumdan sonra doldurulur)
+    const INBOX_ENDPOINT        = 'https://yk-inbox.yargikalemi.workers.dev/';
     const ASK_ENDPOINT          = INBOX_ENDPOINT || FORMSPREE_SORU;
 
     async function handleAsk(e) {

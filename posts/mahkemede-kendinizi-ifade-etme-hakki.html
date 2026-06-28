@@ -276,7 +276,7 @@ function shr(p){var u=encodeURIComponent(PU),t=encodeURIComponent(PT);var m={tw:
 function cp(){navigator.clipboard.writeText(PU).then(function(){var el=document.getElementById('copy-ok');el.classList.add('show');setTimeout(function(){el.classList.remove('show');},2500);});}
 var POST_SLUG="mahkemede-kendinizi-ifade-etme-hakki";
 var QA_ENDPOINT='https://formspree.io/f/xwvjaebn';
-var INBOX_ENDPOINT='';
+var INBOX_ENDPOINT='https://yk-inbox.yargikalemi.workers.dev/';
 var SUBMIT_ENDPOINT=INBOX_ENDPOINT||QA_ENDPOINT;
 function qaEsc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function fmtDate(d){try{return new Date(d).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'});}catch(e){return '';}}
