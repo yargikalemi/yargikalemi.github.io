@@ -740,6 +740,26 @@
             display: flex; gap: 0.45rem; align-items: flex-start; line-height: 1.55;
         }
         .ask-ok { color: var(--accent); font-weight: 700; font-size: 1rem; padding: 0.6rem 0; }
+        .ask-qa-list { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem; }
+        .ask-qa-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.2rem 1.4rem;
+            box-shadow: var(--shadow-sm);
+        }
+        .ask-qa-q {
+            font-weight: 700; font-size: 0.95rem; color: var(--text-primary);
+            display: flex; gap: 0.55rem; align-items: flex-start; margin-bottom: 0.65rem;
+        }
+        .ask-qa-q-ico { color: var(--accent); flex-shrink: 0; margin-top: 1px; }
+        .ask-qa-a {
+            font-size: 0.92rem; color: var(--text-secondary); line-height: 1.7;
+            display: flex; gap: 0.55rem; align-items: flex-start;
+            padding-left: 0.1rem;
+        }
+        .ask-qa-a-ico { color: var(--accent); flex-shrink: 0; margin-top: 1px; font-style: normal; font-weight: 700; }
+        .ask-qa-asker { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.6rem; padding-left: 1.2rem; }
 
         /* =============================================
            NEWSLETTER
@@ -1332,7 +1352,9 @@
             <div class="section-label" style="text-align:center;">Aklınızda mı kaldı?</div>
             <h2 class="section-title" style="text-align:center;">Soru Sorun</h2>
         </div>
-        <p class="ask-lead fade-in">Bir hukuki konuda merak ettiğiniz bir şey mi var? Sorunuzu bırakın; uygun görülen sorular, yanıtıyla birlikte ilgili yazıda paylaşılabilir.</p>
+        <p class="ask-lead fade-in">Bir hukuki konuda merak ettiğiniz bir şey mi var? Sorunuzu bırakın; uygun görülen sorular, yanıtıyla birlikte aşağıda paylaşılır.</p>
+        <!-- Yayımlanmış genel S-C listesi -->
+        <div class="ask-qa-list fade-in" id="ask-qa-list" style="display:none"></div>
         <form class="ask-card fade-in" id="ask-form" onsubmit="handleAsk(event)">
             <div class="ask-row">
                 <div class="ask-field">
@@ -1867,6 +1889,32 @@
     const FORMSPREE_SORU        = 'https://formspree.io/f/xwvjaebn';
     const INBOX_ENDPOINT        = 'https://yk-inbox.yargikalemi.workers.dev/';
     const ASK_ENDPOINT          = INBOX_ENDPOINT || FORMSPREE_SORU;
+
+    function askQaEsc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+    (function loadAskQA() {
+        fetch('comments.json?_=' + Date.now(), { cache: 'no-store' })
+            .then(function(r) { return r.ok ? r.json() : []; })
+            .then(function(all) {
+                var items = (all || []).filter(function(c) {
+                    return (!c.type || c.type === 'soru') &&
+                           c.status === 'published' &&
+                           (!c.postSlug || c.postSlug === '') &&
+                           c.answer;
+                }).sort(function(a, b) { return new Date(b.date||0) - new Date(a.date||0); });
+                if (!items.length) return;
+                var list = document.getElementById('ask-qa-list');
+                list.innerHTML = items.map(function(c) {
+                    var asker = c.askerName ? '<div class="ask-qa-asker">— ' + askQaEsc(c.askerName) + '</div>' : '';
+                    return '<div class="ask-qa-item">' +
+                        '<div class="ask-qa-q"><span class="ask-qa-q-ico"><i class="fas fa-circle-question"></i></span><span>' + askQaEsc(c.question) + '</span></div>' +
+                        '<div class="ask-qa-a"><span class="ask-qa-a-ico">C:</span><span>' + askQaEsc(c.answer) + '</span></div>' +
+                        asker +
+                    '</div>';
+                }).join('');
+                list.style.display = '';
+            }).catch(function() {});
+    })();
 
     async function handleAsk(e) {
         e.preventDefault();
