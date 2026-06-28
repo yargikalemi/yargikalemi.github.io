@@ -1,1 +1,14 @@
-[]
+[
+  {
+    "id": "1782681123143",
+    "type": "soru",
+    "status": "pending",
+    "postSlug": "",
+    "postTitle": "Genel Soru (Ana Sayfa)",
+    "askerName": "Deneme",
+    "authorEmail": "Deneme@gmail.com",
+    "question": "denemeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "answer": "",
+    "date": "2026-06-28T21:12:03.143Z"
+  }
+]
