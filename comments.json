@@ -2,13 +2,13 @@
   {
     "id": "1782681123143",
     "type": "soru",
-    "status": "pending",
+    "status": "published",
     "postSlug": "",
-    "postTitle": "Genel Soru (Ana Sayfa)",
+    "postTitle": "",
     "askerName": "Deneme",
     "authorEmail": "Deneme@gmail.com",
     "question": "denemeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
-    "answer": "",
+    "answer": "evet",
     "date": "2026-06-28T21:12:03.143Z"
   }
 ]
