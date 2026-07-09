@@ -455,10 +455,6 @@
         .featured-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
         .featured-img {
             background: linear-gradient(135deg, var(--bg-dark) 0%, #1a3a5c 100%);
-            background-color: var(--bg-dark);
-            background-size: contain;
-            background-position: center;
-            background-repeat: no-repeat;
             min-height: 320px;
             display: flex;
             align-items: flex-end;
@@ -477,6 +473,25 @@
             color: rgba(13,148,136,0.07);
             pointer-events: none;
             line-height: 1;
+            transition: opacity 0.3s;
+        }
+        .featured-img.has-image::before { opacity: 0; }
+        .featured-blur-bg {
+            position: absolute;
+            inset: -20px;
+            background-size: cover;
+            background-position: center;
+            filter: blur(22px);
+            opacity: 0.6;
+            z-index: 0;
+        }
+        .featured-img-sharp {
+            position: absolute;
+            inset: 0;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: 1;
         }
         .featured-badge {
             background: var(--accent);
@@ -487,6 +502,8 @@
             text-transform: uppercase;
             padding: 0.35rem 0.85rem;
             border-radius: 3px;
+            position: relative;
+            z-index: 2;
         }
         .featured-body { padding: 2.8rem; display: flex; flex-direction: column; justify-content: center; min-width: 0; overflow: hidden; }
         .featured-category {
@@ -614,7 +631,8 @@
             background: linear-gradient(90deg, var(--accent), var(--bg-dark-2));
         }
         .card-img {
-            height: 210px;
+            aspect-ratio: 16 / 9;
+            width: 100%;
             background-size: cover;
             background-position: center;
             flex-shrink: 0;
@@ -1661,7 +1679,20 @@
         {
             const panel = document.querySelector('.featured-img');
             const img = postImg(post);
-            panel.style.backgroundImage = 'url(' + img + ')';
+            panel.style.backgroundImage = '';
+            panel.querySelector('.featured-blur-bg')?.remove();
+            panel.querySelector('.featured-img-sharp')?.remove();
+            if (img) {
+                panel.classList.add('has-image');
+                const blurBg = document.createElement('div');
+                blurBg.className = 'featured-blur-bg';
+                blurBg.style.backgroundImage = 'url(' + img + ')';
+                const sharpEl = document.createElement('div');
+                sharpEl.className = 'featured-img-sharp';
+                sharpEl.style.backgroundImage = 'url(' + img + ')';
+                panel.insertBefore(sharpEl, panel.firstChild);
+                panel.insertBefore(blurBg, panel.firstChild);
+            }
         }
         document.getElementById('featured-body').innerHTML =
             '<div class="featured-category">' + post.category + '</div>' +
