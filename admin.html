@@ -353,12 +353,23 @@ input:checked+.toggle-sl::before{transform:translateX(17px)}
 .faq-admin-info{flex:1;min-width:0}
 .faq-admin-q{font-size:.88rem;font-weight:600;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .faq-admin-a{font-size:.76rem;color:var(--text-muted);margin-top:.18rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.faq-admin-cat{display:inline-block;margin-top:.25rem;padding:.1rem .45rem;background:var(--accent-light);color:var(--accent);border-radius:99px;font-size:.68rem;font-weight:600}
 .faq-admin-acts{display:flex;gap:.35rem;flex-shrink:0}
 .btn-edit-faq,.btn-del-faq{width:30px;height:30px;border-radius:var(--radius);border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;font-size:.75rem;cursor:pointer;transition:all var(--tr)}
 .btn-edit-faq{color:var(--accent)}
 .btn-edit-faq:hover{background:var(--accent-light);border-color:var(--accent)}
 .btn-del-faq{color:var(--text-muted)}
 .btn-del-faq:hover{background:#FEF2F2;color:#DC2626;border-color:#FECACA}
+.faq-cat-mgmt-box{background:#fff;border:1px solid var(--border);border-radius:8px;padding:1rem;margin-bottom:1.1rem}
+.faq-cat-mgmt-title{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);margin-bottom:.65rem;display:flex;align-items:center;gap:.4rem}
+.faq-cat-tags{display:flex;flex-wrap:wrap;gap:.3rem;margin-bottom:.65rem;min-height:24px}
+.faq-cat-add-row{display:flex;gap:.5rem}
+.faq-cat-add-row input{flex:1;padding:.42rem .65rem;border:1.5px solid var(--border);border-radius:var(--radius);font-size:.84rem;transition:border-color var(--tr)}
+.faq-cat-add-row input:focus{border-color:var(--accent);outline:none}
+.btn-faq-cat-add{padding:.42rem .85rem;background:var(--accent);color:#fff;border:none;border-radius:var(--radius);font-size:.82rem;font-weight:600;cursor:pointer;transition:background var(--tr);white-space:nowrap}
+.btn-faq-cat-add:hover{background:var(--accent-hover)}
+.btn-faq-cat-add:disabled{opacity:.5;cursor:not-allowed}
+#faq-cat-msg{font-size:.75rem;margin-top:.4rem;min-height:1em}
 /* ── SÜRÜKLE-BIRAK SORU-CEVAP ── */
 .qa-drag-card{display:flex;align-items:flex-start;gap:.55rem;padding:.8rem 1rem;background:#fff;border:1px solid var(--border);border-radius:8px;margin-bottom:.5rem;transition:box-shadow .15s,border-color .15s,opacity .12s}
 .qa-drag-card.dragging{opacity:.4;border-color:var(--accent)}
@@ -867,6 +878,16 @@ input:checked+.toggle-sl::before{transform:translateX(17px)}
             <p style="font-size:.84rem;color:var(--text-secondary);margin-bottom:1rem;line-height:1.6">
                 Sitede görünen pratik bilgi kartlarını buradan düzenleyebilirsiniz.
             </p>
+            <!-- Kategori yönetimi -->
+            <div class="faq-cat-mgmt-box">
+                <div class="faq-cat-mgmt-title"><i class="fas fa-tags"></i> Kategori Yönetimi</div>
+                <div class="faq-cat-tags" id="faq-cat-manage-list"></div>
+                <div class="faq-cat-add-row">
+                    <input type="text" id="faq-cat-new-inp" placeholder="Yeni kategori adı…" maxlength="50">
+                    <button class="btn-faq-cat-add" id="faq-cat-add-btn" onclick="addFaqCat()"><i class="fas fa-plus"></i> Ekle</button>
+                </div>
+                <div id="faq-cat-msg"></div>
+            </div>
             <div id="faq-admin-list"><div class="loading"><div class="spinner"></div> Yükleniyor…</div></div>
         </div>
 
@@ -1044,6 +1065,12 @@ input:checked+.toggle-sl::before{transform:translateX(17px)}
         <div class="field">
             <label class="field-label">Soru</label>
             <input type="text" class="field-input" id="faq-inp-q" placeholder="Soru metni…">
+        </div>
+        <div class="field" style="margin-top:.8rem">
+            <label class="field-label">Kategori</label>
+            <select class="field-sel" id="faq-inp-cat">
+                <option value="">Kategori seçin…</option>
+            </select>
         </div>
         <div class="field" style="margin-top:.8rem">
             <label class="field-label">Cevap</label>
@@ -3304,6 +3331,86 @@ document.addEventListener('keydown',e=>{
 let allFaq = [];
 let faqSha = '';
 let editingFaqId = null;
+let faqCats = [];
+let faqCatsSha = '';
+
+async function readFaqCats() {
+    const r = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/faq-categories.json`, {headers: ghH()});
+    if (r.status === 404) return { items: [], sha: '' };
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const d = await r.json();
+    let items = [];
+    try { items = JSON.parse(b64Dec(d.content.replace(/\n/g,''))); } catch { items = []; }
+    return { items, sha: d.sha };
+}
+
+async function writeFaqCats(items, sha, msg) {
+    const body = { message: msg, content: b64Enc(JSON.stringify(items, null, 2)) };
+    if (sha) body.sha = sha;
+    const r = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/faq-categories.json`, {
+        method: 'PUT', headers: ghH(), body: JSON.stringify(body)
+    });
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const d = await r.json();
+    faqCatsSha = d.content.sha;
+}
+
+function populateFaqCatSelect(currentVal) {
+    const sel = document.getElementById('faq-inp-cat');
+    sel.innerHTML = '<option value="">Kategori seçin…</option>' +
+        faqCats.map(c => `<option value="${esc(c)}"${c === currentVal ? ' selected' : ''}>${esc(c)}</option>`).join('');
+}
+
+function renderFaqCatManage() {
+    const list = document.getElementById('faq-cat-manage-list');
+    if (!list) return;
+    if (!faqCats.length) { list.innerHTML = '<span style="font-size:.8rem;color:var(--text-muted)">Henüz kategori yok.</span>'; return; }
+    list.innerHTML = faqCats.map(c =>
+        `<span class="cat-tag">${esc(c)} <button class="cat-tag-del" onclick="removeFaqCat('${esc(c).replace(/'/g,"\\'")}')">×</button></span>`
+    ).join('');
+}
+
+async function addFaqCat() {
+    const inp = document.getElementById('faq-cat-new-inp');
+    const msg = document.getElementById('faq-cat-msg');
+    const name = inp.value.trim();
+    if (!name) return;
+    if (faqCats.map(c=>c.toLowerCase()).includes(name.toLowerCase())) {
+        msg.style.color = '#DC2626'; msg.textContent = 'Bu kategori zaten mevcut.'; return;
+    }
+    const btn = document.getElementById('faq-cat-add-btn');
+    btn.disabled = true;
+    faqCats.push(name);
+    try {
+        await writeFaqCats(faqCats, faqCatsSha, 'FAQ kategori eklendi: ' + name);
+        populateFaqCatSelect();
+        renderFaqCatManage();
+        inp.value = '';
+        msg.style.color = '#059669'; msg.textContent = 'Kategori eklendi.';
+        setTimeout(() => msg.textContent = '', 2500);
+    } catch(e) {
+        faqCats.pop();
+        renderFaqCatManage();
+        msg.style.color = '#DC2626'; msg.textContent = 'Hata: ' + e.message;
+    } finally { btn.disabled = false; }
+}
+
+function removeFaqCat(cat) {
+    showConfirm('Kategori Sil', `"${cat}" kategorisi silinecek. Bu kategorideki sorular etkilenmez.`, async () => {
+        const prev = [...faqCats];
+        faqCats = faqCats.filter(c => c !== cat);
+        try {
+            await writeFaqCats(faqCats, faqCatsSha, 'FAQ kategori silindi: ' + cat);
+            populateFaqCatSelect();
+            renderFaqCatManage();
+            toast('Kategori silindi', 'success');
+        } catch(e) {
+            faqCats = prev;
+            renderFaqCatManage();
+            toast('Hata: ' + e.message, 'error');
+        }
+    });
+}
 
 async function readFaq() {
     const r = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/faq.json`, {headers: ghH()});
@@ -3330,8 +3437,11 @@ async function loadFaqPage() {
     const list = document.getElementById('faq-admin-list');
     list.innerHTML = '<div class="loading"><div class="spinner"></div> Yükleniyor…</div>';
     try {
-        const { items, sha } = await readFaq();
-        allFaq = items; faqSha = sha;
+        const [faqRes, catRes] = await Promise.all([readFaq(), readFaqCats()]);
+        allFaq = faqRes.items; faqSha = faqRes.sha;
+        faqCats = catRes.items; faqCatsSha = catRes.sha;
+        populateFaqCatSelect();
+        renderFaqCatManage();
         renderFaqAdmin();
     } catch(e) {
         list.innerHTML = `<div style="color:#DC2626;font-size:.84rem;padding:1rem">Yüklenemedi: ${esc(e.message)}</div>`;
@@ -3349,6 +3459,7 @@ function renderFaqAdmin() {
             <div class="faq-admin-num">${i+1}</div>
             <div class="faq-admin-info">
                 <div class="faq-admin-q">${esc(f.q)}</div>
+                ${f.category ? `<span class="faq-admin-cat">${esc(f.category)}</span>` : ''}
                 <div class="faq-admin-a">${f.a.replace(/<[^>]+>/g,'').slice(0,110)}</div>
             </div>
             <div class="faq-admin-acts">
@@ -3380,6 +3491,7 @@ function openNewFaq() {
     document.getElementById('faq-modal-title').textContent = 'Yeni Soru';
     document.getElementById('faq-inp-q').value = '';
     document.getElementById('faq-inp-a-ed').innerHTML = '';
+    populateFaqCatSelect('');
     document.getElementById('faq-modal').classList.add('show');
     setTimeout(()=>document.getElementById('faq-inp-q').focus(), 50);
 }
@@ -3391,6 +3503,7 @@ function openEditFaq(id) {
     document.getElementById('faq-modal-title').textContent = 'Soruyu Düzenle';
     document.getElementById('faq-inp-q').value = f.q;
     document.getElementById('faq-inp-a-ed').innerHTML = f.a;
+    populateFaqCatSelect(f.category || '');
     document.getElementById('faq-modal').classList.add('show');
     setTimeout(()=>document.getElementById('faq-inp-q').focus(), 50);
 }
@@ -3402,15 +3515,18 @@ function closeFaqModal() {
 async function saveFaqItem() {
     const q = document.getElementById('faq-inp-q').value.trim();
     const a = document.getElementById('faq-inp-a-ed').innerHTML.trim();
+    const category = document.getElementById('faq-inp-cat').value;
     if (!q || !a) { toast('Soru ve cevap boş bırakılamaz', 'error'); return; }
     const btn = document.getElementById('faq-modal-save');
     btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Kaydediliyor…';
     try {
         if (editingFaqId) {
             const idx = allFaq.findIndex(x => x.id === editingFaqId);
-            if (idx > -1) { allFaq[idx].q = q; allFaq[idx].a = a; }
+            if (idx > -1) { allFaq[idx].q = q; allFaq[idx].a = a; allFaq[idx].category = category || undefined; }
         } else {
-            allFaq.push({ id: 'faq-' + Date.now(), q, a });
+            const item = { id: 'faq-' + Date.now(), q, a };
+            if (category) item.category = category;
+            allFaq.push(item);
         }
         await writeFaq(allFaq, faqSha, (editingFaqId ? 'SSS güncellendi: ' : 'SSS eklendi: ') + q.slice(0,40));
         closeFaqModal();
@@ -3441,6 +3557,7 @@ function deleteFaq(id) {
 }
 
 document.getElementById('btn-new-faq').addEventListener('click', openNewFaq);
+document.getElementById('faq-cat-new-inp').addEventListener('keydown', e => { if(e.key === 'Enter') addFaqCat(); });
 
 // ════════════════════════════════════════════
 // SORU-CEVAP (comments.json)
