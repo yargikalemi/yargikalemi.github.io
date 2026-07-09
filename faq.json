@@ -1,41 +1,49 @@
 [
   {
     "id": "faq-1",
+    "category": "Tüketici Hukuku",
     "q": "Ayıplı ürün aldım. Ne yapmalıyım?",
     "a": "<p><font face=\"Arial, sans-serif\">Satın\naldığınız ürün bozuk, eksik, hasarlı veya vaat edilen\nözellikleri taşımıyorsa ayıplı mal kapsamında\ndeğerlendirilebilir. Bu durumda ürünün ücretsiz onarımını,\nyenisiyle değiştirilmesini, bedel indirimi yapılmasını veya\nödediğiniz bedelin iadesini talep edebilirsiniz. Talebinizi ispat\nkolaylığı sağlaması açısından satıcıya yazılı olarak\niletmeniz ve fatura, garanti belgesi ile diğer delilleri saklamanız\nönemlidir. Sorunun çözülmemesi halinde, uyuşmazlık değeri </font><strong><font face=\"Arial, sans-serif\">2026\nyılı için 186.000 TL'nin altında ise Tüketici Hakem Heyeti'ne</font></strong><font face=\"Arial, sans-serif\">,\nbu tutarın üzerindeyse Tüketici Mahkemesi'ne başvurabilirsiniz.\nBaşvurular e-Devlet üzerinden TÜBİS sistemi aracılığıyla veya\ndoğrudan hakem heyetine yapılabilmektedir.&nbsp;</font>\n</p>"
   },
   {
     "id": "faq-2",
+    "category": "İş Hukuku",
     "q": "İşten çıkarıldım. Tazminat hakkım var mı?",
     "a": "En az <strong>1 yıl</strong> çalışmış iseniz ve işveren haklı bir neden göstermeksizin sözleşmenizi feshettiyse <strong>kıdem tazminatı</strong> ve <strong>ihbar tazminatı</strong> hakkınız doğar. Fesih bildirimini aldığınız tarihten itibaren <strong>1 ay içinde</strong> arabulucuya başvurmanız, sonradan dava açmanızın ön koşuludur."
   },
   {
     "id": "faq-3",
+    "category": "Kira Hukuku",
     "q": "Kiracım kira ödemedi. Nasıl tahliye ederim?",
     "a": "Kiracıya noter aracılığıyla <strong>ihtarname</strong> gönderin ve 30 gün süre verin. Bu ihtar aynı kira döneminde ikinci kez tekrarlanırsa kira sözleşmesi bitiminde <strong>tahliye davası</strong> açabilirsiniz. Alternatif olarak borç için <strong>icra takibi</strong> başlatıp ödeme emri gönderilmesini de sağlayabilirsiniz."
   },
   {
     "id": "faq-4",
+    "category": "Ceza Hukuku",
     "q": "Gözaltına alındığımda haklarım nelerdir?",
     "a": "Gözaltında <strong>susma hakkınız</strong> vardır; hiçbir soruya cevap verme zorunluluğunuz yoktur. İlk andan itibaren <strong>avukat talep etme hakkınız</strong> doğar ve bu hak size esirgenilemez. Yakınlarınızın bilgilendirilmesini isteyebilirsiniz. Normal suçlarda gözaltı süresi en fazla <strong>24 saattir</strong>."
   },
   {
     "id": "faq-5",
+    "category": "Aile Hukuku",
     "q": "Boşanma davası ne kadar sürer?",
     "a": "<strong>Anlaşmalı boşanma:</strong> Eşlerin tüm konularda uzlaşması hâlinde genellikle <strong>1–3 ay</strong> içinde sonuçlanır. <strong>Çekişmeli boşanma:</strong> Velayet, nafaka ve mal paylaşımı gibi anlaşmazlıklar süreci uzatır; ortalama <strong>1–3 yıl</strong> sürebilir. Her iki durumda da uzman bir avukattan destek almanız süreci hızlandırır."
   },
   {
     "id": "faq-6",
+    "category": "Ceza Hukuku",
     "q": "Sosyal medyada bana hakaret edildi. Ne yapabilirim?",
     "a": "İçeriğin <strong>ekran görüntüsünü ve URL'sini</strong> alarak belgelendirin, ardından Cumhuriyet Savcılığı'na şikayette bulunun (TCK m. 125 — hakaret suçu). Aynı zamanda <strong>manevi tazminat</strong> için hukuk davası açabilirsiniz. İçeriğin kaldırılması için platformun şikayet mekanizmasını da kullanın."
   },
   {
     "id": "faq-7",
+    "category": "Borçlar Hukuku",
     "q": "Trafik kazasında karşı taraf kusurlu. Ne yapmalıyım?",
     "a": "Kaza yerini terk etmeden <strong>polis tutanağı</strong> tutturun ve kusur oranının tutanağa geçmesini sağlayın. Fotoğraf ve tanık bilgilerini alın. Ardından karşı tarafın <strong>zorunlu trafik sigortasına</strong> hasar ihbarında bulunun. Maddi zararlar için <strong>2 yıl</strong>, bedensel zarar için <strong>10 yıl</strong> içinde dava açma hakkınız vardır."
   },
   {
     "id": "faq-8",
+    "category": "Borçlar Hukuku",
     "q": "İcra takibine uğradım. Ne yapmalıyım?",
     "a": "Ödeme emrini aldığınız tarihten itibaren <strong>7 gün</strong> içinde icra müdürlüğüne itiraz edebilirsiniz; itiraz icraı geçici olarak durdurur. Borç size ait değilse veya miktarda hata varsa derhal itiraz edin ve hukuki destek alın. <strong>Süreyi kaçırmak hakkınızı ortadan kaldırır.</strong>"
   },

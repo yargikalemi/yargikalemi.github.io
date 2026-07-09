@@ -455,6 +455,8 @@
         .featured-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
         .featured-img {
             background: linear-gradient(135deg, var(--bg-dark) 0%, #1a3a5c 100%);
+            background-size: cover;
+            background-position: center;
             min-height: 320px;
             display: flex;
             align-items: flex-end;
@@ -1229,7 +1231,7 @@
             overflow: hidden;
             transition: max-height 0.4s ease;
         }
-        .faq-item.open .faq-a { max-height: 500px; }
+        .faq-item.open .faq-a { max-height: 2000px; transition: max-height 0.5s ease; }
         .faq-a-inner {
             padding: 0 1.5rem 1.4rem;
             border-top: 1px solid var(--border);
@@ -1241,6 +1243,7 @@
             padding-top: 1rem;
         }
         .faq-a-inner strong { color: var(--text-primary); font-weight: 700; }
+        .faq-cat-pills { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
 
         /* Touch targets */
         @media (hover: none) and (pointer: coarse) {
@@ -1393,6 +1396,7 @@
             <h2 class="section-title">Sık Sorulan Sorular</h2>
             <p class="section-sub">Günlük hayatta karşılaşılan hukuki durumlar ve kısa, pratik yanıtlar.</p>
         </div>
+        <div class="faq-cat-pills fade-in" id="faq-pills"></div>
         <div class="faq-list fade-in" id="faq-list">
             <!-- faq.json'dan yüklenir -->
         </div>
@@ -1437,7 +1441,7 @@
         </div>
         <div class="about-mission fade-in">
             <p>Hukuki sorunlar çoğu zaman insanı belirsizlik içinde bırakır. Hakkını korumak isteyen pek çok kişi, nereden başlayacağını ya da hangi yolu izleyeceğini kestiremediği için kendisini bir çıkmazda hissedebilir.</p>
-            <p>Yargı Kalemi, otuz yılı aşkın bir hukuk yolculuğunun —kürsüde ve dosyalar arasında geçen yılların, sayısız dava ve uyuşmazlığın kazandırdığı birikimin— sade, anlaşılır bir dille paylaşıldığı bağımsız bir hukuk blogudur. Amacımız; hukukun çoğu zaman karmaşık görünen dünyasını herkes için erişilebilir kılmak, bireylerin meselelerini daha sağlıklı değerlendirmesine ve hak arayışında daha bilinçli adımlar atmasına katkı sunmaktır.</p>
+            <p>Yargı Kalemi, otuz yılı aşkın bir hukuk yolculuğunun —kürsüde ve dosyalar arasında geçen yılların, sayısız dava ve uyuşmazlığın kazandırdığı birikimin— sade, anlaşılır bir dille paylaşıldığı bir hukuk blogudur. Amacımız; hukukun çoğu zaman karmaşık görünen dünyasını herkes için erişilebilir kılmak, bireylerin meselelerini daha sağlıklı değerlendirmesine ve hak arayışında daha bilinçli adımlar atmasına katkı sunmaktır.</p>
             <p>Bu platform bir bilgi kaynağıdır; kişiye özel hukuki danışmanlık vermez, dava ya da iş takibi yapmaz. Buradaki yazılar genel bilgilendirme amacı taşır ve avukat–müvekkil ilişkisi doğurmaz. Somut bir sorununuzda mutlaka bir avukata başvurmanız önerilir.</p>
             <p>Çünkü hak arayışında en güçlü dayanak doğru bilgidir; doğru bilgi ise ancak tecrübeyle gerçek anlamını kazanır.</p>
         </div>
@@ -1655,8 +1659,7 @@
         {
             const panel = document.querySelector('.featured-img');
             const img = postImg(post);
-            panel.style.cssText += ';background-image:url(' + img + ');background-size:cover;background-position:center;';
-            panel.querySelector('::before') && (panel.querySelector('::before').style.display = 'none');
+            panel.style.backgroundImage = 'url(' + img + ')';
         }
         document.getElementById('featured-body').innerHTML =
             '<div class="featured-category">' + post.category + '</div>' +
@@ -1749,17 +1752,25 @@
         });
     }
 
+    function normalizeTr(str) {
+        return str
+            .replace(/[İI]/g, 'i').replace(/ı/g, 'i')
+            .replace(/[Ğğ]/g, 'g').replace(/[Şş]/g, 's')
+            .replace(/[Öö]/g, 'o').replace(/[Üü]/g, 'u').replace(/[Çç]/g, 'c')
+            .toLowerCase();
+    }
+
     function initFilter() {
         const searchInput = document.getElementById('search-input');
         function filterCards() {
-            const query = searchInput.value.toLowerCase().trim();
+            const query = normalizeTr(searchInput.value).trim();
             const cards = document.querySelectorAll('.post-card');
             const noResult = document.getElementById('no-result');
             let visible = 0;
             cards.forEach(card => {
                 const catMatch = activeCat === 'all' || card.dataset.cat === activeCat;
-                const title = card.dataset.title.toLowerCase();
-                const excerpt = card.querySelector('.card-excerpt').textContent.toLowerCase();
+                const title = normalizeTr(card.dataset.title);
+                const excerpt = normalizeTr(card.querySelector('.card-excerpt').textContent);
                 const queryMatch = !query || title.includes(query) || excerpt.includes(query);
                 const show = catMatch && queryMatch;
                 card.style.display = show ? 'flex' : 'none';
@@ -1767,9 +1778,9 @@
             });
             noResult.style.display = visible === 0 ? 'block' : 'none';
         }
-        document.querySelectorAll('.pill').forEach(pill => {
+        document.querySelectorAll('.posts-toolbar .pill').forEach(pill => {
             pill.addEventListener('click', () => {
-                document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+                document.querySelectorAll('.posts-toolbar .pill').forEach(p => p.classList.remove('active'));
                 pill.classList.add('active');
                 activeCat = pill.dataset.cat;
                 filterCards();
@@ -1834,7 +1845,7 @@
         document.getElementById('modal-meta').innerHTML =
             '<span><i class="far fa-calendar-alt"></i> ' + post.date + '</span>' +
             '<span><i class="far fa-clock"></i> ' + (typeof post.readTime === 'string' ? post.readTime : post.readTime + ' dk') + '</span>';
-        const imgHtml = '<img src="' + postImg(post) + '" style="width:100%;border-radius:4px;margin-bottom:1.2rem;object-fit:cover;max-height:320px;">';
+        const imgHtml = '<img src="' + postImg(post) + '" style="width:100%;border-radius:4px;margin-bottom:1.2rem;object-fit:cover;object-position:center;max-height:320px;">';
         document.getElementById('modal-content').innerHTML = imgHtml + (post.content || '<p>' + post.excerpt + '</p>');
         document.getElementById('modal-overlay').classList.add('open');
         document.body.style.overflow = 'hidden';
@@ -1868,13 +1879,23 @@
 
     function renderFaqSection(faqs) {
         const list = document.getElementById('faq-list');
+        const pillsContainer = document.getElementById('faq-pills');
         if (!list || !faqs.length) return;
+
+        const cats = [...new Set(faqs.map(f => f.category).filter(Boolean))];
+        if (pillsContainer && cats.length) {
+            pillsContainer.innerHTML =
+                '<button class="pill active" data-faq-cat="all">Tümü</button>' +
+                cats.map(c => '<button class="pill" data-faq-cat="' + c + '">' + c + '</button>').join('');
+        }
+
         list.innerHTML = faqs.map(f =>
-            '<div class="faq-item">' +
+            '<div class="faq-item" data-cat="' + (f.category || '') + '">' +
                 '<button class="faq-q">' + f.q + ' <i class="fas fa-chevron-down"></i></button>' +
                 '<div class="faq-a"><div class="faq-a-inner"><p>' + f.a + '</p></div></div>' +
             '</div>'
         ).join('');
+
         list.querySelectorAll('.faq-q').forEach(btn => {
             btn.addEventListener('click', () => {
                 const item = btn.closest('.faq-item');
@@ -1883,6 +1904,20 @@
                 if (!isOpen) item.classList.add('open');
             });
         });
+
+        if (pillsContainer) {
+            pillsContainer.querySelectorAll('.pill').forEach(pill => {
+                pill.addEventListener('click', () => {
+                    pillsContainer.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+                    pill.classList.add('active');
+                    const cat = pill.dataset.faqCat;
+                    list.querySelectorAll('.faq-item').forEach(item => {
+                        item.style.display = (cat === 'all' || item.dataset.cat === cat) ? '' : 'none';
+                    });
+                });
+            });
+        }
+
         list.querySelectorAll('.faq-item').forEach(el => io.observe(el));
     }
 
