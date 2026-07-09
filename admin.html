@@ -1235,6 +1235,9 @@ function buildPostHtml(post) {
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Yargı Kalemi">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${e(post.title)}">
+<meta name="twitter:description" content="${e((post.excerpt||'').slice(0,200))}">
+<meta name="twitter:image" content="${e(imgMeta)}">
 <link rel="canonical" href="${e(pageUrl)}">
 <script type="application/ld+json">
 {
@@ -1244,6 +1247,8 @@ function buildPostHtml(post) {
   "description": ${JSON.stringify(post.excerpt || '')},
   "image": ${JSON.stringify(imgMeta)},
   "articleSection": ${JSON.stringify(post.category || '')},
+  "datePublished": "${(()=>{const months={'Ocak':'01','Şubat':'02','Mart':'03','Nisan':'04','Mayıs':'05','Haziran':'06','Temmuz':'07','Ağustos':'08','Eylül':'09','Ekim':'10','Kasım':'11','Aralık':'12'};const p=(post.date||'').split(' ');return p.length===3?p[2]+'-'+(months[p[1]]||'01')+'-'+p[0].padStart(2,'0'):'';})()}",
+  "dateModified": "${(()=>{const months={'Ocak':'01','Şubat':'02','Mart':'03','Nisan':'04','Mayıs':'05','Haziran':'06','Temmuz':'07','Ağustos':'08','Eylül':'09','Ekim':'10','Kasım':'11','Aralık':'12'};const p=(post.date||'').split(' ');return p.length===3?p[2]+'-'+(months[p[1]]||'01')+'-'+p[0].padStart(2,'0'):'';})()}",
   "inLanguage": "tr-TR",
   "mainEntityOfPage": { "@type": "WebPage", "@id": ${JSON.stringify(pageUrl)} },
   "author": { "@type": "Organization", "name": "Yargı Kalemi", "url": "https://yargikalemi.com" },

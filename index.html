@@ -1931,7 +1931,26 @@
             if (!res.ok) return;
             const faqs = await res.json();
             renderFaqSection(faqs);
+            injectFaqSchema(faqs);
         } catch(e) { console.error('FAQ yüklenemedi:', e); }
+    }
+
+    function injectFaqSchema(faqs) {
+        const items = faqs.filter(f => f.q && f.a);
+        if (!items.length) return;
+        const schema = {
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: items.map(f => ({
+                '@type': 'Question',
+                name: f.q,
+                acceptedAnswer: { '@type': 'Answer', text: f.a.replace(/<[^>]+>/g, '') }
+            }))
+        };
+        const s = document.createElement('script');
+        s.type = 'application/ld+json';
+        s.textContent = JSON.stringify(schema);
+        document.head.appendChild(s);
     }
 
     function renderFaqSection(faqs) {
