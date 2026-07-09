@@ -455,8 +455,10 @@
         .featured-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
         .featured-img {
             background: linear-gradient(135deg, var(--bg-dark) 0%, #1a3a5c 100%);
-            background-size: cover;
+            background-color: var(--bg-dark);
+            background-size: contain;
             background-position: center;
+            background-repeat: no-repeat;
             min-height: 320px;
             display: flex;
             align-items: flex-end;
