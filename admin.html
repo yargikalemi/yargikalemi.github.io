@@ -2848,15 +2848,18 @@ document.getElementById('editor-content').addEventListener('paste', function(e) 
     if (html) {
         const div = document.createElement('div');
         div.innerHTML = html;
+        // Kopyalanan içerikten SADECE punto/renk/boşluk gürültüsünü temizle.
+        // Yazı tipini (font-family) ve kalın/italik gibi biçimleri koru — kullanıcı
+        // Arial kopyaladıysa Arial kalsın; istediğinde araç çubuğundan değiştirir.
         div.querySelectorAll('[style]').forEach(el => {
             const s = el.style;
-            ['color','font-size','font-family','background-color','background','line-height',
+            ['color','font-size','background-color','background','line-height',
              'margin','padding','margin-top','margin-bottom','margin-left','margin-right'].forEach(p => s.removeProperty(p));
-            if (!s.cssText.trim()) el.removeAttribute('style');
+            if (!el.getAttribute('style') || !s.cssText.trim()) el.removeAttribute('style');
         });
-        div.querySelectorAll('font').forEach(el => {
-            el.removeAttribute('face'); el.removeAttribute('size'); el.removeAttribute('color');
-        });
+        div.querySelectorAll('font').forEach(el => { el.removeAttribute('size'); el.removeAttribute('color'); });
+        // Word/Docs artığı boş span ve o:p etiketlerini sadeleştir
+        div.querySelectorAll('o\\:p, style, meta, link').forEach(el => el.remove());
         document.execCommand('insertHTML', false, div.innerHTML);
     } else {
         document.execCommand('insertText', false, text);
@@ -2864,18 +2867,79 @@ document.getElementById('editor-content').addEventListener('paste', function(e) 
     onEditorChange();
 });
 
+// ══ Yazı tipi / boyutu — sağlam uygulama ══════════════════════════
+// Sorun: eski kod dıştan span sarıyordu ama İÇTEKİ font-size/font-family
+// spanları (Word/kopyala-yapıştır kalıntısı) baskın kalıp değişmiyordu.
+// Çözüm: hedef alandaki iç içe aynı stilleri ÖNCE temizle, SONRA uygula.
+// Ayrıca seçim yoksa TÜM yazıya uygula ("tüm yazı 12 punto" mümkün olsun).
+let edHadSelection = false;
+function captureEdSelection() {
+    const ed = document.getElementById('editor-content');
+    const sel = window.getSelection();
+    edHadSelection = !!(sel && sel.rangeCount && !sel.isCollapsed && ed.contains(sel.anchorNode));
+    if (edHadSelection) savedRange = sel.getRangeAt(0).cloneRange();
+}
+
+function editorApplyStyle(prop, value, opts) {
+    opts = opts || {};
+    const ed = document.getElementById('editor-content');
+    const stripNested = (root) => {
+        root.querySelectorAll('[style]').forEach(el => {
+            el.style.removeProperty(prop);
+            if (!el.getAttribute('style') || !el.style.cssText.trim()) el.removeAttribute('style');
+        });
+        if (prop === 'font-family') root.querySelectorAll('font[face]').forEach(el => el.removeAttribute('face'));
+        if (prop === 'font-size')   root.querySelectorAll('font[size]').forEach(el => el.removeAttribute('size'));
+    };
+    ed.focus();
+
+    // 1) Seçim varsa → yalnızca seçime uygula (iç stilleri temizleyerek)
+    if (edHadSelection && savedRange) {
+        const sel = window.getSelection();
+        sel.removeAllRanges(); sel.addRange(savedRange);
+        const range = sel.getRangeAt(0);
+        if (!range.collapsed) {
+            const frag = range.extractContents();
+            stripNested(frag);
+            const span = document.createElement('span');
+            span.style.setProperty(prop, value);
+            span.appendChild(frag);
+            range.insertNode(span);
+            range.selectNodeContents(span);
+            sel.removeAllRanges(); sel.addRange(range);
+            savedRange = range.cloneRange();
+            onEditorChange();
+            return;
+        }
+    }
+
+    // 2) Seçim yoksa → tüm içeriğe uygula
+    stripNested(ed);
+    const isHeading = t => /^H[1-6]$/.test(t);
+    Array.from(ed.childNodes).forEach(node => {
+        if (node.nodeType === 3) {                 // yalın metin düğümü → <p>'ye sar
+            if (!node.textContent.trim()) return;
+            const p = document.createElement('p');
+            node.replaceWith(p); p.appendChild(node);
+            p.style.setProperty(prop, value);
+        } else if (node.nodeType === 1) {
+            if (opts.skipHeadings && isHeading(node.tagName)) return;  // başlıklar korunsun
+            node.style.setProperty(prop, value);
+        }
+    });
+    onEditorChange();
+}
+
 // ── Yazı tipi
-document.getElementById('font-family-sel').addEventListener('mousedown', saveEdRange);
+document.getElementById('font-family-sel').addEventListener('mousedown', captureEdSelection);
 document.getElementById('font-family-sel').addEventListener('change', function() {
     if (!this.value) return;
-    restoreEdRange();
-    document.execCommand('styleWithCSS', false, true);
-    document.execCommand('fontName', false, this.value);
-    this.value = ''; onEditorChange();
+    editorApplyStyle('font-family', this.value, { skipHeadings: true });
+    this.value = '';
 });
 
-// ── Yazı boyutu (pt) — input'a tıklanınca seçim kayboluyor, kayıttan restore ediyoruz
-document.getElementById('font-size-inp').addEventListener('mousedown', saveEdRange);
+// ── Yazı boyutu (pt)
+document.getElementById('font-size-inp').addEventListener('mousedown', captureEdSelection);
 document.getElementById('font-size-inp').addEventListener('keydown', function(e) {
     if (e.key === 'Enter') { e.preventDefault(); applyFontSize(this.value); this.blur(); }
 });
@@ -2886,19 +2950,7 @@ document.getElementById('font-size-inp').addEventListener('change', function() {
 function applyFontSize(pt) {
     const ptVal = parseInt(pt, 10);
     if (!ptVal || ptVal < 1) return;
-    if (!restoreEdRange()) return; // seçim yoksa çık
-    const sel = window.getSelection();
-    if (!sel || !sel.rangeCount || sel.isCollapsed) return;
-    const range = sel.getRangeAt(0);
-    const frag = range.extractContents();
-    const span = document.createElement('span');
-    span.style.fontSize = ptVal + 'pt';
-    span.appendChild(frag);
-    range.insertNode(span);
-    range.selectNodeContents(span);
-    sel.removeAllRanges();
-    sel.addRange(range);
-    onEditorChange();
+    editorApplyStyle('font-size', ptVal + 'pt', { skipHeadings: true });
 }
 
 // ── Yazı rengi
