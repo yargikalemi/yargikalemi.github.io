@@ -497,8 +497,9 @@
 
         .posts-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
+            /* Daha büyük, dergi görünümlü kartlar: masaüstünde 2 geniş sütun */
+            grid-template-columns: repeat(auto-fill, minmax(min(100%, 440px), 1fr));
+            gap: 1.8rem;
         }
         .post-card {
             background: var(--bg-base);
@@ -514,16 +515,18 @@
         .post-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
 
         .card-accent-bar {
-            height: 3px;
-            background: linear-gradient(90deg, var(--accent), var(--bg-dark-2));
+            height: 4px;
+            flex-shrink: 0;
+            background: var(--accent);   /* kategori rengiyle JS'te inline değişir */
         }
         .card-img {
-            aspect-ratio: 16 / 9;
+            aspect-ratio: 3 / 2;
             width: 100%;
             flex-shrink: 0;
             position: relative;
             overflow: hidden;
-            background: var(--bg-dark);
+            /* Yumuşak placeholder: görsel yüklenene kadar sert siyah yerine nazik degrade */
+            background: linear-gradient(135deg, var(--bg-card), var(--bg-base));
         }
         .card-blur-bg {
             position: absolute;
@@ -531,18 +534,23 @@
             background-size: cover;
             background-position: center;
             filter: blur(16px);
-            opacity: 0.65;
+            opacity: 0;
+            transition: opacity 0.5s ease;
             z-index: 0;
         }
+        .card-blur-bg.loaded { opacity: 0.6; }
         .card-img-sharp {
             position: absolute;
             inset: 0;
-            background-size: contain;
-            background-position: center;
-            background-repeat: no-repeat;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            opacity: 0;
+            transition: opacity 0.5s ease;
             z-index: 1;
         }
-        .card-body { padding: 1.4rem 1.4rem 0; flex-grow: 1; display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
+        .card-img-sharp.loaded { opacity: 1; }
+        .card-body { padding: 1.8rem 1.7rem 0; flex-grow: 1; display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
         .card-cat {
             font-size: 0.78rem;
             font-weight: 700;
@@ -556,11 +564,11 @@
         }
         .card-body h3 {
             font-family: 'Playfair Display', serif;
-            font-size: 1.17rem;
+            font-size: 1.32rem;
             font-weight: 700;
             color: var(--text-primary);
-            line-height: 1.4;
-            margin-bottom: 0.75rem;
+            line-height: 1.38;
+            margin-bottom: 0.85rem;
             /* Başlık her zaman TAM görünsün — kırpma yok */
         }
         .card-excerpt {
@@ -1559,6 +1567,14 @@
         activeCat = 'all';
     }
 
+    // Her kategoriye sabit, ayırt edici bir renk (isimden türetilir → yeni kategoriler de otomatik renklenir)
+    const CAT_PALETTE = ['#DC2626','#2563EB','#059669','#7C3AED','#EA580C','#0D9488','#DB2777','#4F46E5','#D97706','#0891B2','#9333EA','#0284C7','#E11D48','#16A34A'];
+    function catColor(name) {
+        let h = 0; const s = name || '';
+        for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+        return CAT_PALETTE[h % CAT_PALETTE.length];
+    }
+
     function renderCards(posts) {
         const grid = document.getElementById('posts-grid');
         const noResult = document.getElementById('no-result');
@@ -1571,14 +1587,18 @@
             art.dataset.title = post.title;
             art.dataset.slug = post.slug || '';
             const img = postImg(post);
+            const col = catColor(post.category);
             const imgLayers = img
                 ? '<div class="card-blur-bg" style="background-image:url(' + img + ');"></div>' +
-                  '<div class="card-img-sharp" style="background-image:url(' + img + ');"></div>'
+                  '<img class="card-img-sharp" loading="lazy" decoding="async" src="' + img + '" alt="" ' +
+                       'onload="this.classList.add(\'loaded\');var b=this.previousElementSibling;if(b)b.classList.add(\'loaded\');" ' +
+                       'onerror="this.remove();">'
                 : '';
             art.innerHTML =
+                '<div class="card-accent-bar" style="background:' + col + '"></div>' +
                 '<div class="card-img">' + imgLayers + '</div>' +
                 '<div class="card-body">' +
-                    '<div class="card-cat">' + post.category + '</div>' +
+                    '<div class="card-cat" style="color:' + col + ';border-color:' + col + '">' + post.category + '</div>' +
                     '<h3>' + post.title + '</h3>' +
                     '<p class="card-excerpt">' + post.excerpt + '</p>' +
                 '</div>' +
@@ -1596,6 +1616,14 @@
             });
             grid.insertBefore(art, noResult);
             io.observe(art);
+        });
+        // Önbellekten gelen (onload tetiklemeyen) görselleri de görünür yap
+        grid.querySelectorAll('.card-img-sharp').forEach(im => {
+            if (im.complete && im.naturalWidth > 0) {
+                im.classList.add('loaded');
+                const b = im.previousElementSibling;
+                if (b) b.classList.add('loaded');
+            }
         });
         markOverflowingCards();
         loadReadCounts();
