@@ -736,7 +736,7 @@ input:checked+.toggle-sl::before{transform:translateX(17px)}
                                     <input type="color" id="inp-hicolor" class="tb-color-inp" value="#FEF08A">
                                 </div>
                                 <div class="tb-sep"></div>
-                                <button class="tb-btn" title="Biçimi Temizle" data-cmd="removeFormat"><i class="fas fa-eraser"></i></button>
+                                <button class="tb-btn" type="button" title="Tüm biçimi temizle → 12pt Arial, düzgün başlıklar" id="btn-deepclean"><i class="fas fa-broom"></i></button>
                             </div>
                             <!-- Satır 2: Paragraf & Ekle -->
                             <div class="tb-row">
@@ -2480,6 +2480,7 @@ function openEdit(id) {
     setEdTitle('Yazıyı Düzenle');
     document.getElementById('btn-publish').innerHTML = '<i class="fas fa-save"></i> Kaydet';
     requestAnimationFrame(resizeEditorFields);
+    edDirty = false;   // yeni yüklendi, henüz düzenlenmedi
 }
 
 function clearEditor() {
@@ -2496,6 +2497,7 @@ function clearEditor() {
     if (sourceMode) toggleSourceMode();
     resizeEditorFields();
     updateCounts(); previewImg(); updateExcerptCount();
+    edDirty = false;   // temiz başlangıç
 }
 
 function setEdTitle(t) {
@@ -2558,6 +2560,7 @@ async function savePost() {
 
         // Yayınlanan taslağı temizle
         if (loadedDraftId) { removeDraft(loadedDraftId); loadedDraftId = null; }
+        edDirty = false;   // kaydedildi → temiz
 
         toast(editingId ? '✅ Yazı güncellendi' : (scheduledAt ? '📅 Yazı zamanlandı' : '✅ Yazı yayınlandı'),'success');
         renderList();                       // bellekteki güncel veriyle çiz (tekrar indirme yok)
@@ -2821,6 +2824,7 @@ document.getElementById('btn-code').addEventListener('click', () => {
 // ── Yazı tipi
 // ── Seçimi kaydet / geri yükle
 let savedRange = null;
+let edDirty = false;   // kaydedilmemiş değişiklik var mı (sayfadan kazara çıkışı önlemek için)
 function saveEdRange() {
     const sel = window.getSelection();
     if (sel && sel.rangeCount && !sel.isCollapsed) savedRange = sel.getRangeAt(0).cloneRange();
@@ -2952,6 +2956,63 @@ function applyFontSize(pt) {
     if (!ptVal || ptVal < 1) return;
     editorApplyStyle('font-size', ptVal + 'pt', { skipHeadings: true });
 }
+
+// ══ Biçimi Temizle (tüm yazı) — karışık kopyala-yapıştır içeriğini tekdüze yapar ══
+// Word/LibreOffice'ten gelen iç içe font-size, Times/serif, boş bloklar, başlığa
+// sıkışmış paragraflar gibi bozuklukları tek tıkla düzeltir → 12pt Arial + düzgün başlık.
+function deepCleanEditorNow() {
+    const ed = document.getElementById('editor-content');
+    const c = document.createElement('div');
+    c.innerHTML = ed.innerHTML;
+
+    // 0) başlık içine sıkışmış blokları düzelt (kısa başlık→düzleştir, uzun→dışarı taşı)
+    c.querySelectorAll('h1,h2,h3,h4,h5,h6').forEach(h => {
+        const blocks = [...h.children].filter(ch => /^(P|DIV|UL|OL|TABLE|BLOCKQUOTE)$/.test(ch.tagName));
+        if (!blocks.length) return;
+        const total = h.textContent.replace(/\s+/g, ' ').trim().length;
+        if (total <= 90) blocks.forEach(b => { while (b.firstChild) b.parentNode.insertBefore(b.firstChild, b); b.remove(); });
+        else { let a = h; blocks.forEach(b => { a.after(b); a = b; }); }
+    });
+    // 1) font normalize → Arial / 12pt
+    c.querySelectorAll('font').forEach(f => { if (f.hasAttribute('face')) f.setAttribute('face', 'Arial, sans-serif'); if (f.style && f.style.fontSize) f.style.fontSize = '12pt'; });
+    c.querySelectorAll('[style]').forEach(el => { if (el.style.fontSize) el.style.fontSize = '12pt'; if (el.style.fontFamily) el.style.fontFamily = 'Arial, sans-serif'; if (el.style.color) el.style.removeProperty('color'); if (el.style.backgroundColor) el.style.removeProperty('background-color'); });
+    // 2) uzun sahte başlıkları paragrafa çevir (>90 karakter)
+    c.querySelectorAll('h1,h2,h3,h4,h5,h6').forEach(el => {
+        if (el.textContent.replace(/\s+/g, ' ').trim().length > 90) {
+            const p = document.createElement('p');
+            if (el.getAttribute('align')) p.setAttribute('align', el.getAttribute('align'));
+            while (el.firstChild) p.appendChild(el.firstChild);
+            el.replaceWith(p);
+        }
+    });
+    // 2a) harf alt başlıkları (A. B. C.) → H3 tutarlılığı
+    c.querySelectorAll('h1,h2,h3,h4,h5,h6').forEach(el => {
+        const t = el.textContent.replace(/\s+/g, ' ').trim();
+        if (/^[A-EÇ]\.\s/.test(t) && el.tagName !== 'H3') {
+            const h3 = document.createElement('h3');
+            [...el.attributes].forEach(a => h3.setAttribute(a.name, a.value));
+            while (el.firstChild) h3.appendChild(el.firstChild);
+            el.replaceWith(h3);
+        }
+    });
+    // 2b) tüm gövde bloklarına 12pt Arial garanti
+    c.querySelectorAll('p,li,td,th').forEach(el => { el.style.fontSize = '12pt'; el.style.fontFamily = 'Arial, sans-serif'; });
+    // 3) boş blok/inline temizle
+    let rm = 1, ps = 0;
+    while (rm && ps < 15) { rm = 0; ps++; c.querySelectorAll('h1,h2,h3,h4,h5,h6,p,font,span,b,strong,i,em').forEach(el => { if (!el.textContent.trim() && !el.querySelector('img,table,hr,br')) { el.remove(); rm++; } }); }
+    // 4) özniteliksiz span/font aç
+    let uw = 1, p2 = 0;
+    while (uw && p2 < 25) { uw = 0; p2++; c.querySelectorAll('span,font').forEach(el => { const hs = el.getAttribute('style') && el.getAttribute('style').trim(); const hf = el.tagName === 'FONT' && (el.getAttribute('face') || el.getAttribute('size') || el.getAttribute('color')); if (!hs && !hf && !el.className) { while (el.firstChild) el.parentNode.insertBefore(el.firstChild, el); el.remove(); uw++; } }); }
+
+    ed.innerHTML = c.innerHTML;
+    onEditorChange();
+    edDirty = true;
+    toast('✨ Biçim temizlendi — tüm yazı 12pt Arial', 'success');
+}
+document.getElementById('btn-deepclean').addEventListener('click', () => {
+    if (sourceMode) { toast('Önce HTML modundan çıkın', 'error'); return; }
+    showConfirm('Biçimi Temizle', 'Tüm yazı 12 punto Arial\'a çevrilecek, karışık biçimler ve boşluklar sadeleştirilecek. Başlıklar korunur. Devam edilsin mi?', deepCleanEditorNow);
+});
 
 // ── Yazı rengi
 document.getElementById('inp-forecolor').addEventListener('change', function() {
@@ -3262,7 +3323,7 @@ function execCmd(cmd) {
     document.getElementById('editor-content').focus();
     document.execCommand(cmd,false,null); onEditorChange();
 }
-function onEditorChange() { updateCounts(); autoReadTime(); if(sourceMode) document.getElementById('html-source').value=document.getElementById('editor-content').innerHTML; }
+function onEditorChange() { edDirty = true; updateCounts(); autoReadTime(); if(sourceMode) document.getElementById('html-source').value=document.getElementById('editor-content').innerHTML; }
 function updateCounts() {
     const t = document.getElementById('editor-content').innerText||'';
     document.getElementById('word-count').textContent = `${t.trim()?t.trim().split(/\s+/).length:0} kelime`;
@@ -3284,8 +3345,17 @@ function toggleSourceMode() {
         tb.style.opacity=''; tb.style.pointerEvents=''; btn.classList.remove('on'); sourceMode=false; updateCounts();
     }
 }
-document.getElementById('inp-title').addEventListener('input',function(){autoResize(this);autoReadTime();});
-document.getElementById('inp-excerpt').addEventListener('input',function(){autoResize(this);updateExcerptCount();});
+document.getElementById('inp-title').addEventListener('input',function(){edDirty=true;autoResize(this);autoReadTime();});
+document.getElementById('inp-excerpt').addEventListener('input',function(){edDirty=true;autoResize(this);updateExcerptCount();});
+
+// Kazara sayfadan çıkışa (geri hareketi, sekme kapatma) karşı uyarı — iş kaybını önler
+window.addEventListener('beforeunload', function(e){
+    if(edDirty && document.getElementById('page-editor').classList.contains('active')){
+        e.preventDefault(); e.returnValue = '';
+    }
+});
+// Araç çubuğu butonları her zaman type="button" olsun (kazara form davranışını önler)
+document.querySelectorAll('#toolbar button, .tb-src-btn').forEach(b=>{ b.type = 'button'; });
 // Gizli (display:none) elemanlarda scrollHeight 0 olur; bu durumda yüksekliği sıfırlamayalım
 function autoResize(el){el.style.height='auto';const h=el.scrollHeight;if(h>0)el.style.height=h+'px';}
 function resizeEditorFields(){autoResize(document.getElementById('inp-title'));autoResize(document.getElementById('inp-excerpt'));}
