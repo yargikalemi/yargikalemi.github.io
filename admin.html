@@ -116,6 +116,7 @@ a{text-decoration:none;color:inherit}
 .btn-act{width:28px;height:28px;border:1px solid var(--border);border-radius:4px;background:#fff;color:var(--text-muted);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all var(--tr);font-size:.72rem}
 .btn-act:hover{background:var(--bg-base)}
 .btn-act.edit:hover{color:var(--accent);border-color:var(--accent)}
+.btn-act.feat:hover,.btn-act.feat.on{color:#F59E0B;border-color:#FDE68A;background:#FFFBEB}
 .btn-act.del:hover{color:#DC2626;border-color:#FECACA;background:#FEF2F2}
 .empty-state{text-align:center;padding:3rem 2rem;color:var(--text-muted)}
 .empty-state i{font-size:2.2rem;opacity:.22;margin-bottom:.65rem;display:block}
@@ -129,6 +130,8 @@ a{text-decoration:none;color:inherit}
 .editor-side{position:sticky;top:74px}
 .card{background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:.9rem}
 .card:last-child{margin-bottom:0}
+/* İçerik kartı: overflow:visible → araç çubuğu (toolbar) scroll'da sabit kalabilsin */
+.card-editor{overflow:visible}
 .card-hdr{padding:.72rem 1rem;border-bottom:1px solid var(--border);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);display:flex;align-items:center;justify-content:space-between}
 .card-body{padding:.95rem}
 #inp-title{width:100%;border:none;outline:none;font-family:'Playfair Display',serif;font-size:1.55rem;font-weight:700;color:var(--text-primary);resize:none;background:transparent;line-height:1.3;overflow:hidden}
@@ -666,7 +669,7 @@ input:checked+.toggle-sl::before{transform:translateX(17px)}
                             <div class="excerpt-meta"><span id="excerpt-count">0 / 300 karakter</span></div>
                         </div>
                     </div>
-                    <div class="card">
+                    <div class="card card-editor">
                         <div class="card-hdr">
                             <span>İçerik</span>
                             <button class="tb-src-btn" id="src-btn"><i class="fas fa-code"></i> HTML</button>
@@ -825,6 +828,13 @@ input:checked+.toggle-sl::before{transform:translateX(17px)}
                                     <input type="number" id="inp-rt" class="field-input" min="1" max="99" value="3" readonly style="flex:1;background:var(--bg-base);cursor:default">
                                     <span class="inp-rt-auto">otomatik</span>
                                 </div>
+                            </div>
+                            <div class="toggle-row">
+                                <div>
+                                    <div class="toggle-lbl">⭐ Editörün Seçimi</div>
+                                    <div class="toggle-sub">Ana sayfada öne çıkar</div>
+                                </div>
+                                <label class="toggle"><input type="checkbox" id="inp-feat"><span class="toggle-sl"></span></label>
                             </div>
                         </div>
                     </div>
@@ -2147,8 +2157,10 @@ function renderList() {
     if (filterCat) posts = posts.filter(p => p.category === filterCat);
     if (searchQ)   posts = posts.filter(p => (p.title||'').toLowerCase().includes(searchQ));
 
+    const featCount = allPosts.filter(p => p.featured).length;
     document.getElementById('posts-stats').innerHTML =
-        `<div class="stat-chip">Toplam: <b>${allPosts.length}</b></div>`;
+        `<div class="stat-chip">Toplam: <b>${allPosts.length}</b></div>` +
+        `<div class="stat-chip">Öne çıkan: <b>${featCount}</b></div>`;
 
     const list = document.getElementById('posts-list');
     if (!posts.length) {
@@ -2166,7 +2178,7 @@ function renderList() {
             <div class="pr-title">
                 <input type="checkbox" class="pr-check" data-id="${esc(p.id)}" ${selectedIds.has(p.id)?'checked':''} title="Seç">
                 <div>
-                    <strong title="${esc(p.title)}">${esc(p.title)}</strong>
+                    <strong title="${esc(p.title)}">${p.featured ? '<i class="fas fa-star" style="color:#F59E0B;margin-right:.35rem" title="Editörün Seçimi"></i>' : ''}${esc(p.title)}</strong>
                     <div class="pr-id">#${esc(p.id)} ${p.scheduledAt ? `<span class="sched-badge">📅 ${p.scheduledAt.replace('T',' ').slice(0,16)}</span>` : ''}</div>
                 </div>
             </div>
@@ -2174,6 +2186,7 @@ function renderList() {
             <div class="pr-date">${esc(p.date||'—')}</div>
             <div class="pr-time">${p.readTime ? p.readTime+' dk' : '—'}</div>
             <div class="pr-actions">
+                <button class="btn-act feat ${p.featured?'on':''}" title="${p.featured?'Öne çıkarıldı':'Öne çıkar'}" onclick="toggleFeat('${esc(p.id)}')"><i class="fas fa-star"></i></button>
                 <button class="btn-act edit" title="Düzenle" onclick="openEdit('${esc(p.id)}')"><i class="fas fa-pen"></i></button>
                 <button class="btn-act del" title="Sil" onclick="deletePost('${esc(p.id)}')"><i class="fas fa-trash"></i></button>
             </div>
@@ -2417,6 +2430,15 @@ function initDragDrop() {
 // ════════════════════════════════════════════
 // POST ACTIONS (liste)
 // ════════════════════════════════════════════
+async function toggleFeat(id) {
+    const post = allPosts.find(p => p.id === id);
+    if (!post) return;
+    if (!post.featured) { allPosts.forEach(p => { p.featured = false; }); post.featured = true; }
+    else { post.featured = false; }
+    renderList();
+    try { await savePosts(post.featured ? `Öne çıkarıldı: ${post.title}` : `Öne çıkan kaldırıldı: ${post.title}`); toast('⭐ Güncellendi','success'); }
+    catch(e) { toast('Hata: '+e.message,'error'); await loadPosts(); }
+}
 
 function deletePost(id) {
     const post = allPosts.find(p => p.id === id);
@@ -2464,6 +2486,7 @@ function openEdit(id) {
     document.getElementById('editor-content').innerHTML = post.content || '';
     document.getElementById('inp-cat').value     = post.category || '';
     document.getElementById('inp-rt').value      = post.readTime || 3;
+    document.getElementById('inp-feat').checked  = !!post.featured;
     document.getElementById('inp-img').value     = post.image || '';
     document.getElementById('inp-date').value    = trToISO(post.date) || todayISO();
     const schedCb = document.getElementById('inp-schedule');
@@ -2489,6 +2512,7 @@ function clearEditor() {
     document.getElementById('editor-content').innerHTML = '';
     document.getElementById('inp-cat').value     = '';
     document.getElementById('inp-rt').value      = '3';
+    document.getElementById('inp-feat').checked  = false;
     document.getElementById('inp-img').value     = '';
     document.getElementById('inp-date').value    = todayISO();
     document.getElementById('inp-schedule').checked = false;
@@ -2518,6 +2542,7 @@ async function savePost() {
                                 : document.getElementById('editor-content').innerHTML;
     const category    = document.getElementById('inp-cat').value;
     const readTime    = parseInt(document.getElementById('inp-rt').value,10) || 3;
+    const featured    = document.getElementById('inp-feat').checked;
     const image       = document.getElementById('inp-img').value.trim();
     const date        = isoToTR(document.getElementById('inp-date').value);
     const isScheduled = document.getElementById('inp-schedule').checked;
@@ -2534,18 +2559,20 @@ async function savePost() {
     setBtn('<i class="fas fa-circle-notch fa-spin"></i> Yazı kaydediliyor…');
 
     try {
+        // Öne çıkan tek olsun: bu yazı öne çıkarılıyorsa diğerlerini kaldır
+        if (featured) allPosts.forEach(p => { p.featured = false; });
         let target, msg;
         if (editingId) {
             const idx = allPosts.findIndex(p => p.id === editingId);
             if (idx === -1) throw new Error('Yazı bulunamadı.');
-            const updated = { ...allPosts[idx], title, excerpt, content, category, readTime, date };
+            const updated = { ...allPosts[idx], title, excerpt, content, category, readTime, date, featured };
             if (image) updated.image = image; else delete updated.image;
             if (scheduledAt) updated.scheduledAt = scheduledAt; else delete updated.scheduledAt;
             if (!updated.slug) updated.slug = generateSlug(title, editingId);
             allPosts[idx] = updated;
             target = updated; msg = `Güncellendi: ${title}`;
         } else {
-            const post = { id:'', title, category, excerpt, date, readTime, content };
+            const post = { id:'', featured, title, category, excerpt, date, readTime, content };
             if (image) post.image = image;
             if (scheduledAt) post.scheduledAt = scheduledAt;
             post.slug = generateSlug(title, null);
@@ -2586,6 +2613,7 @@ function getDraftData() {
         category: document.getElementById('inp-cat').value,
         date:     document.getElementById('inp-date').value,
         readTime: document.getElementById('inp-rt').value,
+        featured: document.getElementById('inp-feat').checked,
         image:    document.getElementById('inp-img').value,
     };
 }
@@ -2675,6 +2703,7 @@ function loadDraftById(id) {
     document.getElementById('inp-cat').value     = data.category || '';
     document.getElementById('inp-date').value    = data.date     || todayISO();
     document.getElementById('inp-rt').value      = data.readTime || 3;
+    document.getElementById('inp-feat').checked  = !!data.featured;
     document.getElementById('inp-img').value     = data.image    || '';
     if (sourceMode) toggleSourceMode();
     updateCounts(); previewImg(); updateExcerptCount();
@@ -3577,11 +3606,24 @@ function renderFaqAdmin() {
                 <div class="faq-admin-a">${f.a.replace(/<[^>]+>/g,'').slice(0,110)}</div>
             </div>
             <div class="faq-admin-acts">
+                <button class="btn-edit-faq" onclick="moveFaq('${esc(f.id)}',-1)" title="Yukarı taşı" ${i===0?'disabled style="opacity:.3;cursor:default"':''}><i class="fas fa-arrow-up"></i></button>
+                <button class="btn-edit-faq" onclick="moveFaq('${esc(f.id)}',1)" title="Aşağı taşı" ${i===allFaq.length-1?'disabled style="opacity:.3;cursor:default"':''}><i class="fas fa-arrow-down"></i></button>
                 <button class="btn-edit-faq" onclick="openEditFaq('${esc(f.id)}')" title="Düzenle"><i class="fas fa-pencil"></i></button>
                 <button class="btn-del-faq" onclick="deleteFaq('${esc(f.id)}')" title="Sil"><i class="fas fa-trash"></i></button>
             </div>
         </div>`
     ).join('');
+}
+
+// FAQ sırasını değiştir (yukarı/aşağı) ve kaydet
+async function moveFaq(id, dir) {
+    const i = allFaq.findIndex(x => x.id === id);
+    const j = i + dir;
+    if (i < 0 || j < 0 || j >= allFaq.length) return;
+    [allFaq[i], allFaq[j]] = [allFaq[j], allFaq[i]];
+    renderFaqAdmin();
+    try { await writeFaq(allFaq, faqSha, 'SSS sırası değiştirildi'); toast('Sıra güncellendi', 'success'); }
+    catch(e) { toast('Hata: ' + e.message, 'error'); const res = await readFaq(); allFaq = res.items; faqSha = res.sha; renderFaqAdmin(); }
 }
 
 // ── FAQ mini editor toolbar
@@ -3640,7 +3682,7 @@ async function saveFaqItem() {
         } else {
             const item = { id: 'faq-' + Date.now(), q, a };
             if (category) item.category = category;
-            allFaq.push(item);
+            allFaq.unshift(item);   // yeni soru en başa (en yeni en üstte)
         }
         await writeFaq(allFaq, faqSha, (editingFaqId ? 'SSS güncellendi: ' : 'SSS eklendi: ') + q.slice(0,40));
         closeFaqModal();

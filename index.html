@@ -436,6 +436,77 @@
         .section-header { margin-bottom: var(--section-gap); }
 
         /* =============================================
+           ÖNE ÇIKAN (EDİTÖRÜN SEÇİMİ)
+        ============================================= */
+        #featured {
+            padding: var(--section-py) 5% 0;
+            background: var(--bg-card);
+            transition: background var(--transition);
+        }
+        .featured-inner { max-width: 1280px; margin: 0 auto; }
+        .featured-card {
+            display: grid;
+            grid-template-columns: 1.05fr 1fr;
+            background: var(--bg-base);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+        }
+        .featured-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+        .featured-media {
+            position: relative;
+            aspect-ratio: 16 / 10;
+            min-height: 100%;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--bg-card), var(--bg-base));
+        }
+        .featured-media .card-blur-bg { inset: -14px; filter: blur(20px); }
+        .featured-badge {
+            position: absolute;
+            top: 1rem; left: 1rem;
+            z-index: 2;
+            background: var(--accent);
+            color: #fff;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            padding: 0.4rem 0.85rem;
+            border-radius: 999px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+        }
+        .featured-content { padding: 2.4rem 2.6rem; display: flex; flex-direction: column; justify-content: center; min-width: 0; }
+        .featured-content .card-cat {
+            font-size: 0.8rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+            margin-bottom: 0.9rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--accent);
+            display: inline-block; align-self: flex-start; color: var(--accent);
+        }
+        .featured-content h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.5rem, 2.4vw, 2.05rem);
+            font-weight: 700; line-height: 1.28; color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+        .featured-content p {
+            color: var(--text-secondary); font-size: 0.97rem; line-height: 1.75; margin-bottom: 1.4rem;
+        }
+        .featured-meta { display: flex; flex-wrap: wrap; gap: 1.3rem; font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+        .featured-read {
+            align-self: flex-start;
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            background: var(--accent); color: #fff; font-weight: 700; font-size: 0.9rem;
+            padding: 0.7rem 1.4rem; border-radius: 8px; border: none; cursor: pointer;
+            transition: gap var(--transition), filter var(--transition);
+        }
+        .featured-read:hover { gap: 0.8rem; filter: brightness(1.08); }
+        @media (max-width: 780px) {
+            .featured-card { grid-template-columns: 1fr; }
+            .featured-media { aspect-ratio: 16 / 9; }
+            .featured-content { padding: 1.6rem 1.5rem; }
+        }
+
+        /* =============================================
            YAZILAR GRID
         ============================================= */
         #posts {
@@ -575,7 +646,11 @@
             font-size: 0.88rem;
             color: var(--text-secondary);
             line-height: 1.65;
-            /* Özet en çok 5 satır; taşarsa "Devamını Oku" görünür (kartlar dengeli kalsın) */
+            /* Varsayılan: özet TAM görünür (kırpma yok) */
+        }
+        /* "Devamını Oku" modunu geri getirmek için: renderCards içindeki
+           CLAMP_EXCERPTS = true yap → kartlara .clamped eklenir ve özet 5 satıra iner */
+        .post-card.clamped .card-excerpt {
             display: -webkit-box;
             -webkit-line-clamp: 5;
             line-clamp: 5;
@@ -1239,6 +1314,13 @@
     </div>
 </section>
 
+<!-- ÖNE ÇIKAN (EDİTÖRÜN SEÇİMİ) -->
+<section id="featured" style="display:none">
+    <div class="featured-inner">
+        <article class="featured-card fade-in" id="featured-card"></article>
+    </div>
+</section>
+
 <!-- POSTS -->
 <section id="posts">
     <div class="posts-inner">
@@ -1552,11 +1634,43 @@
                 const cats = await catsRes.json();
                 renderPills(cats);
             }
-            renderCards(allPosts);
+            featuredPost = allPosts.find(p => p.featured) || null;
+            renderFeatured(featuredPost);
+            renderCards(featuredPost ? allPosts.filter(p => p !== featuredPost) : allPosts);
             initFilter();
         } catch(e) {
             console.error('Yükleme hatası:', e);
         }
+    }
+
+    let featuredPost = null;
+    function renderFeatured(post) {
+        const sec = document.getElementById('featured');
+        const card = document.getElementById('featured-card');
+        if (!post) { sec.style.display = 'none'; return; }
+        sec.style.display = '';
+        const img = postImg(post);
+        const col = catColor(post.category);
+        const media = img
+            ? '<div class="card-blur-bg" style="background-image:url(' + img + ');"></div>' +
+              '<img class="card-img-sharp" loading="lazy" decoding="async" src="' + img + '" alt="" ' +
+                   'onload="this.classList.add(\'loaded\');var b=this.previousElementSibling;if(b)b.classList.add(\'loaded\');" onerror="this.remove();">'
+            : '';
+        card.innerHTML =
+            '<div class="featured-media"><span class="featured-badge">★ Editörün Seçimi</span>' + media + '</div>' +
+            '<div class="featured-content">' +
+                '<div class="card-cat" style="color:' + col + ';border-color:' + col + '">' + post.category + '</div>' +
+                '<h2>' + post.title + '</h2>' +
+                '<p>' + post.excerpt + '</p>' +
+                '<div class="featured-meta">' +
+                    '<span><i class="far fa-calendar-alt"></i> ' + post.date + '</span>' +
+                    '<span><i class="far fa-clock"></i> ' + (typeof post.readTime === 'string' ? post.readTime : post.readTime + ' dk') + '</span>' +
+                '</div>' +
+                '<button class="featured-read" style="background:' + col + '">Yazıyı Oku <i class="fas fa-arrow-right"></i></button>' +
+            '</div>';
+        card.onclick = () => openPost(post.id);
+        const b = card.querySelector('.card-img-sharp');
+        if (b && b.complete && b.naturalWidth > 0) { b.classList.add('loaded'); const bg = b.previousElementSibling; if (bg) bg.classList.add('loaded'); }
     }
 
     function renderPills(cats) {
@@ -1568,12 +1682,34 @@
     }
 
     // Her kategoriye sabit, ayırt edici bir renk (isimden türetilir → yeni kategoriler de otomatik renklenir)
-    const CAT_PALETTE = ['#DC2626','#2563EB','#059669','#7C3AED','#EA580C','#0D9488','#DB2777','#4F46E5','#D97706','#0891B2','#9333EA','#0284C7','#E11D48','#16A34A'];
+    // Bilinen kategorilere renk çemberine yayılmış, birbirinden AÇIKÇA farklı renkler
+    const CAT_COLORS = {
+        'Ceza Hukuku':              '#DC2626', // kırmızı
+        'Ceza Muhakemeleri Hukuku': '#EA580C', // turuncu
+        'İdare Hukuku':             '#D97706', // koyu turuncu
+        'Borçlar Hukuku':           '#CA8A04', // hardal
+        'Tüketici Hukuku':          '#16A34A', // yeşil
+        'Gayrimenkul / Kira':       '#059669', // zümrüt
+        'İş Hukuku':                '#0D9488', // teal
+        'Medeni Hukuk':             '#0891B2', // camgöbeği
+        'AİHM':                     '#0284C7', // gök mavisi
+        'Anayasa Mahkemesi':        '#2563EB', // mavi
+        'Ticaret Hukuku':           '#4F46E5', // çivit
+        'Aile Hukuku':              '#9333EA', // mor
+        'İcra ve İflas':            '#DB2777', // pembe
+        'Mali Hukuk':               '#7C3AED', // menekşe
+    };
+    const CAT_PALETTE = ['#DC2626','#EA580C','#CA8A04','#16A34A','#059669','#0D9488','#0891B2','#0284C7','#2563EB','#4F46E5','#9333EA','#DB2777','#E11D48','#7C3AED'];
     function catColor(name) {
+        if (CAT_COLORS[name]) return CAT_COLORS[name];
         let h = 0; const s = name || '';
         for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
         return CAT_PALETTE[h % CAT_PALETTE.length];
     }
+
+    // false = özetlerin TAMAMI görünür, "Devamını Oku" gizli.
+    // true  = özet 5 satıra iner ve taşınca "Devamını Oku" çıkar (eski davranış).
+    const CLAMP_EXCERPTS = false;
 
     function renderCards(posts) {
         const grid = document.getElementById('posts-grid');
@@ -1581,7 +1717,7 @@
         grid.querySelectorAll('.post-card').forEach(c => c.remove());
         posts.forEach(post => {
             const art = document.createElement('article');
-            art.className = 'post-card fade-in';
+            art.className = 'post-card fade-in' + (CLAMP_EXCERPTS ? ' clamped' : '');
             art.dataset.cat = post.category;
             art.dataset.id = post.id;
             art.dataset.title = post.title;
@@ -1631,6 +1767,7 @@
 
     // Sadece kutusuna sığmayan (taşan) kartlara "Devamını Oku" göster — yeni yazılarda da otomatik çalışır
     function markOverflowingCards() {
+        if (!CLAMP_EXCERPTS) return;   // tam özet modunda "Devamını Oku" yok
         const run = () => {
             document.querySelectorAll('#posts-grid .post-card').forEach(card => {
                 const ex = card.querySelector('.card-excerpt');
@@ -1685,6 +1822,9 @@
             const query = normalizeTr(searchInput.value).trim();
             const cards = document.querySelectorAll('.post-card');
             const noResult = document.getElementById('no-result');
+            // Öne çıkan kart yalnızca varsayılan görünümde (filtre/arama yokken) görünsün
+            const fSec = document.getElementById('featured');
+            if (fSec && featuredPost) fSec.style.display = (activeCat === 'all' && !query) ? '' : 'none';
             let visible = 0;
             cards.forEach(card => {
                 const catMatch = activeCat === 'all' || card.dataset.cat === activeCat;
