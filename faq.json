@@ -59,14 +59,14 @@
     "a": "Uygulamada en yoğun olarak işçilik alacakları davalarında kullanılmaktadır."
   },
   {
-    "id": "faq-1783246112282",
-    "q": "Belirsiz alacak davası nedir?",
-    "a": "Alacağın varlığı bilinmesine rağmen miktarının dava açıldığı tarihte objektif olarak tam belirlenemediği hâllerde açılabilen dava türüdür."
-  },
-  {
     "id": "faq-1783246295010",
     "q": "Fazla mesai alacağı neden çoğu zaman belirsiz kabul edilir?",
     "a": "Çünkü hesaplama için gerekli kayıtların önemli bölümü işverenin elindedir ve gerçek miktar çoğu zaman ancak yargılama sırasında belirlenebilir."
+  },
+  {
+    "id": "faq-1783246112282",
+    "q": "Belirsiz alacak davası nedir?",
+    "a": "Alacağın varlığı bilinmesine rağmen miktarının dava açıldığı tarihte objektif olarak tam belirlenemediği hâllerde açılabilen dava türüdür."
   },
   {
     "id": "faq-1783246242414",
