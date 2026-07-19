@@ -1,15 +1,15 @@
 [
   {
-    "id": "faq-1",
-    "category": "Tüketici Hukuku",
-    "q": "Ayıplı ürün aldım. Ne yapmalıyım?",
-    "a": "<p><font face=\"Arial, sans-serif\">Satın\naldığınız ürün bozuk, eksik, hasarlı veya vaat edilen\nözellikleri taşımıyorsa ayıplı mal kapsamında\ndeğerlendirilebilir. Bu durumda ürünün ücretsiz onarımını,\nyenisiyle değiştirilmesini, bedel indirimi yapılmasını veya\nödediğiniz bedelin iadesini talep edebilirsiniz. Talebinizi ispat\nkolaylığı sağlaması açısından satıcıya yazılı olarak\niletmeniz ve fatura, garanti belgesi ile diğer delilleri saklamanız\nönemlidir. Sorunun çözülmemesi halinde, uyuşmazlık değeri </font><strong><font face=\"Arial, sans-serif\">2026\nyılı için 186.000 TL'nin altında ise Tüketici Hakem Heyeti'ne</font></strong><font face=\"Arial, sans-serif\">,\nbu tutarın üzerindeyse Tüketici Mahkemesi'ne başvurabilirsiniz.\nBaşvurular e-Devlet üzerinden TÜBİS sistemi aracılığıyla veya\ndoğrudan hakem heyetine yapılabilmektedir.&nbsp;</font>\n</p>"
-  },
-  {
     "id": "faq-2",
     "category": "İş Hukuku",
     "q": "İşten çıkarıldım. Tazminat hakkım var mı?",
     "a": "En az <strong>1 yıl</strong> çalışmış iseniz ve işveren haklı bir neden göstermeksizin sözleşmenizi feshettiyse <strong>kıdem tazminatı</strong> ve <strong>ihbar tazminatı</strong> hakkınız doğar. Fesih bildirimini aldığınız tarihten itibaren <strong>1 ay içinde</strong> arabulucuya başvurmanız, sonradan dava açmanızın ön koşuludur."
+  },
+  {
+    "id": "faq-1",
+    "category": "Tüketici Hukuku",
+    "q": "Ayıplı ürün aldım. Ne yapmalıyım?",
+    "a": "<p><font face=\"Arial, sans-serif\">Satın\naldığınız ürün bozuk, eksik, hasarlı veya vaat edilen\nözellikleri taşımıyorsa ayıplı mal kapsamında\ndeğerlendirilebilir. Bu durumda ürünün ücretsiz onarımını,\nyenisiyle değiştirilmesini, bedel indirimi yapılmasını veya\nödediğiniz bedelin iadesini talep edebilirsiniz. Talebinizi ispat\nkolaylığı sağlaması açısından satıcıya yazılı olarak\niletmeniz ve fatura, garanti belgesi ile diğer delilleri saklamanız\nönemlidir. Sorunun çözülmemesi halinde, uyuşmazlık değeri </font><strong><font face=\"Arial, sans-serif\">2026\nyılı için 186.000 TL'nin altında ise Tüketici Hakem Heyeti'ne</font></strong><font face=\"Arial, sans-serif\">,\nbu tutarın üzerindeyse Tüketici Mahkemesi'ne başvurabilirsiniz.\nBaşvurular e-Devlet üzerinden TÜBİS sistemi aracılığıyla veya\ndoğrudan hakem heyetine yapılabilmektedir.&nbsp;</font>\n</p>"
   },
   {
     "id": "faq-3",
