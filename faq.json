@@ -24,15 +24,15 @@
     "a": "Gözaltında <strong>susma hakkınız</strong> vardır; hiçbir soruya cevap verme zorunluluğunuz yoktur. İlk andan itibaren <strong>avukat talep etme hakkınız</strong> doğar ve bu hak size esirgenilemez. Yakınlarınızın bilgilendirilmesini isteyebilirsiniz. Normal suçlarda gözaltı süresi en fazla <strong>24 saattir</strong>."
   },
   {
+    "id": "faq-1783258000111",
+    "q": "İnternetten araç muayene randevusu alırken dolandırıldım, ne yapmalıyım?",
+    "a": "<p style=\"line-height: 100%; margin-bottom: 0cm\">Son dönemde arama motorlarındaki sahte reklamlar vasıtasıyla\nresmi kurumları (özellikle TÜVTÜRK’ü) taklit eden oltalama\n(phishing) siteleri yaygınlaşmıştır. Bu siteler \"15 TL\nprovizyon ücreti\" gibi küçük tutarlar talep ederek kart\nbilgilerinizi almakta, arka planda ise rızanız dışında binlerce\nliralık e-ticaret harcaması tetiklemektedir.</p>\n<p>Böyle bir durumla karşılaştığınızda <b>zaman kaybetmeden</b>\nşu üç adımı atmalısınız:</p>\n<ol>\n\t<li><p><b>Bankanızı Arayın:</b> Kartınızı derhal kullanıma\n\tkapatın ve siber dolandırıcılık (Fraud) birimine harcama\n\titirazı kaydı açtırın.</p></li>\n\t<li><p><b>Kolluk veya Savcılığa Başvurun:</b> En yakın Emniyet\n\tbirimine (tercihen Siber Suçlarla Mücadele Şubesi'ne) veya\n\tCumhuriyet Başsavcılığına şikayet dilekçesi verin.</p></li>\n\t<li><p><b>Delilleri Koruyun:</b> Tarayıcı geçmişinizi, gelen SMS\n\tonay kodlarını ve banka dekontlarının ekran görüntülerini\n\tsilmeyin; çıktısını alıp dilekçenize ekleyin.</p></li>\n</ol>"
+  },
+  {
     "id": "faq-3",
     "category": "Kira Hukuku",
     "q": "Kiracım kira ödemedi. Nasıl tahliye ederim?",
     "a": "Kiracıya noter aracılığıyla <strong>ihtarname</strong> gönderin ve 30 gün süre verin. Bu ihtar aynı kira döneminde ikinci kez tekrarlanırsa kira sözleşmesi bitiminde <strong>tahliye davası</strong> açabilirsiniz. Alternatif olarak borç için <strong>icra takibi</strong> başlatıp ödeme emri gönderilmesini de sağlayabilirsiniz."
-  },
-  {
-    "id": "faq-1783258000111",
-    "q": "İnternetten araç muayene randevusu alırken dolandırıldım, ne yapmalıyım?",
-    "a": "<p style=\"line-height: 100%; margin-bottom: 0cm\">Son dönemde arama motorlarındaki sahte reklamlar vasıtasıyla\nresmi kurumları (özellikle TÜVTÜRK’ü) taklit eden oltalama\n(phishing) siteleri yaygınlaşmıştır. Bu siteler \"15 TL\nprovizyon ücreti\" gibi küçük tutarlar talep ederek kart\nbilgilerinizi almakta, arka planda ise rızanız dışında binlerce\nliralık e-ticaret harcaması tetiklemektedir.</p>\n<p>Böyle bir durumla karşılaştığınızda <b>zaman kaybetmeden</b>\nşu üç adımı atmalısınız:</p>\n<ol>\n\t<li><p><b>Bankanızı Arayın:</b> Kartınızı derhal kullanıma\n\tkapatın ve siber dolandırıcılık (Fraud) birimine harcama\n\titirazı kaydı açtırın.</p></li>\n\t<li><p><b>Kolluk veya Savcılığa Başvurun:</b> En yakın Emniyet\n\tbirimine (tercihen Siber Suçlarla Mücadele Şubesi'ne) veya\n\tCumhuriyet Başsavcılığına şikayet dilekçesi verin.</p></li>\n\t<li><p><b>Delilleri Koruyun:</b> Tarayıcı geçmişinizi, gelen SMS\n\tonay kodlarını ve banka dekontlarının ekran görüntülerini\n\tsilmeyin; çıktısını alıp dilekçenize ekleyin.</p></li>\n</ol>"
   },
   {
     "id": "faq-6",
