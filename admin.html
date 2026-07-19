@@ -2968,18 +2968,140 @@ function normalizeFragment(c) {
     return c;
 }
 
-// Yapıştırma: gelen içerik OTOMATİK olarak 12pt Arial'a normalize edilir.
-// Böylece Word/LibreOffice karmaşası editöre hiç girmez.
+// ══ WORD'E SADIK YAPIŞTIRMA ══════════════════════════════════════
+// Word panoya HTML + kendi <style> bloğunu koyar. Tarayıcıya yapıştırınca o
+// blok atıldığı için "MsoNormal" gibi sınıflar anlamsızlaşır ve yazı Word'deki
+// halinden farklı görünür. Çözüm: içeriği GİZLİ bir çerçevede Word'ün kendi
+// stiliyle render edip her elemanın GERÇEK görünümünü okumak ve bunu doğrudan
+// elemana yazmak. Böylece Word'deki görünüm korunur, bozuk artıklar atılır.
+
+// Word yazı tiplerine web'de güvenli karşılıklar
+function mapWordFont(cssFamily) {
+    if (!cssFamily) return '';
+    const first = cssFamily.split(',')[0].replace(/["']/g, '').trim();
+    const map = {
+        'Calibri':            "Calibri, Carlito, 'Segoe UI', sans-serif",
+        'Cambria':            "Cambria, Caladea, Georgia, serif",
+        'Candara':            "Candara, 'Segoe UI', sans-serif",
+        'Corbel':             "Corbel, 'Segoe UI', sans-serif",
+        'Constantia':         "Constantia, Georgia, serif",
+        'Times New Roman':    "'Times New Roman', Times, serif",
+        'Liberation Serif':   "'Liberation Serif', 'Times New Roman', Times, serif",
+        'Georgia':            "Georgia, 'Times New Roman', serif",
+        'Arial':              "Arial, Helvetica, sans-serif",
+        'Helvetica':          "Helvetica, Arial, sans-serif",
+        'Verdana':            "Verdana, Geneva, sans-serif",
+        'Tahoma':             "Tahoma, Geneva, sans-serif",
+        'Segoe UI':           "'Segoe UI', Tahoma, sans-serif",
+        'Garamond':           "Garamond, 'Times New Roman', serif",
+        'Book Antiqua':       "'Book Antiqua', Palatino, serif",
+        'Palatino Linotype':  "'Palatino Linotype', Palatino, serif",
+    };
+    if (map[first]) return map[first];
+    const generic = (/serif/i.test(cssFamily) && !/sans-serif/i.test(cssFamily)) ? 'serif' : 'sans-serif';
+    return `'${first}', ${generic}`;
+}
+// Siyaha yakın renk = Word varsayılanı → yazma (koyu tema okunabilirliği bozulmasın)
+function isDefaultBlack(color) {
+    const m = (color || '').match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+    if (!m) return true;
+    return (+m[1] < 60 && +m[2] < 60 && +m[3] < 60);
+}
+
+function wordFaithfulHtml(clipboardHtml) {
+    const iframe = document.createElement('iframe');
+    iframe.setAttribute('aria-hidden', 'true');
+    iframe.style.cssText = 'position:fixed;left:-99999px;top:0;width:816px;height:600px;border:0;visibility:hidden';
+    document.body.appendChild(iframe);
+    try {
+        const doc = iframe.contentDocument, win = iframe.contentWindow;
+        doc.open(); doc.write(clipboardHtml); doc.close();   // Word'ün <style>'ı da uygulanır
+        const body = doc.body;
+        if (!body) throw new Error('gövde yok');
+
+        const BLOCK = /^(P|DIV|H1|H2|H3|H4|H5|H6|LI|TD|TH|BLOCKQUOTE)$/;
+        const snap = new Map();
+        const els = [...body.querySelectorAll('*')];
+        els.forEach(el => {
+            if (/^(STYLE|SCRIPT|META|LINK)$/i.test(el.tagName)) return;
+            const cs = win.getComputedStyle(el);
+            const fsPx = parseFloat(cs.fontSize) || 0;
+            const d = {};
+            const fam = mapWordFont(cs.fontFamily); if (fam) d['font-family'] = fam;
+            if (fsPx) d['font-size'] = (Math.round(fsPx * 0.75 * 2) / 2) + 'pt';   // px → pt
+            if (parseInt(cs.fontWeight, 10) >= 600) d['font-weight'] = 'bold';
+            if (cs.fontStyle === 'italic') d['font-style'] = 'italic';
+            if (/underline/.test(cs.textDecorationLine || cs.textDecoration || '')) d['text-decoration'] = 'underline';
+            if (!isDefaultBlack(cs.color)) d['color'] = cs.color;
+            const bg = cs.backgroundColor;
+            if (bg && !/transparent|rgba\(0,\s*0,\s*0,\s*0\)|rgb\(255,\s*255,\s*255\)/.test(bg)) d['background-color'] = bg;
+            if (/^(center|right|justify)$/.test(cs.textAlign)) d['text-align'] = cs.textAlign;
+            const lhPx = parseFloat(cs.lineHeight);
+            if (lhPx && fsPx) { const r = lhPx / fsPx; if (r > 1.1) d['line-height'] = Math.round(r * 100) / 100; }
+            if (BLOCK.test(el.tagName)) {   // Word'ün paragraf boşlukları / girintileri
+                ['margin-top','margin-bottom','margin-left','text-indent'].forEach(p => {
+                    const v = parseFloat(cs.getPropertyValue(p));
+                    if (v && Math.abs(v) > 1) d[p] = Math.round(v) + 'px';
+                });
+            }
+            snap.set(el, d);
+        });
+        // uygula
+        snap.forEach((d, el) => Object.keys(d).forEach(k => el.style.setProperty(k, d[k])));
+        // gereksiz tekrarları buda: çocuk ebeveyniyle aynıysa sil (görünüm değişmez, katman sorunu biter)
+        els.forEach(el => {
+            const p = el.parentElement;
+            if (!p || p === body) return;            // kökteki elemanlar açık kalsın
+            const d = snap.get(el), pd = snap.get(p);
+            if (!d || !pd) return;
+            Object.keys(d).forEach(k => { if (String(pd[k]) === String(d[k])) el.style.removeProperty(k); });
+            if (!el.getAttribute('style') || !el.style.cssText.trim()) el.removeAttribute('style');
+        });
+        // Word artıklarını at (görünümü etkilemez)
+        body.querySelectorAll('o\\:p, style, meta, link, script, xml').forEach(e => e.remove());
+        body.querySelectorAll('[class]').forEach(e => e.removeAttribute('class'));
+        body.querySelectorAll('[lang]').forEach(e => e.removeAttribute('lang'));
+        // yorum düğümlerini (koşullu Word yorumları) sil
+        const walker = doc.createTreeWalker(body, NodeFilter.SHOW_COMMENT);
+        const comments = []; while (walker.nextNode()) comments.push(walker.currentNode);
+        comments.forEach(c => c.remove());
+        // yerel (file:///) görseller web'de açılmaz → kaldır, kullanıcıyı uyar
+        let removedImg = 0;
+        body.querySelectorAll('img').forEach(im => {
+            const s = im.getAttribute('src') || '';
+            if (/^file:/i.test(s) || !s) { im.remove(); removedImg++; }
+        });
+        // özniteliksiz span'leri aç
+        let uw = 1, guard = 0;
+        while (uw && guard < 20) {
+            uw = 0; guard++;
+            body.querySelectorAll('span').forEach(el => {
+                if (!el.attributes.length) { while (el.firstChild) el.parentNode.insertBefore(el.firstChild, el); el.remove(); uw++; }
+            });
+        }
+        return { html: body.innerHTML, removedImg };
+    } finally {
+        iframe.remove();
+    }
+}
+
+// Yapıştırma: Word'deki görünüm KORUNUR (otomatik 12pt Arial'a çevirme yok).
+// Tekdüze hale getirmek istersen araç çubuğundaki süpürge butonunu kullan.
 document.getElementById('editor-content').addEventListener('paste', function(e) {
     e.preventDefault();
     const html = e.clipboardData.getData('text/html');
     const text = e.clipboardData.getData('text/plain');
     if (html) {
-        const div = document.createElement('div');
-        div.innerHTML = html;
-        normalizeFragment(div);
-        document.execCommand('insertHTML', false, div.innerHTML);
-        toast('✨ Yapıştırılan yazı 12pt Arial\'a düzenlendi', 'success');
+        let res = null;
+        try { res = wordFaithfulHtml(html); } catch (err) { console.warn('Word filtresi:', err); }
+        if (res && res.html) {
+            document.execCommand('insertHTML', false, res.html);
+            if (res.removedImg) toast(`⚠️ ${res.removedImg} görsel Word'den geldiği için eklenemedi — "Kapak Görseli"nden yükleyin`, 'error');
+        } else {
+            const div = document.createElement('div'); div.innerHTML = html;
+            div.querySelectorAll('o\\:p, style, meta, link, script').forEach(x => x.remove());
+            document.execCommand('insertHTML', false, div.innerHTML);
+        }
     } else {
         document.execCommand('insertText', false, text);
     }
