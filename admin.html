@@ -2871,9 +2871,105 @@ document.getElementById('editor-content').addEventListener('input', onEditorChan
 document.getElementById('editor-content').addEventListener('keydown', e => {
     if (e.key === 'Tab') { e.preventDefault(); document.execCommand('insertHTML', false, '    '); }
 });
-document.getElementById('editor-content').addEventListener('mouseup', saveEdRange);
-document.getElementById('editor-content').addEventListener('keyup', saveEdRange);
+document.getElementById('editor-content').addEventListener('mouseup', () => { saveEdRange(); syncFontSizeInput(); });
+document.getElementById('editor-content').addEventListener('keyup', () => { saveEdRange(); syncFontSizeInput(); });
 document.getElementById('editor-content').addEventListener('selectionchange', saveEdRange);
+
+// İmlecin/seçimin GERÇEK puntosunu kutuda göster (12pt = 16px; kutu artık 16'da takılı kalmaz)
+function syncFontSizeInput() {
+    const ed = document.getElementById('editor-content');
+    const inp = document.getElementById('font-size-inp');
+    if (!inp || document.activeElement === inp) return;   // kullanıcı yazıyorsa dokunma
+    const sel = window.getSelection();
+    if (!sel || !sel.rangeCount) return;
+    let node = sel.anchorNode;
+    if (node && node.nodeType === 3) node = node.parentElement;
+    if (!node || !ed.contains(node)) return;
+    const px = parseFloat(getComputedStyle(node).fontSize);
+    if (px) inp.value = Math.round(px * 0.75);            // px → pt
+}
+// ══ ORTAK NORMALİZASYON ══════════════════════════════════════════
+// Word/LibreOffice'ten gelen içeriği tek tip 12pt Arial'a çevirir:
+// iç içe punto kademelerini, serif yazı tiplerini, koyu renk artıklarını,
+// boş blokları ve başlığa sıkışmış paragrafları düzeltir.
+// Hem YAPIŞTIRMADA (otomatik) hem "Biçimi Temizle" butonunda kullanılır.
+function normalizeFragment(c) {
+    // Word/Docs artıkları
+    c.querySelectorAll('o\\:p, style, meta, link, script').forEach(el => el.remove());
+
+    // 0) başlık içine sıkışmış bloklar: kısa başlık → düzleştir, uzun → dışarı taşı
+    c.querySelectorAll('h1,h2,h3,h4,h5,h6').forEach(h => {
+        const blocks = [...h.children].filter(ch => /^(P|DIV|UL|OL|TABLE|BLOCKQUOTE)$/.test(ch.tagName));
+        if (!blocks.length) return;
+        const total = h.textContent.replace(/\s+/g, ' ').trim().length;
+        if (total <= 90) blocks.forEach(b => { while (b.firstChild) b.parentNode.insertBefore(b.firstChild, b); b.remove(); });
+        else { let a = h; blocks.forEach(b => { a.after(b); a = b; }); }
+    });
+
+    // 1) punto/yazı tipi normalize + renk-arkaplan-satır aralığı artıklarını at
+    c.querySelectorAll('font').forEach(f => {
+        if (f.hasAttribute('face')) f.setAttribute('face', 'Arial, sans-serif');
+        f.removeAttribute('size'); f.removeAttribute('color');
+        if (f.style && f.style.fontSize) f.style.fontSize = '12pt';
+    });
+    c.querySelectorAll('[style]').forEach(el => {
+        if (el.style.fontSize) el.style.fontSize = '12pt';
+        if (el.style.fontFamily) el.style.fontFamily = 'Arial, sans-serif';
+        ['color','background-color','background','line-height','margin','padding',
+         'margin-top','margin-bottom','margin-left','margin-right'].forEach(p => el.style.removeProperty(p));
+        if (!el.getAttribute('style') || !el.style.cssText.trim()) el.removeAttribute('style');
+    });
+
+    // 2) uzun sahte başlıklar (>90 karakter aslında paragraftır) → <p>
+    c.querySelectorAll('h1,h2,h3,h4,h5,h6').forEach(el => {
+        if (el.textContent.replace(/\s+/g, ' ').trim().length > 90) {
+            const p = document.createElement('p');
+            if (el.getAttribute('align')) p.setAttribute('align', el.getAttribute('align'));
+            while (el.firstChild) p.appendChild(el.firstChild);
+            el.replaceWith(p);
+        }
+    });
+    // 2a) harf alt başlıkları (A. B. C.) → H3 tutarlılığı
+    c.querySelectorAll('h1,h2,h3,h4,h5,h6').forEach(el => {
+        const t = el.textContent.replace(/\s+/g, ' ').trim();
+        if (/^[A-EÇ]\.\s/.test(t) && el.tagName !== 'H3') {
+            const h3 = document.createElement('h3');
+            [...el.attributes].forEach(a => h3.setAttribute(a.name, a.value));
+            while (el.firstChild) h3.appendChild(el.firstChild);
+            el.replaceWith(h3);
+        }
+    });
+    // 2b) tüm gövde bloklarına 12pt Arial garanti
+    c.querySelectorAll('p,li,td,th').forEach(el => {
+        el.style.fontSize = '12pt';
+        el.style.fontFamily = 'Arial, sans-serif';
+    });
+    // 3) boş blok/inline temizle
+    let rm = 1, ps = 0;
+    while (rm && ps < 15) {
+        rm = 0; ps++;
+        c.querySelectorAll('h1,h2,h3,h4,h5,h6,p,font,span,b,strong,i,em').forEach(el => {
+            if (!el.textContent.trim() && !el.querySelector('img,table,hr,br')) { el.remove(); rm++; }
+        });
+    }
+    // 4) özniteliksiz span/font aç (iç içe yığını sadeleştir)
+    let uw = 1, p2 = 0;
+    while (uw && p2 < 30) {
+        uw = 0; p2++;
+        c.querySelectorAll('span,font').forEach(el => {
+            const hs = el.getAttribute('style') && el.getAttribute('style').trim();
+            const hf = el.tagName === 'FONT' && (el.getAttribute('face') || el.getAttribute('size') || el.getAttribute('color'));
+            if (!hs && !hf && !el.className) {
+                while (el.firstChild) el.parentNode.insertBefore(el.firstChild, el);
+                el.remove(); uw++;
+            }
+        });
+    }
+    return c;
+}
+
+// Yapıştırma: gelen içerik OTOMATİK olarak 12pt Arial'a normalize edilir.
+// Böylece Word/LibreOffice karmaşası editöre hiç girmez.
 document.getElementById('editor-content').addEventListener('paste', function(e) {
     e.preventDefault();
     const html = e.clipboardData.getData('text/html');
@@ -2881,19 +2977,9 @@ document.getElementById('editor-content').addEventListener('paste', function(e) 
     if (html) {
         const div = document.createElement('div');
         div.innerHTML = html;
-        // Kopyalanan içerikten SADECE punto/renk/boşluk gürültüsünü temizle.
-        // Yazı tipini (font-family) ve kalın/italik gibi biçimleri koru — kullanıcı
-        // Arial kopyaladıysa Arial kalsın; istediğinde araç çubuğundan değiştirir.
-        div.querySelectorAll('[style]').forEach(el => {
-            const s = el.style;
-            ['color','font-size','background-color','background','line-height',
-             'margin','padding','margin-top','margin-bottom','margin-left','margin-right'].forEach(p => s.removeProperty(p));
-            if (!el.getAttribute('style') || !s.cssText.trim()) el.removeAttribute('style');
-        });
-        div.querySelectorAll('font').forEach(el => { el.removeAttribute('size'); el.removeAttribute('color'); });
-        // Word/Docs artığı boş span ve o:p etiketlerini sadeleştir
-        div.querySelectorAll('o\\:p, style, meta, link').forEach(el => el.remove());
+        normalizeFragment(div);
         document.execCommand('insertHTML', false, div.innerHTML);
+        toast('✨ Yapıştırılan yazı 12pt Arial\'a düzenlendi', 'success');
     } else {
         document.execCommand('insertText', false, text);
     }
@@ -2993,46 +3079,7 @@ function deepCleanEditorNow() {
     const ed = document.getElementById('editor-content');
     const c = document.createElement('div');
     c.innerHTML = ed.innerHTML;
-
-    // 0) başlık içine sıkışmış blokları düzelt (kısa başlık→düzleştir, uzun→dışarı taşı)
-    c.querySelectorAll('h1,h2,h3,h4,h5,h6').forEach(h => {
-        const blocks = [...h.children].filter(ch => /^(P|DIV|UL|OL|TABLE|BLOCKQUOTE)$/.test(ch.tagName));
-        if (!blocks.length) return;
-        const total = h.textContent.replace(/\s+/g, ' ').trim().length;
-        if (total <= 90) blocks.forEach(b => { while (b.firstChild) b.parentNode.insertBefore(b.firstChild, b); b.remove(); });
-        else { let a = h; blocks.forEach(b => { a.after(b); a = b; }); }
-    });
-    // 1) font normalize → Arial / 12pt
-    c.querySelectorAll('font').forEach(f => { if (f.hasAttribute('face')) f.setAttribute('face', 'Arial, sans-serif'); if (f.style && f.style.fontSize) f.style.fontSize = '12pt'; });
-    c.querySelectorAll('[style]').forEach(el => { if (el.style.fontSize) el.style.fontSize = '12pt'; if (el.style.fontFamily) el.style.fontFamily = 'Arial, sans-serif'; if (el.style.color) el.style.removeProperty('color'); if (el.style.backgroundColor) el.style.removeProperty('background-color'); });
-    // 2) uzun sahte başlıkları paragrafa çevir (>90 karakter)
-    c.querySelectorAll('h1,h2,h3,h4,h5,h6').forEach(el => {
-        if (el.textContent.replace(/\s+/g, ' ').trim().length > 90) {
-            const p = document.createElement('p');
-            if (el.getAttribute('align')) p.setAttribute('align', el.getAttribute('align'));
-            while (el.firstChild) p.appendChild(el.firstChild);
-            el.replaceWith(p);
-        }
-    });
-    // 2a) harf alt başlıkları (A. B. C.) → H3 tutarlılığı
-    c.querySelectorAll('h1,h2,h3,h4,h5,h6').forEach(el => {
-        const t = el.textContent.replace(/\s+/g, ' ').trim();
-        if (/^[A-EÇ]\.\s/.test(t) && el.tagName !== 'H3') {
-            const h3 = document.createElement('h3');
-            [...el.attributes].forEach(a => h3.setAttribute(a.name, a.value));
-            while (el.firstChild) h3.appendChild(el.firstChild);
-            el.replaceWith(h3);
-        }
-    });
-    // 2b) tüm gövde bloklarına 12pt Arial garanti
-    c.querySelectorAll('p,li,td,th').forEach(el => { el.style.fontSize = '12pt'; el.style.fontFamily = 'Arial, sans-serif'; });
-    // 3) boş blok/inline temizle
-    let rm = 1, ps = 0;
-    while (rm && ps < 15) { rm = 0; ps++; c.querySelectorAll('h1,h2,h3,h4,h5,h6,p,font,span,b,strong,i,em').forEach(el => { if (!el.textContent.trim() && !el.querySelector('img,table,hr,br')) { el.remove(); rm++; } }); }
-    // 4) özniteliksiz span/font aç
-    let uw = 1, p2 = 0;
-    while (uw && p2 < 25) { uw = 0; p2++; c.querySelectorAll('span,font').forEach(el => { const hs = el.getAttribute('style') && el.getAttribute('style').trim(); const hf = el.tagName === 'FONT' && (el.getAttribute('face') || el.getAttribute('size') || el.getAttribute('color')); if (!hs && !hf && !el.className) { while (el.firstChild) el.parentNode.insertBefore(el.firstChild, el); el.remove(); uw++; } }); }
-
+    normalizeFragment(c);              // yapıştırmayla aynı normalizasyon
     ed.innerHTML = c.innerHTML;
     onEditorChange();
     edDirty = true;
