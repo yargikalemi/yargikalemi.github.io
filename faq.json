@@ -12,16 +12,16 @@
     "a": "<p><font face=\"Arial, sans-serif\">Satın\naldığınız ürün bozuk, eksik, hasarlı veya vaat edilen\nözellikleri taşımıyorsa ayıplı mal kapsamında\ndeğerlendirilebilir. Bu durumda ürünün ücretsiz onarımını,\nyenisiyle değiştirilmesini, bedel indirimi yapılmasını veya\nödediğiniz bedelin iadesini talep edebilirsiniz. Talebinizi ispat\nkolaylığı sağlaması açısından satıcıya yazılı olarak\niletmeniz ve fatura, garanti belgesi ile diğer delilleri saklamanız\nönemlidir. Sorunun çözülmemesi halinde, uyuşmazlık değeri </font><strong><font face=\"Arial, sans-serif\">2026\nyılı için 186.000 TL'nin altında ise Tüketici Hakem Heyeti'ne</font></strong><font face=\"Arial, sans-serif\">,\nbu tutarın üzerindeyse Tüketici Mahkemesi'ne başvurabilirsiniz.\nBaşvurular e-Devlet üzerinden TÜBİS sistemi aracılığıyla veya\ndoğrudan hakem heyetine yapılabilmektedir.&nbsp;</font>\n</p>"
   },
   {
-    "id": "faq-3",
-    "category": "Kira Hukuku",
-    "q": "Kiracım kira ödemedi. Nasıl tahliye ederim?",
-    "a": "Kiracıya noter aracılığıyla <strong>ihtarname</strong> gönderin ve 30 gün süre verin. Bu ihtar aynı kira döneminde ikinci kez tekrarlanırsa kira sözleşmesi bitiminde <strong>tahliye davası</strong> açabilirsiniz. Alternatif olarak borç için <strong>icra takibi</strong> başlatıp ödeme emri gönderilmesini de sağlayabilirsiniz."
-  },
-  {
     "id": "faq-4",
     "category": "Ceza Hukuku",
     "q": "Gözaltına alındığımda haklarım nelerdir?",
     "a": "Gözaltında <strong>susma hakkınız</strong> vardır; hiçbir soruya cevap verme zorunluluğunuz yoktur. İlk andan itibaren <strong>avukat talep etme hakkınız</strong> doğar ve bu hak size esirgenilemez. Yakınlarınızın bilgilendirilmesini isteyebilirsiniz. Normal suçlarda gözaltı süresi en fazla <strong>24 saattir</strong>."
+  },
+  {
+    "id": "faq-3",
+    "category": "Kira Hukuku",
+    "q": "Kiracım kira ödemedi. Nasıl tahliye ederim?",
+    "a": "Kiracıya noter aracılığıyla <strong>ihtarname</strong> gönderin ve 30 gün süre verin. Bu ihtar aynı kira döneminde ikinci kez tekrarlanırsa kira sözleşmesi bitiminde <strong>tahliye davası</strong> açabilirsiniz. Alternatif olarak borç için <strong>icra takibi</strong> başlatıp ödeme emri gönderilmesini de sağlayabilirsiniz."
   },
   {
     "id": "faq-1784223896794",
