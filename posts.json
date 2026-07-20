@@ -88,6 +88,17 @@
   {
     "id": "8",
     "featured": false,
+    "title": "Mahkemede Kendinizi İfade Etme Hakkı",
+    "category": "Ceza Hukuku",
+    "excerpt": "Mahkemede susma hakkı ne zaman kullanılır, beyan nasıl verilir? Avukat olmaksızın kendinizi savunmak zorunda kalırsanız nelere dikkat etmelisiniz?",
+    "date": "2 Nisan 2025",
+    "readTime": "7 dk",
+    "content": "<p>Ceza yargılamasında sanık sıfatı, beraberinde hem haklar hem de riskler getirir. Mahkemede yanlış zamanda yanlış söylenen bir sözcük, lehte delilleri anlamsız kılabilir.</p><h3>Susma Hakkı</h3><p>Anayasa ve CMK kapsamında her sanık, kendisini suçlayacak beyan vermekten kaçınma hakkına sahiptir. Bu hakkı kullanmak suçluluk karinesi oluşturmaz. Mahkeme, susma hakkının aleyhte delil olarak kullanılmasına izin veremez. Avukatınız olmadan yapılan tüm beyanlar potansiyel risk taşır.</p><h3>İfade Vermeyi Seçerseniz</h3><p>Eğer ifade vermeyi tercih ediyorsanız, yalnızca doğrudan bilgi sahibi olduğunuz konularda konuşun. \"Hatırlamıyorum\" veya \"bilmiyorum\" demek, yanlış ya da tutarsız bir beyan vermekten her zaman daha güvenlidir. Verilen her beyan kayıt altına alınır ve ilerleyen aşamalarda sizi bağlar.</p><h3>Avukatsız Duruşma</h3><p>Zorunlu müdafilik kapsamına girmeyen davalarda sanık avukatsız yargılanabilir. Bu durumda mahkemeden yeterli süre talep edin, belgeleri önceden inceleyin ve gereksiz konuşmaktan kaçının. Mahkemenin görevi tarafları temsil etmek değil, hukuku uygulamaktır.</p>",
+    "slug": "mahkemede-kendinizi-ifade-etme-hakki"
+  },
+  {
+    "id": "9",
+    "featured": false,
     "title": "Mesafeli Sözleşmelerde Tüketicinin Cayma Hakkı Ve Uygulamada Yaşanan Uyuşmazlıklar",
     "category": "Tüketici Hukuku",
     "excerpt": "Bu yazımızda mesafeli sözleşmelerde cayma hakkının sınırlarını, şirketlerin \"koşulları kabul ettiniz\" savunmasını boşa çıkaran durumlar ve haksız şart uygulamalarını ele aldık. Ayrıca, mağduriyet yaşayan tüketicilerin 2026 yılı güncel parasal sınırları çerçevesinde Hakem Heyetleri ve Tüketici Mahkemelerine başvuru yollarını inceledik.",
@@ -98,7 +109,7 @@
     "image": "images/1781699605229_canva-MADF0e2C7jY.jpg"
   },
   {
-    "id": "9",
+    "id": "10",
     "featured": false,
     "title": "Tüketicinin Güvencesi: Tüketici Hakem Heyetleri",
     "category": "Tüketici Hukuku",
@@ -109,7 +120,7 @@
     "slug": "tuketicinin-guvencesi-tuketici-hakem-heyetleri-2"
   },
   {
-    "id": "10",
+    "id": "11",
     "featured": false,
     "title": "Tüketici Hakem Heyetine Nasıl Başvurulur?",
     "category": "Tüketici Hukuku",
@@ -121,7 +132,7 @@
     "image": "images/1781623229287_canva-MADAzRhDbcM.jpg"
   },
   {
-    "id": "11",
+    "id": "12",
     "featured": false,
     "title": "İdareye Karşı Nasıl Dava Açılır?",
     "category": "İdare Hukuku",
@@ -131,17 +142,6 @@
     "content": "<p>Devlet kurumları vatandaşlara karşı hatalı işlem tesis edebilir, haksız para cezası uygulayabilir ya da hukuka aykırı disiplin kararı verebilir. Tüm bu durumlarda başvurulacak yargı yolu idari yargıdır.</p><h3>Hangi Mahkemeler?</h3><p>İdare mahkemesi, Danıştay ve Vergi Mahkemeleri idari yargının üç temel ayağını oluşturur. Genel kural olarak idare mahkemeleri ilk derece yargı merciidir; davalar burada açılır. Danıştay ise bazı davalarda ilk derece, diğerlerinde temyiz mercii olarak görev yapar.</p><h3>Süre Çok Kritik</h3><p>İdari işlemlere karşı dava açma süresi kural olarak 60 gündür. Bu süre işlemin tebliğinden itibaren işlemeye başlar. 60 günlük süreyi geçiren başvurular, hakkın ne kadar güçlü olduğundan bağımsız olarak usul yönünden reddedilir.</p><h3>İptal ve Tam Yargı Davaları</h3><p>İdari davaların iki ana türü vardır: iptal davaları (hukuka aykırı işlemin ortadan kaldırılması) ve tam yargı davaları (uğranılan zararın tazmini). Bu ikisi aynı anda ya da ayrı ayrı açılabilir; tam yargı davası için iptal kararının beklenmesi zorunlu değildir.</p>",
     "slug": "idareye-karsi-nasil-dava-acilir",
     "image": "images/1781709262801_kalem_m_h_r.jpg"
-  },
-  {
-    "id": "12",
-    "featured": false,
-    "title": "Mahkemede Kendinizi İfade Etme Hakkı",
-    "category": "Ceza Hukuku",
-    "excerpt": "Mahkemede susma hakkı ne zaman kullanılır, beyan nasıl verilir? Avukat olmaksızın kendinizi savunmak zorunda kalırsanız nelere dikkat etmelisiniz?",
-    "date": "2 Nisan 2025",
-    "readTime": "7 dk",
-    "content": "<p>Ceza yargılamasında sanık sıfatı, beraberinde hem haklar hem de riskler getirir. Mahkemede yanlış zamanda yanlış söylenen bir sözcük, lehte delilleri anlamsız kılabilir.</p><h3>Susma Hakkı</h3><p>Anayasa ve CMK kapsamında her sanık, kendisini suçlayacak beyan vermekten kaçınma hakkına sahiptir. Bu hakkı kullanmak suçluluk karinesi oluşturmaz. Mahkeme, susma hakkının aleyhte delil olarak kullanılmasına izin veremez. Avukatınız olmadan yapılan tüm beyanlar potansiyel risk taşır.</p><h3>İfade Vermeyi Seçerseniz</h3><p>Eğer ifade vermeyi tercih ediyorsanız, yalnızca doğrudan bilgi sahibi olduğunuz konularda konuşun. \"Hatırlamıyorum\" veya \"bilmiyorum\" demek, yanlış ya da tutarsız bir beyan vermekten her zaman daha güvenlidir. Verilen her beyan kayıt altına alınır ve ilerleyen aşamalarda sizi bağlar.</p><h3>Avukatsız Duruşma</h3><p>Zorunlu müdafilik kapsamına girmeyen davalarda sanık avukatsız yargılanabilir. Bu durumda mahkemeden yeterli süre talep edin, belgeleri önceden inceleyin ve gereksiz konuşmaktan kaçının. Mahkemenin görevi tarafları temsil etmek değil, hukuku uygulamaktır.</p>",
-    "slug": "mahkemede-kendinizi-ifade-etme-hakki"
   },
   {
     "id": "13",
