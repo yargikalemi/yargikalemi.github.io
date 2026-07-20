@@ -99,6 +99,17 @@
   {
     "id": "9",
     "featured": false,
+    "title": "Ceza Davalarında Zamanaşımı: Bilmeniz Gerekenler",
+    "category": "Ceza Hukuku",
+    "excerpt": "Bir suç işlenmişse, ne kadar zaman sonra takibat başlatılamaz? Zamanaşımı hangi suçlar için kaç yıl? Bu hukuki koruma mekanizmasını somut örneklerle açıklıyorum.",
+    "date": "25 Nisan 2025",
+    "readTime": "9 dk",
+    "content": "<p>Zamanaşımı, devletin belirli bir süre geçtikten sonra suçlama hakkını yitirdiği anlamına gelir. Bu ilke, hem hukuki güvenlik hem de delillerin zamanla anlamsızlaşması nedeniyle tüm modern hukuk sistemlerinde mevcuttur.</p><h3>Dava Zamanaşımı Süreleri</h3><p>Türk Ceza Kanunu'na göre zamanaşımı süreleri suçun öngördüğü azami cezaya bağlıdır. Ağırlaştırılmış müebbet hapis cezasını gerektiren suçlarda süre yoktur. Ağır ceza suçlarında 30 yıl, 5-10 yıl arası hapis gerektiren suçlarda 15 yıl, daha hafif suçlarda 8 veya 4 yıl uygulanır.</p><h3>Zamanaşımı Ne Zaman Başlar?</h3><p>Kural olarak suçun işlendiği gün zamanaşımı başlar. Ancak kesintisiz suçlarda son hareket tarihinde, sonradan ortaya çıkan suçlarda ise sonucun gerçekleştiği anda başlangıç sayılır.</p><h3>Durma ve Kesilme</h3><p>Soruşturma başladığında, dava açıldığında veya sanık yurt dışına kaçtığında zamanaşımı durabilir ya da kesilebilir. Kesilmesi halinde süre sıfırlanarak yeniden işlemeye başlar. Bu nedenle zamanaşımının hesabı her somut olayda ayrı teknik analiz gerektirir.</p>",
+    "slug": "ceza-davalarinda-zamanasimi-bilmeniz-gerekenler"
+  },
+  {
+    "id": "10",
+    "featured": false,
     "title": "Mesafeli Sözleşmelerde Tüketicinin Cayma Hakkı Ve Uygulamada Yaşanan Uyuşmazlıklar",
     "category": "Tüketici Hukuku",
     "excerpt": "Bu yazımızda mesafeli sözleşmelerde cayma hakkının sınırlarını, şirketlerin \"koşulları kabul ettiniz\" savunmasını boşa çıkaran durumlar ve haksız şart uygulamalarını ele aldık. Ayrıca, mağduriyet yaşayan tüketicilerin 2026 yılı güncel parasal sınırları çerçevesinde Hakem Heyetleri ve Tüketici Mahkemelerine başvuru yollarını inceledik.",
@@ -109,7 +120,7 @@
     "image": "images/1781699605229_canva-MADF0e2C7jY.jpg"
   },
   {
-    "id": "10",
+    "id": "11",
     "featured": false,
     "title": "Tüketicinin Güvencesi: Tüketici Hakem Heyetleri",
     "category": "Tüketici Hukuku",
@@ -120,7 +131,7 @@
     "slug": "tuketicinin-guvencesi-tuketici-hakem-heyetleri-2"
   },
   {
-    "id": "11",
+    "id": "12",
     "featured": false,
     "title": "Tüketici Hakem Heyetine Nasıl Başvurulur?",
     "category": "Tüketici Hukuku",
@@ -132,7 +143,7 @@
     "image": "images/1781623229287_canva-MADAzRhDbcM.jpg"
   },
   {
-    "id": "12",
+    "id": "13",
     "featured": false,
     "title": "İdareye Karşı Nasıl Dava Açılır?",
     "category": "İdare Hukuku",
@@ -142,17 +153,6 @@
     "content": "<p>Devlet kurumları vatandaşlara karşı hatalı işlem tesis edebilir, haksız para cezası uygulayabilir ya da hukuka aykırı disiplin kararı verebilir. Tüm bu durumlarda başvurulacak yargı yolu idari yargıdır.</p><h3>Hangi Mahkemeler?</h3><p>İdare mahkemesi, Danıştay ve Vergi Mahkemeleri idari yargının üç temel ayağını oluşturur. Genel kural olarak idare mahkemeleri ilk derece yargı merciidir; davalar burada açılır. Danıştay ise bazı davalarda ilk derece, diğerlerinde temyiz mercii olarak görev yapar.</p><h3>Süre Çok Kritik</h3><p>İdari işlemlere karşı dava açma süresi kural olarak 60 gündür. Bu süre işlemin tebliğinden itibaren işlemeye başlar. 60 günlük süreyi geçiren başvurular, hakkın ne kadar güçlü olduğundan bağımsız olarak usul yönünden reddedilir.</p><h3>İptal ve Tam Yargı Davaları</h3><p>İdari davaların iki ana türü vardır: iptal davaları (hukuka aykırı işlemin ortadan kaldırılması) ve tam yargı davaları (uğranılan zararın tazmini). Bu ikisi aynı anda ya da ayrı ayrı açılabilir; tam yargı davası için iptal kararının beklenmesi zorunlu değildir.</p>",
     "slug": "idareye-karsi-nasil-dava-acilir",
     "image": "images/1781709262801_kalem_m_h_r.jpg"
-  },
-  {
-    "id": "13",
-    "featured": false,
-    "title": "Ceza Davalarında Zamanaşımı: Bilmeniz Gerekenler",
-    "category": "Ceza Hukuku",
-    "excerpt": "Bir suç işlenmişse, ne kadar zaman sonra takibat başlatılamaz? Zamanaşımı hangi suçlar için kaç yıl? Bu hukuki koruma mekanizmasını somut örneklerle açıklıyorum.",
-    "date": "25 Nisan 2025",
-    "readTime": "9 dk",
-    "content": "<p>Zamanaşımı, devletin belirli bir süre geçtikten sonra suçlama hakkını yitirdiği anlamına gelir. Bu ilke, hem hukuki güvenlik hem de delillerin zamanla anlamsızlaşması nedeniyle tüm modern hukuk sistemlerinde mevcuttur.</p><h3>Dava Zamanaşımı Süreleri</h3><p>Türk Ceza Kanunu'na göre zamanaşımı süreleri suçun öngördüğü azami cezaya bağlıdır. Ağırlaştırılmış müebbet hapis cezasını gerektiren suçlarda süre yoktur. Ağır ceza suçlarında 30 yıl, 5-10 yıl arası hapis gerektiren suçlarda 15 yıl, daha hafif suçlarda 8 veya 4 yıl uygulanır.</p><h3>Zamanaşımı Ne Zaman Başlar?</h3><p>Kural olarak suçun işlendiği gün zamanaşımı başlar. Ancak kesintisiz suçlarda son hareket tarihinde, sonradan ortaya çıkan suçlarda ise sonucun gerçekleştiği anda başlangıç sayılır.</p><h3>Durma ve Kesilme</h3><p>Soruşturma başladığında, dava açıldığında veya sanık yurt dışına kaçtığında zamanaşımı durabilir ya da kesilebilir. Kesilmesi halinde süre sıfırlanarak yeniden işlemeye başlar. Bu nedenle zamanaşımının hesabı her somut olayda ayrı teknik analiz gerektirir.</p>",
-    "slug": "ceza-davalarinda-zamanasimi-bilmeniz-gerekenler"
   },
   {
     "id": "14",
