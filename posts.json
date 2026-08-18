@@ -1,7 +1,7 @@
 [
   {
     "id": "1",
-    "featured": false,
+    "featured": true,
     "title": "AİHM VE AYM KARARLARINDA “İHLAL TESPİTİNİN YETERLİ TATMİN OLUŞTURDUĞU ve  TAZMİNAT ÖDENMESİNE YER OLMADIĞI” YAKLAŞIMI VE TAZMİNATIN CAYDIRICILIK VE TAMAMLAYICILIK İŞLEVİ",
     "category": "AİHM",
     "excerpt": "Bireysel başvuru sisteminde tazminat; yargılamanın şeklî bir uzantısı değil, insan haklarının etkin korunması ve kamu idaresinde caydırıcılığın sağlanması adına kurumsal bir güvencedir. Yüksek mahkemelerin ihlal tespitiyle yetinmeyi alışkanlık hâline getirmesi, bu makamları zamanla sembolik birer \"tescil organına\" dönüştürme riski taşımaktadır. İhlalleri tüm sonuçlarıyla ortadan kaldırmak için geleceğe yönelik giderimler ile geçmişe dönük tazminat yolları birbirini tamamlayıcı nitelikte uygulanmalıdır. İşte yazıdaki diğer ayrıntılar..",
@@ -181,7 +181,7 @@
   },
   {
     "id": "16",
-    "featured": true,
+    "featured": false,
     "title": "AVUKATIN YAPAY ZEKÂYA MÜVEKKİL BİLGİLERİNİ YÜKLEMESİNİN VERİ GİZLİLİĞİ VE MESLEKİ SIR SAKLAMA AÇISINDAN RİSKLERİ",
     "category": "Tüketici Hukuku",
     "excerpt": "Yapay zekâ avukatlar için büyük bir kolaylık sağlasa da müvekkil bilgilerinin bu platformlarla paylaşılması, gizlilik ve veri güvenliği açısından dikkat edilmesi gereken bazı hususları beraberinde getirmektedir. Teknolojik kolaylıkların taşıdığı riskleri büyüterek bu araçlardan tamamen uzaklaşmak yerine, gerekli veri güvenliği önlemlerini alarak yapay zekâyı  güvenli ve faydalı birer yardımcı araca dönüştürmek mümkündür. İşte güvenli kullanım için bazı  ipuçları..",
